@@ -28,9 +28,7 @@ public class Autos {
   public static boolean moveRight = false;
   public static boolean moveLeft = false;
 
-  public Autos(
-      Drive drive,
-      PoseManager poseManager) {
+  public Autos(Drive drive, PoseManager poseManager) {
     this.drive = drive;
     this.poseManager = poseManager;
 
@@ -64,7 +62,8 @@ public class Autos {
       if (!isChoreoAuto) {
         // Set up SysId routines
         nonChoreoChooser.addOption(
-            "Drive Wheel Radius Characterization", DriveCommands.wheelRadiusCharacterization(drive));
+            "Drive Wheel Radius Characterization",
+            DriveCommands.wheelRadiusCharacterization(drive));
         nonChoreoChooser.addOption(
             "Drive Simple FF Characterization", DriveCommands.feedforwardCharacterization(drive));
         nonChoreoChooser.addOption(

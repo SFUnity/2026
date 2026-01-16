@@ -1,13 +1,11 @@
 package frc.robot.util;
 
 import static frc.robot.FieldConstants.*;
-import static frc.robot.util.AllianceFlipUtil.apply;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.geometry.Twist2d;
@@ -125,9 +123,6 @@ public class PoseManager {
   public Twist2d robotVelocity() {
     return robotVelocity;
   }
-
-
-
 
   public LinkedList<Pose2d> fuelPositions = new LinkedList<>();
 
