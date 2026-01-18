@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.units.measure.Time;
 import frc.robot.subsystems.drive.DriveConstants;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -35,7 +36,7 @@ public class PoseManager {
       new SwerveDrivePoseEstimator(
           DriveConstants.kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
 
-  private double[] visionGyroMeasurement;
+  private Queue<double[]> visionGyroMeasurement = new LinkedList<>();
 
   public PoseManager() {}
 
@@ -51,8 +52,8 @@ public class PoseManager {
   }
 
   public void addVisionGyroMeasurement(double yawDeg, double timestamp) {
-    visionGyroMeasurement[0] = yawDeg;
-    visionGyroMeasurement[1] = timestamp;
+    visionGyroMeasurement = new LinkedList<>();
+    visionGyroMeasurement.add(new double[]{yawDeg, timestamp});
   }
 
   public void addVelocityData(Twist2d robotVelocity) {
@@ -60,7 +61,7 @@ public class PoseManager {
   }
 
   public double[] getVisionGyroMeasurement() {
-    return visionGyroMeasurement;
+    return visionGyroMeasurement.poll();
   }
 
   public double getDistanceTo(Pose2d pose) {
