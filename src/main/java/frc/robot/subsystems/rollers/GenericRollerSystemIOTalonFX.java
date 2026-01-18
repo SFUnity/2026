@@ -20,4 +20,19 @@ public class GenericRollerSystemIOTalonFX implements GenericRollerSystemIO {
     config.CurrentLimits.SupplyCurrentLimitEnable = true;
     talon.getConfigurator().apply(config);
   }
+
+  @Override
+  public void updateInputs(GenericRollerIOInputs inputs) {
+    inputs.appliedVolts = talon.getMotorVoltage().getValueAsDouble();
+  }
+
+  @Override
+  public void runVolts(double volts) {
+    talon.setControl(voltageOut.withOutput(volts));
+  }
+
+  @Override
+  public void stop() {
+    talon.setControl(neutralOut);
+  }
 }

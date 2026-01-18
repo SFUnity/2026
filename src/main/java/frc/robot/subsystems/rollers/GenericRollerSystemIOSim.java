@@ -7,7 +7,7 @@ public class GenericRollerSystemIOSim implements GenericRollerSystemIO {
   public GenericRollerSystemIOSim() {}
 
   @Override
-  public void updateInputs(GenericRollerInputs inputs) {
+  public void updateInputs(GenericRollerIOInputs inputs) {
     inputs.appliedVolts = appliedVolts;
     inputs.currentAmps = currentAmps;
   }
