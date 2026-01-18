@@ -101,6 +101,8 @@ public class DriveConstants {
   public static final double driveKs;
   public static final double driveKv;
 
+  public static final double gyroVisionLatencyLimit = 0.01;
+
   static {
     switch (Constants.currentMode) {
       default:
