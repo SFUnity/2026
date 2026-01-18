@@ -101,7 +101,8 @@ public class DriveConstants {
   public static final double driveKs;
   public static final double driveKv;
 
-  public static final double gyroVisionLatencyLimit = 0.01;
+  //Time between Vision reading and gyro update in seconds
+  public static final double gyroVisionLatencyLimit = 0.05; //TODO tune to make sure it wont fuck up gyro but will actually let readings in
 
   static {
     switch (Constants.currentMode) {
