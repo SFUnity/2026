@@ -3,7 +3,7 @@ package.frc.robot.util;
 public static class ShooterUtil {
     //Constants
     public static final double Gravity = 9.81; 
-    public static final double ShooterMaxRPM = 0; // Placeholder value
+    public static final double ShooterMaxRPM = 3500; // Placeholder value
     public static final double ShooterMinAngle = 45; 
     public static final double ShooterMaxAngle = 75; 
 
@@ -20,7 +20,7 @@ public static class ShooterUtil {
         double calculationsNumerator = Gravity * horizontalDistanceMeters * horizontalDistanceMeters;
         double calculationsDenominator = 2 * Math.cos(angleRad) * (horizontalDistanceMeters * Math.tan(angleRad) - verticalDistanceMeters);
        
-        if (requiredVelocitySquared < 0) {
+        if (calculationsNumerator/calculationsDenominator < 0) {
             return null; 
         }
         
