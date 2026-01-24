@@ -9,5 +9,4 @@ public class Spindexer extends SubsystemBase {
     public Spindexer(SpindexerIO io) {
         this.io = io;
     }
-
 }
