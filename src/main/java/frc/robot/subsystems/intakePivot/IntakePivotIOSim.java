@@ -7,7 +7,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
-import frc.robot.constantsGlobal.Constants;
 import frc.robot.util.LoggedTunableNumber;
 
 public class IntakePivotIOSim implements IntakePivotIO {
@@ -33,8 +32,8 @@ public class IntakePivotIOSim implements IntakePivotIO {
   }
 
   @Override
-  public void updateInputs(IntakeIOInputs inputs) {
-    sim.update(Constants.loopPeriodSecs);
+  public void updateInputs(IntakePivotIOInputs inputs) {
+    sim.update(0.02);
 
     inputs.pivotCurrentPositionDeg = getAngleDeg();
     inputs.pivotAppliedVolts = pivotAppliedVolts;
