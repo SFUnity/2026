@@ -15,10 +15,7 @@ public class IntakePivotIOTalon implements IntakePivotIO {
   private final SparkClosedLoopController pid = pivot.getClosedLoopController();
 
   public IntakePivotIOTalon() {
-    pivot.restoreFactoryDefaults();
-    pid.setFeedbackDevice(encoder);
-    encoder.setPositionConversionFactor(pivotPositionFactor / 360.0);
-    pid.setP(kP.get());
+    
   }
 
   @Override
