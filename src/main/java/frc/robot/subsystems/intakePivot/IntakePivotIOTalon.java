@@ -1,33 +1,24 @@
-package frc.robot.subsystems.intake;
+package frc.robot.subsystems.intakePivot;
 
-import static frc.robot.subsystems.intake.IntakeConstants.*;
-import static frc.robot.util.SparkUtil.configureSpark;
-import static frc.robot.util.SparkUtil.sparkConfig;
+import static frc.robot.subsystems.intakePivot.IntakePivotConstants.*;
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 
-public class IntakeIOTalon implements IntakeIO {
+public class IntakePivotIOTalon implements IntakePivotIO {
   private final SparkMax pivot = new SparkMax(pivotID, MotorType.kBrushless);
   private final SparkMax rollers = new SparkMax(rollersID, MotorType.kBrushless);
   private final RelativeEncoder encoder = pivot.getEncoder();
   private final SparkClosedLoopController pid = pivot.getClosedLoopController();
 
-  public IntakeIOSparkMax() {
-    var pivotConfig = sparkConfig(pivotInverted, pivotPositionFactor);
-    pivotConfig
-        .closedLoop
-        .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-        .positionWrappingEnabled(false)
-        .p(kP.get());
-    configureSpark(pivot, pivotConfig, true);
-
-    var rollerConfig = sparkConfig(rollersInverted, rollersPositionFactor);
-    configureSpark(rollers, rollerConfig, true);
+  public IntakePivotIOTalon() {
+    pivot.restoreFactoryDefaults();
+    pid.setFeedbackDevice(encoder); 
+    encoder.setPositionConversionFactor(pivotPositionFactor / 360.0);
+    pid.setP(kP.get()); 
   }
 
   @Override
