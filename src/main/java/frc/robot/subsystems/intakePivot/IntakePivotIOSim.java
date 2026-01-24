@@ -32,7 +32,7 @@ public class IntakePivotIOSim implements IntakePivotIO {
   }
 
   @Override
-  public void updateInputs(IntakeIOInputs inputs) {
+  public void updateInputs(IntakePivotIOInputs inputs) {
     sim.update(0.02);
 
     inputs.pivotCurrentPositionDeg = getAngleDeg();
