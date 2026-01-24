@@ -12,9 +12,9 @@ public interface SpindexerIO {
         public double supplyCurrentAmps = 0.0;
     }
 
-    public default void updateInputs(SpindexerIOInputs inputs) {}
+  public default void updateInputs(SpindexerIOInputs inputs) {}
 
     public default void runVolts(double voltage) {}
 
-    public default void stop() {}
+  public default void stop() {}
 }
