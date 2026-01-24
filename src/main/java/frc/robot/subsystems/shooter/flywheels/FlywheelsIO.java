@@ -1,16 +1,18 @@
 package frc.robot.subsystems.shooter.flywheels;
 
+import org.littletonrobotics.junction.AutoLog;
+
 public interface FlywheelsIO {
-    public static class FlywheelsIOOutputs{
-        public double velocityRotsPerSec = 0.0;
-        public double appliedVolts = 0.0;
-        public double currentAmps = 0.0;
+  @AutoLog
+  public static class FlywheelsIOInputs {
+    public double velocityRotsPerSec = 0.0;
+    public double appliedVolts = 0.0;
+    public double currentAmps = 0.0;
+  }
 
+  public default void updateInputs(FlywheelsIOInputs inputs) {}
 
-    }
-    public default void updateInputs(FlywheelsIOOutputs inputs){}
+  public default void runVelocity(double velocity) {}
 
-    public default void runVelocity(double velocity){}
-
-    public default void idle(){}
+  public default void idle() {}
 }
