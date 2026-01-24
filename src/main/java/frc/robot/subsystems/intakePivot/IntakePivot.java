@@ -98,7 +98,6 @@ public class IntakePivot extends SubsystemBase {
     Logger.recordOutput("Intake/positionSetpoint", positionSetpoint);
     Util.logSubsystem(this, "Intake");
 
-    Leds.getInstance().intakeGPHeld = GPHeld();
   }
 
   public Command resetGPHeld() {
@@ -149,7 +148,7 @@ public class IntakePivot extends SubsystemBase {
                         inputs.pivotCurrentPositionDeg >= l1Angle.get() - .75
                                 && shouldPlace.getAsBoolean()
                             || groundAlgae.get()));
-                .andThen(
+                andThen(
                     run(() -> {
                           rollersOut();
                         })
