@@ -19,7 +19,7 @@ public class IntakePivotIOTalon implements IntakePivotIO {
   }
 
   @Override
-  public void updateInputs(IntakeIOInputs inputs) {
+  public void updateInputs(IntakePivotIOInputs inputs) {
     inputs.pivotCurrentPositionDeg = encoder.getPosition();
     inputs.pivotAppliedVolts = pivot.getAppliedOutput() * pivot.getBusVoltage();
     inputs.pivotCurrentAmps = pivot.getOutputCurrent();
@@ -40,7 +40,8 @@ public class IntakePivotIOTalon implements IntakePivotIO {
 
   @Override
   public void setPivotPosition(double setpointDeg) {
-    pid.setReference(setpointDeg, ControlType.kPosition);
+    pid.setReference(
+        setpointDeg * pivotPositionFactor, ControlType.kPosition);
   }
 
   @Override
