@@ -4,7 +4,7 @@ import org.littletonrobotics.junction.AutoLog;
 
 public interface IntakePivotIO {
   @AutoLog
-  public static class IntakeIOInputs {
+  public static class IntakePivotIOInputs {
     public double pivotCurrentPositionDeg = 0;
     public double pivotAppliedVolts = 0.0;
     public double pivotCurrentAmps = 0.0;
@@ -13,7 +13,7 @@ public interface IntakePivotIO {
     public double rollersCurrentAmps = 0.0;
   }
 
-  default void updateInputs(IntakeIOInputs inputs) {}
+  default void updateInputs(IntakePivotIOInputs inputs) {}
 
   default void runRollers(double volts) {}
 

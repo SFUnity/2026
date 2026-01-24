@@ -15,14 +15,11 @@ public class IntakePivotIOTalon implements IntakePivotIO {
   private final SparkClosedLoopController pid = pivot.getClosedLoopController();
 
   public IntakePivotIOTalon() {
-    pivot.restoreFactoryDefaults();
-    pid.setFeedbackDevice(encoder);
-    encoder.setPositionConversionFactor(pivotPositionFactor / 360.0);
-    pid.setP(kP.get());
+    
   }
 
   @Override
-  public void updateInputs(IntakeIOInputs inputs) {
+  public void updateInputs(IntakePivotIOInputs inputs) {
     inputs.pivotCurrentPositionDeg = encoder.getPosition();
     inputs.pivotAppliedVolts = pivot.getAppliedOutput() * pivot.getBusVoltage();
     inputs.pivotCurrentAmps = pivot.getOutputCurrent();
@@ -43,7 +40,8 @@ public class IntakePivotIOTalon implements IntakePivotIO {
 
   @Override
   public void setPivotPosition(double setpointDeg) {
-    pid.setReference(setpointDeg, ControlType.kPosition);
+    pid.setReference(
+        setpointDeg * pivotPositionFactor, ControlType.kPosition);
   }
 
   @Override
