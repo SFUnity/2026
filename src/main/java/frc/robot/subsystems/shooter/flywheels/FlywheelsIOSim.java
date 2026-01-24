@@ -31,6 +31,15 @@ public class FlywheelsIOSim implements FlywheelsIO {
   public void runVelocity(double velocity) {
     appliedVolts = pid.calculate(velocity);
   }
+    inputs.appliedVolts = appliedVolts;
+    inputs.currentAmps = sim.getCurrentDrawAmps();
+    inputs.velocityRotsPerSec = sim.getAngularVelocityRPM() * 60;
+  }
+
+  @Override
+  public void runVelocity(double velocity) {
+    appliedVolts = pid.calculate(velocity);
+  }
 
   @Override
   public void idle() {

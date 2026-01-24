@@ -2,6 +2,7 @@ package frc.robot;
 
 import choreo.auto.AutoFactory;
 import choreo.auto.AutoRoutine;
+import choreo.auto.AutoTrajectory;
 import choreo.trajectory.SwerveSample;
 import choreo.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -93,7 +94,10 @@ public class Autos {
   public AutoRoutine climbAutoRoutine() {
 
     AutoRoutine routine = factory.newRoutine("Climb Auto Routine");
-    routine.active();
-    return routine;
-  }
+    AutoTrajectory Climb = routine.trajectory("Climb");
+    routine.active().onTrue(RobotCommands.sequence(Climb.resetOdometry(), Climb.cmd()));
+    Climb.done().onTrue(RobotCommands.sequence(climbExtend(), climbRetract()));
+        return routine;
+      }
+    
 }
