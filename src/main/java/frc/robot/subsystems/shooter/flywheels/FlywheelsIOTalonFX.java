@@ -34,7 +34,7 @@ public class FlywheelsIOTalonFX implements FlywheelsIO {
     motionMagicConfigs.MotionMagicJerk = 1600; // Target jerk of 1600 rps/s/s (0.1 seconds)
 
     leader.getConfigurator().apply(talonFXConfigs);
-    follow.setControl(new Follower(leader.getDeviceID(), new MotorAlignmentValue(1)));
+    follow.setControl(new Follower(leader.getDeviceID(), MotorAlignmentValue.Opposed));
   }
 
   @Override
