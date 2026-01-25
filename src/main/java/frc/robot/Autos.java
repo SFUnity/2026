@@ -173,6 +173,7 @@ public AutoRoutine FeedAutoRoutine() {
     LowerFeed.atTime("StopIntake").onTrue(RobotCommands.stopIntake());
   return routine;
   }
+
 public AutoRoutine LowerFeedClimbAutoRoutine() {
     AutoRoutine routine = factory.newRoutine("Lower Feed Climb Auto Routine");
     AutoTrajectory LowerFeedClimb = routine.trajectory("LowerFeedClimb");
