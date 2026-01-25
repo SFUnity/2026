@@ -96,12 +96,29 @@ public class Autos {
     AutoRoutine routine = factory.newRoutine("Climb Auto Routine");
     AutoTrajectory Climb = routine.trajectory("Climb");
     routine.active().onTrue(RobotCommands.sequence(Climb.resetOdometry(), Climb.cmd()));
-    Climb.done().onTrue(RobotCommands.sequence(climbExtend(), climbRetract()));
+    Climb.atTime("ExtendClimber").onTrue(RobotCommands.climbExtend());
+    Climb.done().onTrue(RobotCommands.climbRetract());
     return routine;
   }
 
-  public AutoRoutine depotAutoRoutine(){
+
+  public AutoRoutine outpostclimbAutoRoutine() { 
+    AutoRoutine routine = factory.newRoutine("Outpost Climb Auto Routine");
+    AutoTrajectory OutpostClimb = routine.trajectory("OutpostClimb");
+    return routine;
+  
+  public AutoRoutine depotAutoRoutine() {
     AutoRoutine routine = factory.newRoutine("Depot Auto Routine");
     AutoTrajectory Depot = routine.trajectory("DepotClimb");
+    routine.active().onTrue(RobotCommands.sequence(Depot.resetOdometry(), Depot.cmd()));
+    Depot.atTime("ExtendClimber").onTrue(RobotCommands.climbExtend());
+    Depot.done().onTrue(RobotCommands.climbRetract());
     return routine;
   }
+  
+  public AutoRoutine depotFeedAutoRoutine() {
+    AutoRoutine routine = factory.newRoutine("Depot Feed Auto Routine");
+    
+  }
+
+}
