@@ -20,11 +20,15 @@ public class Intake extends SubsystemBase {
     Logger.processInputs("intake", inputs);
   }
 
-  public Command runVolts() {
+  public Command intake() {
     return run(() -> io.runVolts(intakeSpeedVolts.get()));
   }
 
   public Command stop() {
     return run(() -> io.runVolts(0));
+  }
+
+  public Command eject() {
+    return run(() -> io.runVolts(-intakeSpeedVolts.get()));
   }
 }
