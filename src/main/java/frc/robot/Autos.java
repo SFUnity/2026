@@ -136,3 +136,14 @@ public AutoRoutine ScoreCenterClimbAutoRoutine() {
   ScoreCenterClimb.done().onTrue(RobotCommands.climbRetract());
   return routine;
 }
+
+public AutoRoutine LowerFeedAutoRoutine() {
+  AutoRoutine routine = factory.newRoutine("Lower Feed Auto Routine");
+  AutoTrajectory LowerFeed = routine.trajectory("LowerFeedClimb");
+  routine.active().onTrue(RobotCommands.sequence(LowerFeed.resetOdometry(), LowerFeed.cmd()));
+  LowerFeed.atTime("StartIntake").onTrue(RobotCommands.intake());
+  LowerFeed.atTime("StopIntake").onTrue(RobotCommands.stopIntake());
+  LowerFeed.atTime("ExtendClimber").onTrue(RobotCommands.climbExtend());
+  LowerFeed.done().onTrue(RobotCommands.climbRetract());
+  return routine;
+}
