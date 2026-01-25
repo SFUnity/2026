@@ -1,6 +1,5 @@
 package frc.robot.subsystems.rollers.intake;
 
-import frc.robot.subsystems.rollers.kicker.KickerIO.KickerIOInputs;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface IntakeIO {
