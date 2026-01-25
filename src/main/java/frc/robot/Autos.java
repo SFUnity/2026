@@ -99,4 +99,9 @@ public class Autos {
     Climb.done().onTrue(RobotCommands.sequence(climbExtend(), climbRetract()));
     return routine;
   }
-}
+
+  public AutoRoutine depotAutoRoutine(){
+    AutoRoutine routine = factory.newRoutine("Depot Auto Routine");
+    AutoTrajectory Depot = routine.trajectory("DepotClimb");
+    return routine;
+  }
