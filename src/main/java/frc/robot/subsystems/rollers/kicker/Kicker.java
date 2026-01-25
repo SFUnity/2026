@@ -27,6 +27,10 @@ public class Kicker extends SubsystemBase {
     public Command stop(){
         return run(()-> io.runVolts(0));
     }
+
+    public boolean atSpeed(){
+        return inputs.velocity
+    }
     
   
 }
