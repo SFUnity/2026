@@ -105,3 +105,8 @@ public class Autos {
     AutoTrajectory Depot = routine.trajectory("DepotClimb");
     return routine;
   }
+  public AutoRoutine outpostclimbAutoRoutine() { 
+    AutoRoutine routine = factory.newRoutine("Outpost Climb Auto Routine");
+    AutoTrajectory OutpostClimb = routine.trajectory("OutpostClimb");
+    return routine;
+  }
