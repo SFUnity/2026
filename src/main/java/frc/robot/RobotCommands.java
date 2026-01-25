@@ -21,7 +21,7 @@ public class RobotCommands {
 
   public static Command stopIntake() {
     return Commands.run(() -> Logger.recordOutput("RobotCommands/StopIntake", true))
-    .finallyDo((interrupted) -> Logger.recordOutput("RobotCommands/StopIntake", false));
+        .finallyDo((interrupted) -> Logger.recordOutput("RobotCommands/StopIntake", false));
   }
 
   public static Command climbExtend() {
