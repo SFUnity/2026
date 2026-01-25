@@ -152,9 +152,9 @@ public class Autos {
     UpperFeedClimb.atTime("ExtendClimber").onTrue(RobotCommands.climbExtend());
     UpperFeedClimb.done().onTrue(RobotCommands.climbRetract());
     return routine;
-  }
+}
 
-  public AutoRoutine FeedAutoRoutine() {
+public AutoRoutine FeedAutoRoutine() {
     AutoRoutine routine = factory.newRoutine("Feed Auto Routine");
     AutoTrajectory Feed = routine.trajectory("Feed");
     routine.active().onTrue(RobotCommands.sequence(Feed.resetOdometry(), Feed.cmd()));
@@ -162,10 +162,10 @@ public class Autos {
     Feed.atTime("StopIntake").onTrue(RobotCommands.stopIntake());
     Feed.atTime("StartShooting").onTrue(RobotCommands.shoot());
     Feed.atTime("StopShooting").onTrue(RobotCommands.stopShoot());
-    return routine;
-  }
+
 }
 
+<<<<<<< HEAD
 
 
 public AutoRoutine ScoreCenterClimbAutoRoutine() {
@@ -184,3 +184,18 @@ public AutoRoutine ScoreCenterClimbAutoRoutine() {
     LowerFeed.atTime("StopIntake").onTrue(RobotCommands.stopIntake());
   return routine;
   }
+=======
+public AutoRoutine LowerFeedClimbAutoRoutine() {
+    AutoRoutine routine = factory.newRoutine("Lower Feed Climb Auto Routine");
+    AutoTrajectory LowerFeedClimb = routine.trajectory("LowerFeedClimb");
+    routine.active().onTrue(RobotCommands.sequence(LowerFeedClimb.resetOdometry(), LowerFeedClimb.cmd()));
+    LowerFeedClimb.atTime("StartIntake").onTrue(RobotCommands.intake());
+    LowerFeedClimb.atTime("StopIntake").onTrue(RobotCommands.stopIntake());
+    LowerFeedClimb.atTime("StartShooting").onTrue(RobotCommands.shoot());
+    LowerFeedClimb.atTime("StopShooting").onTrue(RobotCommands.stopShoot());
+    LowerFeedClimb.atTime("ExtendClimber").onTrue(RobotCommands.climbExtend());
+    LowerFeedClimb.done().onTrue(RobotCommands.climbRetract());
+    return routine; 
+  }
+}
+>>>>>>> 480a360b7629d740df24b79060124327295e0771
