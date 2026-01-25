@@ -163,7 +163,7 @@ public class Autos {
     Feed.atTime("StartShooting").onTrue(RobotCommands.shoot());
     Feed.atTime("StopShooting").onTrue(RobotCommands.stopShoot());
     return routine;
-}
+  }
 
  public AutoRoutine LowerFeedAutoRoutine() {
     AutoRoutine routine = factory.newRoutine("Lower Feed Auto Routine");
@@ -174,7 +174,7 @@ public class Autos {
     return routine;
   }
 
-public AutoRoutine LowerFeedClimbAutoRoutine() {
+  public AutoRoutine LowerFeedClimbAutoRoutine() {
     AutoRoutine routine = factory.newRoutine("Lower Feed Climb Auto Routine");
     AutoTrajectory LowerFeedClimb = routine.trajectory("LowerFeedClimb");
     routine.active().onTrue(RobotCommands.sequence(LowerFeedClimb.resetOdometry(), LowerFeedClimb.cmd()));
