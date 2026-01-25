@@ -105,6 +105,9 @@ public class Autos {
   public AutoRoutine outpostClimbAutoRoutine() { 
     AutoRoutine routine = factory.newRoutine("Outpost Climb Auto Routine");
     AutoTrajectory OutpostClimb = routine.trajectory("OutpostClimb");
+    routine.active().onTrue(RobotCommands.sequence(OutpostClimb.resetOdometry(), OutpostClimb.cmd()));
+    OutpostClimb.atTime("ExtendClimber").onTrue(RobotCommands.climbExtend());
+    OutpostClimb.done().onTrue(RobotCommands.climbRetract());
     return routine;
   }
   public AutoRoutine depotAutoRoutine() {
