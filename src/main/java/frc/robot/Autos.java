@@ -138,7 +138,9 @@ public class Autos {
     routine.active().onTrue(RobotCommands.sequence(DepotFeed.resetOdometry(), DepotFeed.cmd()));
     DepotFeed.atTime("StartIntake").onTrue(RobotCommands.intake());
     DepotFeed.atTime("StopIntake").onTrue(RobotCommands.stopIntake());
+    return routine;
   }
+
   public AutoRoutine upperFeedClimbAutoRoutine() {
     AutoRoutine routine = factory.newRoutine("Upper Feed Climb Auto Routine");
     AutoTrajectory UpperFeedClimb = routine.trajectory("UpperFeedClimb");
