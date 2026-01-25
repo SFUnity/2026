@@ -112,7 +112,8 @@ public class Autos {
   
   public AutoRoutine depotFeedAutoRoutine() {
     AutoRoutine routine = factory.newRoutine("Depot Feed Auto Routine");
-    
-  }
+    AutoTrajectory DepotFeed = routine.trajectory("DepotFeedClimb");
+    routine.active().onTrue(RobotCommands.sequence(DepotFeed.resetOdometry(), DepotFeed.cmd()));
+    DepotFeed.atTime("StartIntake").onTrue(RobotCommands.intake());
 
 }
