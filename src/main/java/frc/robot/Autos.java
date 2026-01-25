@@ -101,12 +101,42 @@ public class Autos {
     return routine;
   }
 
-  public AutoRoutine depotAutoRoutine(){
+  public AutoRoutine outpostClimbAutoRoutine() { 
+    AutoRoutine routine = factory.newRoutine("Outpost Climb Auto Routine");
+    AutoTrajectory OutpostClimb = routine.trajectory("OutpostClimb");
+    routine.active().onTrue(RobotCommands.sequence(OutpostClimb.resetOdometry(), OutpostClimb.cmd()));
+    OutpostClimb.atTime("ExtendClimber").onTrue(RobotCommands.climbExtend());
+    OutpostClimb.done().onTrue(RobotCommands.climbRetract()); 
+    return routine;
+  }
+  
+  public AutoRoutine depotAutoRoutine() {
     AutoRoutine routine = factory.newRoutine("Depot Auto Routine");
     AutoTrajectory Depot = routine.trajectory("DepotClimb");
     routine.active().onTrue(RobotCommands.sequence(Depot.resetOdometry(), Depot.cmd()));
     Depot.atTime("ExtendClimber").onTrue(RobotCommands.climbExtend());
     Depot.done().onTrue(RobotCommands.climbRetract());
     return routine;
+  }
+
+  public AutoRoutine ScoreCenterClimbAutoRoutine() {
+    AutoRoutine routine = factory.newRoutine("ScoreCenterClimb Auto Routine");
+    AutoTrajectory ScoreCenterClimb = routine.trajectory("ScoreCenterClimb");
+    routine.active().onTrue(RobotCommands.sequence(ScoreCenterClimb.resetOdometry(), ScoreCenterClimb.cmd()));
+    ScoreCenterClimb.atTime("ExtendClimber").onTrue(RobotCommands.climbExtend());
+    ScoreCenterClimb.atTime("StartIntake").onTrue(RobotCommands.intake());
+    ScoreCenterClimb.atTime("StopIntake").onTrue(RobotCommands.stopIntake());
+    ScoreCenterClimb.atTime("StartShoot").onTrue(RobotCommands.shoot());
+    ScoreCenterClimb.atTime("StopShoot").onTrue(RobotCommands.stopShoot());
+    ScoreCenterClimb.done().onTrue(RobotCommands.climbRetract());
+    return routine;
+  }
+  
+  public AutoRoutine depotFeedAutoRoutine() {
+    AutoRoutine routine = factory.newRoutine("Depot Feed Auto Routine");
+    AutoTrajectory DepotFeed = routine.trajectory("DepotFeedClimb");
+    routine.active().onTrue(RobotCommands.sequence(DepotFeed.resetOdometry(), DepotFeed.cmd()));
+    DepotFeed.atTime("StartIntake").onTrue(RobotCommands.intake());
+    DepotFeed.atTime("StopIntake").onTrue(RobotCommands.stopIntake());
   }
 }

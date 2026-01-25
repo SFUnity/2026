@@ -11,6 +11,11 @@ public class RobotCommands {
         .finallyDo((interrupted) -> Logger.recordOutput("RobotCommands/Intake", false));
   }
 
+  public static Command stopIntake() {
+    return Commands.run(() -> Logger.recordOutput("RobotCommands/StopIntake", true))
+    .finallyDo((interrupted) -> Logger.recordOutput("RobotCommands/StopIntake", false));
+  }
+
   public static Command climbExtend() {
     return Commands.run(() -> Logger.recordOutput("RobotCommands/ClimbExtend", true))
         .finallyDo((interrupted) -> Logger.recordOutput("RobotCommands/ClimbExtend", false));
@@ -21,9 +26,14 @@ public class RobotCommands {
         .finallyDo((interrupted) -> Logger.recordOutput("RobotCommands/ClimbRetract", false));
   }
 
-  public static Command score() {
-    return Commands.run(() -> Logger.recordOutput("RobotCommands/Score", true))
-        .finallyDo((interrupted) -> Logger.recordOutput("RobotCommands/Score", false));
+  public static Command shoot() {
+    return Commands.run(() -> Logger.recordOutput("RobotCommands/StopShoot", true))
+        .finallyDo((interrupted) -> Logger.recordOutput("RobotCommands/StopShoot", false));
+  }
+
+  public static Command stopShoot() {
+    return Commands.run(() -> Logger.recordOutput("RobotCommands/Shoot", true))
+        .finallyDo((interrupted) -> Logger.recordOutput("RobotCommands/Shoot", false));
   }
 
   public static Command sequence(Command... commands) {
