@@ -118,6 +118,19 @@ public class Autos {
     Depot.done().onTrue(RobotCommands.climbRetract());
     return routine;
   }
+
+  public AutoRoutine ScoreCenterClimbAutoRoutine() {
+    AutoRoutine routine = factory.newRoutine("ScoreCenterClimb Auto Routine");
+    AutoTrajectory ScoreCenterClimb = routine.trajectory("ScoreCenterClimb");
+    routine.active().onTrue(RobotCommands.sequence(ScoreCenterClimb.resetOdometry(), ScoreCenterClimb.cmd()));
+    ScoreCenterClimb.atTime("ExtendClimber").onTrue(RobotCommands.climbExtend());
+    ScoreCenterClimb.atTime("StartIntake").onTrue(RobotCommands.intake());
+    ScoreCenterClimb.atTime("StopIntake").onTrue(RobotCommands.stopIntake());
+    ScoreCenterClimb.atTime("StartShoot").onTrue(RobotCommands.shoot());
+    ScoreCenterClimb.atTime("StopShoot").onTrue(RobotCommands.stopShoot());
+    ScoreCenterClimb.done().onTrue(RobotCommands.climbRetract());
+    return routine;
+  }
   
   public AutoRoutine depotFeedAutoRoutine() {
     AutoRoutine routine = factory.newRoutine("Depot Feed Auto Routine");
@@ -125,7 +138,7 @@ public class Autos {
     routine.active().onTrue(RobotCommands.sequence(DepotFeed.resetOdometry(), DepotFeed.cmd()));
     DepotFeed.atTime("StartIntake").onTrue(RobotCommands.intake());
     DepotFeed.atTime("StopIntake").onTrue(RobotCommands.stopIntake());
-
+  }
 }
 
 public AutoRoutine ScoreCenterClimbAutoRoutine() {
@@ -136,14 +149,11 @@ public AutoRoutine ScoreCenterClimbAutoRoutine() {
   ScoreCenterClimb.done().onTrue(RobotCommands.climbRetract());
   return routine;
 }
-
-public AutoRoutine LowerFeedAutoRoutine() {
-  AutoRoutine routine = factory.newRoutine("Lower Feed Auto Routine");
-  AutoTrajectory LowerFeed = routine.trajectory("LowerFeedClimb");
-  routine.active().onTrue(RobotCommands.sequence(LowerFeed.resetOdometry(), LowerFeed.cmd()));
-  LowerFeed.atTime("StartIntake").onTrue(RobotCommands.intake());
-  LowerFeed.atTime("StopIntake").onTrue(RobotCommands.stopIntake());
-  LowerFeed.atTime("ExtendClimber").onTrue(RobotCommands.climbExtend());
-  LowerFeed.done().onTrue(RobotCommands.climbRetract());
+ public Autoroutine LowerFeedAutoRoutine() {
+    AutoRoutine routine = factory.newRoutine("Lower Feed Auto Routine");
+    AutoTrajectory LowerFeed = routine.trajectory("LowerFeedClimb");
+    routine.active().onTrue(RobotCommands.sequence(LowerFeed.resetOdometry(), LowerFeed.cmd()));
+    LowerFeed.atTime("StartIntake").onTrue(RobotCommands.intake());
+    LowerFeed.atTime("StopIntake").onTrue(RobotCommands.stopIntake());
   return routine;
-}
+  }
