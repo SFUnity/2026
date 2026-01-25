@@ -151,9 +151,8 @@ public class Autos {
     UpperFeedClimb.done().onTrue(RobotCommands.climbRetract());
     return routine;
   }
-}
 
-public AutoRoutine FeedAutoRoutine() {
+  public AutoRoutine FeedAutoRoutine() {
     AutoRoutine routine = factory.newRoutine("Feed Auto Routine");
     AutoTrajectory Feed = routine.trajectory("Feed");
     routine.active().onTrue(RobotCommands.sequence(Feed.resetOdometry(), Feed.cmd()));
@@ -161,5 +160,8 @@ public AutoRoutine FeedAutoRoutine() {
     Feed.atTime("StopIntake").onTrue(RobotCommands.stopIntake());
     Feed.atTime("StartShooting").onTrue(RobotCommands.shoot());
     Feed.atTime("StopShooting").onTrue(RobotCommands.stopShoot());
-
+    return routine;
+  }
 }
+
+
