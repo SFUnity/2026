@@ -96,7 +96,7 @@ public class Autos {
     AutoRoutine routine = factory.newRoutine("Climb Auto Routine");
     AutoTrajectory Climb = routine.trajectory("Climb");
     routine.active().onTrue(RobotCommands.sequence(Climb.resetOdometry(), Climb.cmd()));
-    Climb.done().onTrue(RobotCommands.sequence(climbExtend(), climbRetract()));
+    // Climb.done().onTrue(RobotCommands.sequence(climbExtend(), climbRetract()));
     return routine;
   }
 }
