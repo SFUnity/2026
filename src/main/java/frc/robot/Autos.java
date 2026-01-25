@@ -152,9 +152,9 @@ public class Autos {
     UpperFeedClimb.atTime("ExtendClimber").onTrue(RobotCommands.climbExtend());
     UpperFeedClimb.done().onTrue(RobotCommands.climbRetract());
     return routine;
-}
+  }
 
-public AutoRoutine FeedAutoRoutine() {
+  public AutoRoutine FeedAutoRoutine() {
     AutoRoutine routine = factory.newRoutine("Feed Auto Routine");
     AutoTrajectory Feed = routine.trajectory("Feed");
     routine.active().onTrue(RobotCommands.sequence(Feed.resetOdometry(), Feed.cmd()));
@@ -165,16 +165,7 @@ public AutoRoutine FeedAutoRoutine() {
     return routine;
 }
 
-public AutoRoutine ScoreCenterClimbAutoRoutine() {
-  AutoRoutine routine = factory.newRoutine("Score Center Climb Auto Routine");
-  AutoTrajectory ScoreCenterClimb = routine.trajectory("ScoreCenterClimb");
-  routine.active().onTrue(RobotCommands.sequence(ScoreCenterClimb.resetOdometry(), ScoreCenterClimb.cmd()));
-  ScoreCenterClimb.atTime("ExtendClimber").onTrue(RobotCommands.climbExtend());
-  ScoreCenterClimb.done().onTrue(RobotCommands.climbRetract());
-  return routine;
-}
-
- public Autoroutine LowerFeedAutoRoutine() {
+ public AutoRoutine LowerFeedAutoRoutine() {
     AutoRoutine routine = factory.newRoutine("Lower Feed Auto Routine");
     AutoTrajectory LowerFeed = routine.trajectory("LowerFeedClimb");
     routine.active().onTrue(RobotCommands.sequence(LowerFeed.resetOdometry(), LowerFeed.cmd()));
