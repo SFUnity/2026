@@ -35,4 +35,10 @@ public class TurretConstants {
 
   public static double extraDegs1 = 360 * (1 % totalRotations1);
   public static double extraDegs2 = 360 * (1 % totalRotations2);
+
+  public static double shootKA = 0.005;
+  public static double shootKV = 0.1;
+
+  public static double noshootKA = 0.1;
+  public static double noshootKV = 0.2;
 }
