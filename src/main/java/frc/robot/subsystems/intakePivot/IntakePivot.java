@@ -98,10 +98,7 @@ public class IntakePivot extends SubsystemBase {
     Util.logSubsystem(this, "Intake");
   }
 
-  public Command resetGPHeld() {
-    return Commands.runOnce(() -> hasGP = false);
-  }
-
+ 
   private void lower() {
     positionSetpoint = loweredAngle.get();
     io.setPivotPosition(positionSetpoint);
