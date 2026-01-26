@@ -10,7 +10,6 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-
 import edu.wpi.first.math.util.Units;
 
 public class TurretIOTalonFX implements TurretIO {
@@ -21,8 +20,10 @@ public class TurretIOTalonFX implements TurretIO {
   private final VoltageOut voltageOut = new VoltageOut(0).withEnableFOC(true);
   private final NeutralOut neutralOut = new NeutralOut();
 
-  private final DynamicMotionMagicExpoVoltage motionMagicExpoVoltageShoot = new DynamicMotionMagicExpoVoltage(0, shootKV, shootKA).withEnableFOC(true);
-    private final DynamicMotionMagicExpoVoltage motionMagicExpoVoltageNoShoot = new DynamicMotionMagicExpoVoltage(0, noshootKV, noshootKA).withEnableFOC(true);
+  private final DynamicMotionMagicExpoVoltage motionMagicExpoVoltageShoot =
+      new DynamicMotionMagicExpoVoltage(0, shootKV, shootKA).withEnableFOC(true);
+  private final DynamicMotionMagicExpoVoltage motionMagicExpoVoltageNoShoot =
+      new DynamicMotionMagicExpoVoltage(0, noshootKV, noshootKA).withEnableFOC(true);
 
   private double angle;
 
@@ -53,26 +54,39 @@ public class TurretIOTalonFX implements TurretIO {
   }
 
   @Override
-    public void runVolts(double volts) {
-        talon.setControl(voltageOut.withOutput(volts));
-    }
+  public void runVolts(double volts) {
+    talon.setControl(voltageOut.withOutput(volts));
+  }
 
-    @Override
-    public void stop() {
-        talon.setControl(neutralOut);
-    }
+  @Override
+  public void stop() {
+    talon.setControl(neutralOut);
+  }
 
-    @Override
-    public void turnTurret(double targetDegs, boolean isShooting) {
-        if(isShooting) {
-            targetDegs = (targetDegs < minAngleDegs || targetDegs > maxAngleDegs) ? ((360-Math.abs(targetDegs-centerDegs))*((targetDegs-centerDegs)/-Math.abs(targetDegs-centerDegs)))+centerDegs : targetDegs;
-            talon.setControl(motionMagicExpoVoltageShoot.withPosition(Units.degreesToRotations(targetDegs) * gearRatio));
-        }
-        else {
-            targetDegs = (targetDegs < minBufferAngleDegs || targetDegs > maxBufferAngleDegs) ? ((360-Math.abs(targetDegs-centerDegs))*((targetDegs-centerDegs)/-Math.abs(targetDegs-centerDegs)))+centerDegs : targetDegs;
-            talon.setControl(motionMagicExpoVoltageNoShoot.withPosition(Units.degreesToRotations(targetDegs) * gearRatio));
-        }
+  @Override
+  public void turnTurret(double targetDegs, boolean isShooting) {
+    if (isShooting) {
+      targetDegs =
+          (targetDegs < minAngleDegs || targetDegs > maxAngleDegs)
+              ? ((360 - Math.abs(targetDegs - centerDegs))
+                      * ((targetDegs - centerDegs) / -Math.abs(targetDegs - centerDegs)))
+                  + centerDegs
+              : targetDegs;
+      talon.setControl(
+          motionMagicExpoVoltageShoot.withPosition(
+              Units.degreesToRotations(targetDegs) * gearRatio));
+    } else {
+      targetDegs =
+          (targetDegs < minBufferAngleDegs || targetDegs > maxBufferAngleDegs)
+              ? ((360 - Math.abs(targetDegs - centerDegs))
+                      * ((targetDegs - centerDegs) / -Math.abs(targetDegs - centerDegs)))
+                  + centerDegs
+              : targetDegs;
+      talon.setControl(
+          motionMagicExpoVoltageNoShoot.withPosition(
+              Units.degreesToRotations(targetDegs) * gearRatio));
     }
+  }
 
   @Override
   public double getPositionDegs() {

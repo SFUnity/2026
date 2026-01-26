@@ -57,20 +57,19 @@ public class RobotCommands {
     return new SequentialCommandGroup(commands);
   }
 
-  public static Command intake(Intake intake, IntakePivot intakePivot){
+  public static Command intake(Intake intake, IntakePivot intakePivot) {
     return intake.intake().alongWith(intakePivot.lower());
   }
-  public static Command eject(Intake intake, IntakePivot intakePivot){
+
+  public static Command eject(Intake intake, IntakePivot intakePivot) {
     return intake.eject().alongWith(intakePivot.lower());
   }
 
-  public static Command stowIntake(Intake intake, IntakePivot intakePivot){
+  public static Command stowIntake(Intake intake, IntakePivot intakePivot) {
     return intake.stop().alongWith(intakePivot.raise());
   }
 
-  public static Command jork(Intake intake, IntakePivot intakePivot){
+  public static Command jork(Intake intake, IntakePivot intakePivot) {
     return intake.stop().alongWith(intakePivot.jork());
-  }  
-
-  
+  }
 }

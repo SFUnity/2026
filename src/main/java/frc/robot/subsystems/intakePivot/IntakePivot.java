@@ -131,16 +131,15 @@ public class IntakePivot extends SubsystemBase {
         .finallyDo(() -> io.resetEncoder(0.0));
   }
 
-  public Command raise(){
+  public Command raise() {
     return Commands.none();
   }
 
-  public Command lower(){
+  public Command lower() {
     return Commands.none();
   }
 
-  public Command jork(){
+  public Command jork() {
     return Commands.none();
   }
-
 }
