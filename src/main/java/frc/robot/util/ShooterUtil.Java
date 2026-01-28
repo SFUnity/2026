@@ -30,8 +30,7 @@ public static class ShooterUtil {
                  horizontalDistanceMeters * horizontalDistanceMeters +
                  verticalDistanceMeters * verticalDistanceMeters
              )) / horizontalDistanceMeters
-        
-    );
+        );
         //Added a bit of tolerance by increasing the angle by 2 degrees
         double optimalAngleDeg = Math.toDegrees(optimalAngleRad) + 2;
         double optimalAngle = Math.toRadians(optimalAngleDeg);
@@ -54,53 +53,53 @@ public static class ShooterUtil {
 
         //correcting angle instead if required rpm is too large
         if (rpm > ShooterMaxRPM) {
-        // Solve quadratic for tan(theta) using v_max and basically reverse the projectile motion equations
-        double v_max = 2 * Math.PI * wheelRadius * (ShooterMaxRPM / 60.0);
-        double a = Gravity * horizontalDistanceMeters * horizontalDistanceMeters / (2 * v_max * v_max);
-        double b = -horizontalDistanceMeters;
-        double c = a + verticalDistanceMeters;
+            // Solve quadratic for tan(theta) using v_max and basically reverse the projectile motion equations
+            double v_max = 2 * Math.PI * wheelRadius * (ShooterMaxRPM / 60.0);
+            double a = Gravity * horizontalDistanceMeters * horizontalDistanceMeters / (2 * v_max * v_max);
+            double b = -horizontalDistanceMeters;
+            double c = a + verticalDistanceMeters;
 
-    double discriminant = b*b - 4*a*c;
+            double discriminant = b*b - 4*a*c;
 
-    if (discriminant >= 0) {
-        double T1 = (-b + Math.sqrt(discriminant)) / (2*a);
-        double T2 = (-b - Math.sqrt(discriminant)) / (2*a);
+            if (discriminant >= 0) {
+                double T1 = (-b + Math.sqrt(discriminant)) / (2*a);
+                double T2 = (-b - Math.sqrt(discriminant)) / (2*a);
 
-        double newAngleRad = Math.atan(Math.min(T1, T2));
-        double newAngleDeg = Math.toDegrees(newAngleRad);
+                double newAngleRad = Math.atan(Math.min(T1, T2));
+                double newAngleDeg = Math.toDegrees(newAngleRad);
 
-        if (newAngleDeg >= ShooterMinAngle && newAngleDeg <= ShooterMaxAngle) {
-            optimalAngleDeg = newAngleDeg;
-            optimalAngle = newAngleRad;
-            requiredVelocity = v_max;
+                if (newAngleDeg >= ShooterMinAngle && newAngleDeg <= ShooterMaxAngle) {
+                    optimalAngleDeg = newAngleDeg;
+                    optimalAngle = newAngleRad;
+                    requiredVelocity = v_max;
 
-            rpm = ShooterMaxRPM; // since we are using max velocity
-        } else {
-            // No valid angle or velocity so sotm defaults to largest angle and max rpm
-            return new ShooterSolution(ShooterMaxAngle, ShooterMaxRPM, launchAngle);
+                    rpm = ShooterMaxRPM; // since we are using max velocity
+                } else {
+                    // No valid angle or velocity so sotm defaults to largest angle and max rpm
+                    return new ShooterSolution(ShooterMaxAngle, ShooterMaxRPM, launchAngle);
+                }
+            } 
         }
-    } 
-}
         //i don't think I did this right but basically calculate flight time to find horizontal skew
         public static double calculateTimeOfFlight(double horizontalDistanceMeters, double launchAngleDeg, double rpm) {
-        double angleRad = Math.toRadians(launchAngleDeg);
+            double angleRad = Math.toRadians(launchAngleDeg);
 
-        double wheelRadius = 0.0508; 
-        double exitVelocity = (rpm / 60.0) * (2 * Math.PI * wheelRadius);
+            double wheelRadius = 0.0508; 
+            double exitVelocity = (rpm / 60.0) * (2 * Math.PI * wheelRadius);
 
-        double horizontalVelocity = exitVelocity * Math.cos(angleRad);
-        if (horizontalVelocity <= 0) {
-        return null;
+            double horizontalVelocity = exitVelocity * Math.cos(angleRad);
+            if (horizontalVelocity <= 0) {
+                return null;
+            }
+
+            return horizontalDistanceMeters / horizontalVelocity;
         }
-
-    return horizontalDistanceMeters / horizontalVelocity;
-    }
         //calculate the angle the robot needs to turn to compensate for sideways movement
-    public static double calculateTurnAngle(double robotSidewaysVelocityMetersPerSec, double exitVelocityMetersPerSec) {
-        
-        return Math.atan(robotSidewaysVelocityMetersPerSec / exitVelocityMetersPerSec);
+        public static double calculateTurnAngle(double robotSidewaysVelocityMetersPerSec, double exitVelocityMetersPerSec) {
+            
+            return Math.atan(robotSidewaysVelocityMetersPerSec / exitVelocityMetersPerSec);
 
-    }
+        }
         return new ShooterSolution(optimalAngleDeg, rpm, launchAngle);
     }
 
