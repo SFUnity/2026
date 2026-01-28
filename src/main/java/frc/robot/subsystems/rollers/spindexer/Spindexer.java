@@ -23,6 +23,6 @@ public class Spindexer extends SubsystemBase {
   }
 
   public Command stopSpindexer() {
-    return run(() -> io.runVolts(0));
+    return run(() -> io.stop());
   }
 }
