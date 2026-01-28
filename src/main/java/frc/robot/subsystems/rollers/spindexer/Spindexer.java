@@ -16,7 +16,7 @@ public class Spindexer extends SubsystemBase {
 
   public void periodic() {
     io.updateInputs(inputs);
-    // TODO add log subsystem from GeneralUtil
+    // TODO add log subsystem from GeneralUtil + logging framework
   }
 
   // TODO rename to simply "run" because there are no inputs to the command (it will end up reading spindexer.run())
