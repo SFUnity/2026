@@ -1,19 +1,19 @@
-package frc.robot.subsystems.rollers.kicker;
+package frc.robot.subsystems.rollers.intake;
 
 import static frc.robot.Constants.loopPeriodSecs;
-import static frc.robot.subsystems.rollers.kicker.KickerConstants.*;
+import static frc.robot.subsystems.rollers.intake.IntakeConstants.*;
 
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 
-public class KickerIOTalonFX implements KickerIO {
-  private final TalonFX rollerMotor = new TalonFX(kickerMotorID);
+public class IntakeIOTalonFX implements IntakeIO {
+  private final TalonFX rollerMotor = new TalonFX(intakeMotorID);
 
   private final VoltageOut voltageOut =
       new VoltageOut(0).withEnableFOC(true).withUpdateFreqHz(loopPeriodSecs);
 
   @Override
-  public void updateInputs(KickerIOInputs inputs) {
+  public void updateInputs(IntakeIOInputs inputs) {
     inputs.appliedVolts = rollerMotor.getMotorVoltage().getValueAsDouble();
     inputs.currentAmps = rollerMotor.getSupplyCurrent().getValueAsDouble();
   }

@@ -1,13 +1,13 @@
-package frc.robot.subsystems.rollers;
+package frc.robot.subsystems.rollers.intake;
 
-public class GenericRollerIOSim implements GenericRollerIO {
+public class IntakeIOSim implements IntakeIO {
   private double appliedVolts = 0.0;
   private double currentAmps = 0.0;
 
-  public GenericRollerIOSim() {}
+  public IntakeIOSim() {}
 
   @Override
-  public void updateInputs(GenericRollerIOInputs inputs) {
+  public void updateInputs(IntakeIOInputs inputs) {
     inputs.appliedVolts = appliedVolts;
     inputs.currentAmps = currentAmps;
   }

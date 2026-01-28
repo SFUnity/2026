@@ -14,6 +14,7 @@ public class Flywheels extends SubsystemBase {
     this.io = io;
   }
 
+  @Override
   public void periodic() {
     io.updateInputs(inputs);
 
@@ -29,7 +30,7 @@ public class Flywheels extends SubsystemBase {
     velocity = speed;
   }
 
-  public Command setVelocities(double speed) {
+  public Command setVelocity(double speed) {
     return run(() -> updateFlywheels(speed));
   }
 
