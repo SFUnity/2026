@@ -26,7 +26,12 @@ public interface TurretIO {
   public default void turnTurret(double targetDegs, boolean isShooting) {}
   ;
 
-  public default double getPositionDegs() {
+  public default double getEncoder1Degs() {
+    return 0;
+  }
+  ;
+
+  public default double getEncoder2Degs() {
     return 0;
   }
   ;
