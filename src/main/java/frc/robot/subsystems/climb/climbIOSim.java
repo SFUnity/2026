@@ -12,7 +12,7 @@ public class ClimbIOSim implements ClimbIO {
   }
 
   @Override
-  public void runVolts(double voltage) {
-    appliedVolts = voltage;
+  public void setPosition(double rotations) {
+    appliedVolts = rotations;
   }
 }

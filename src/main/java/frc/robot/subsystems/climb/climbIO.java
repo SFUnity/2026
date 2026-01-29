@@ -14,5 +14,5 @@ public interface ClimbIO {
 
   public default void updateInputs(climbIOInputs inputs) {}
 
-  public default void runVolts(double voltage) {}
+  public default void setPosition(double rotations) {}
 }

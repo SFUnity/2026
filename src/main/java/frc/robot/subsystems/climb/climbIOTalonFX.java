@@ -1,12 +1,8 @@
 package frc.robot.subsystems.climb;
 
-import static frc.robot.Constants.loopPeriodSecs;
-
-import com.ctre.phoenix6.controls.PositionVoltage;
-import com.ctre.phoenix6.controls.VoltageOut;
-import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-
+import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.hardware.TalonFX;
 
 public class ClimbIOTalonFX implements ClimbIO {
   private final TalonFX talon = new TalonFX(0);
@@ -28,9 +24,7 @@ public class ClimbIOTalonFX implements ClimbIO {
   //    new VoltageOut(0).withEnableFOC(true).withUpdateFreqHz(loopPeriodSecs);
   final PositionVoltage positionVoltage = new PositionVoltage(0).withSlot(0);
 
-
-  @
-  Override
+  @Override
   public void updateInputs(climbIOInputs inputs) {
     inputs.appliedVolts = talon.getMotorVoltage().getValueAsDouble();
     inputs.statorCurrentAmps = talon.getStatorCurrent().getValueAsDouble();
