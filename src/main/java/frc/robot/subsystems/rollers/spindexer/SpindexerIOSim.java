@@ -18,10 +18,4 @@ public class SpindexerIOSim implements SpindexerIO {
   public void run(double voltage) {
     appliedVolts = voltage;
   }
-
-  // TODO you can delete this because it doesn't get used anywhere
-  @Override
-  public void stop() {
-    appliedVolts = 0;
-  }
 }

@@ -23,8 +23,7 @@ public class Spindexer extends SubsystemBase {
     return run(() -> io.run(spindexerSpeedVolts.get()));
   }
 
-  // TODO rename to "stop" for consistency / readability (it will end up reading spindexer.stop())
-  public Command stopSpindexer() {
-    return run(() -> io.stop());
+  public Command stop() {
+    return run(() -> io.run(0.0));
   }
 }
