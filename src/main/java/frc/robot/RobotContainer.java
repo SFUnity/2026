@@ -36,9 +36,9 @@ import frc.robot.util.PoseManager;
 public class RobotContainer {
   // Subsystems
   private final Drive drive;
-  private final Turret turret;
-  private final Shooter Shooter;
-  private final Hood hood;
+  // private final Turret turret;
+  // private final Shooter Shooter;
+  // private final Hood hood;
 
   // Non-subsystems
   private final Autos autos;
