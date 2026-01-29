@@ -26,7 +26,6 @@ import java.util.function.BooleanSupplier;
 
 public class DriveConstants {
   public static final double maxSpeedMetersPerSec = Units.feetToMeters(10.5);
-  public static final double nitroMaxSpeedMetersPerSec = Units.feetToMeters(17.5);
   public static final double maxAccelerationMetersPerSec =
       Units.feetToMeters(70.0); // This is what 6328
   public static final double odometryFrequency = 100.0; // Hz
