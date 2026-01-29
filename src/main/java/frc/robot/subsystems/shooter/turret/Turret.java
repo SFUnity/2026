@@ -6,6 +6,7 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.util.GeneralUtil;
 
 public class Turret extends SubsystemBase {
   private final TurretIO io;
@@ -23,7 +24,8 @@ public class Turret extends SubsystemBase {
     io.updateInputs(inputs);
     inputs.positionDegs = getPositionDegs();
     Logger.processInputs("Turret", inputs);
-    
+    GeneralUtil.logSubsystem(this, "Turret");
+
     if (isShooting) {
       double currentDegs = getPositionDegs();
       targetDegs += bufferDegs * 2;
