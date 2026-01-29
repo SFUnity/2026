@@ -1,5 +1,6 @@
 package frc.robot.subsystems.shooter;
 
+import frc.robot.util.ShooterUtil.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.shooter.flywheels.Flywheels;
