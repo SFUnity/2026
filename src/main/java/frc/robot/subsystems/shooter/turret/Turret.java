@@ -2,10 +2,9 @@ package frc.robot.subsystems.shooter.turret;
 
 import static frc.robot.subsystems.shooter.turret.TurretConstants.*;
 
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.littletonrobotics.junction.Logger;
 import frc.robot.util.GeneralUtil;
 
 public class Turret extends SubsystemBase {
