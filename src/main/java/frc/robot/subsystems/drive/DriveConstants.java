@@ -13,7 +13,6 @@
 
 package frc.robot.subsystems.drive;
 
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
@@ -35,15 +34,8 @@ public class DriveConstants {
   public static final double maxAngularSpeedRadiansPerSec = maxSpeedMetersPerSec / driveBaseRadius;
   public static final double maxAngularAccelerationRadiansPerSec =
       maxAccelerationMetersPerSec / driveBaseRadius;
-  public static final Translation2d[] moduleTranslations =
-      new Translation2d[] {
-        new Translation2d(trackWidth / 2.0, wheelBase / 2.0),
-        new Translation2d(trackWidth / 2.0, -wheelBase / 2.0),
-        new Translation2d(-trackWidth / 2.0, wheelBase / 2.0),
-        new Translation2d(-trackWidth / 2.0, -wheelBase / 2.0)
-      };
   public static final SwerveDriveKinematics kinematics =
-      new SwerveDriveKinematics(moduleTranslations);
+      new SwerveDriveKinematics(Drive.getModuleTranslations());
 
   // Zeroed rotation values for each module, see setup instructions
   public static final double frontLeftZeroRotation = -0.241943;
