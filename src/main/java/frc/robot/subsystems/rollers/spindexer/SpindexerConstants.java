@@ -6,5 +6,5 @@ public class SpindexerConstants {
   public static final int talonID = 0;
 
   public static final LoggedTunableNumber spindexerSpeedVolts =
-      new LoggedTunableNumber("Spindexer/rollerSpeed", 2);
+      new LoggedTunableNumber("Spindexer/rollerSpeed", 10.0);
 }
