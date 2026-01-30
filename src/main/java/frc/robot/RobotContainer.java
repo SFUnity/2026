@@ -115,6 +115,7 @@ public class RobotContainer {
             () -> -controller.getLeftX(),
             () -> -controller.getRightX(),
             poseManager));
+    spindexer.setDefaultCommand(spindexer.stop());
 
     // Lock to 0° when A button is held
     controller
@@ -142,8 +143,8 @@ public class RobotContainer {
                 .ignoringDisable(true));
 
     controller.y().whileTrue(spindexer.run());
+    
   }
-
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
