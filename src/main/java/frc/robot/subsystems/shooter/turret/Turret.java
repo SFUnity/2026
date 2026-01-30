@@ -59,7 +59,7 @@ public class Turret extends SubsystemBase {
     return truePosition;
   }
 
-  public boolean isAtGoal() {
+  public boolean atGoal() {
     return Math.abs(inputs.positionDegs - goalDegs) < angleToleranceDegs;
   }
 
