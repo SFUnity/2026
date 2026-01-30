@@ -45,5 +45,7 @@ public class ShooterVisualizer {
             zCoord + Math.sin(hoodAngle)*flywheelSpeed,
             new Rotation3d()
         );
+
+        Logger.recordOutput("Shooter/Mechanism3D", ShooterPose);
     }
 }
