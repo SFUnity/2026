@@ -17,13 +17,9 @@ public class Shooter extends SubsystemBase {
     this.flywheels = flywheels;
     this.turret = turret;
     this.hood = hood;
-
-
   }
 
-  public void periodic() {
-
-  }
+  public void periodic() {}
 
   public Command setShooting(boolean shooting) {
     return runOnce(() -> isShooting = shooting);
