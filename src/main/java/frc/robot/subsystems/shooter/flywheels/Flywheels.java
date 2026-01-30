@@ -2,6 +2,9 @@ package frc.robot.subsystems.shooter.flywheels;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import static frc.robot.subsystems.shooter.flywheels.FlywheelsConstants.flywheelTolerance;
+
 import org.littletonrobotics.junction.Logger;
 
 public class Flywheels extends SubsystemBase {
@@ -38,5 +41,9 @@ public class Flywheels extends SubsystemBase {
 
   public Command setIdle() {
     return run(() -> idle = true);
+  }
+
+  public boolean atGoal() {
+    return Math.abs(inputs.velocityRotsPerSec - velocity) < flywheelTolerance;
   }
 }
