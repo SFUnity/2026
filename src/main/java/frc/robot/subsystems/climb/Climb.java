@@ -14,6 +14,7 @@ public class Climb extends SubsystemBase {
 
   public Climb(ClimbIO io) {
     this.io = io;
+    Logger.recordOutput("ClimbPosition", downRotations);
   }
 
   public void periodic() {
@@ -24,10 +25,10 @@ public class Climb extends SubsystemBase {
   }
 
   public Command climbUp() {
-    return run(() -> io.setPosition(upRotations));
+    return run(() -> io.setPosition(upRotations)).alongWith(runOnce(() -> Logger.recordOutput("ClimbPosition", upRotations)));
   }
 
   public Command climbDown() {
-    return run(() -> io.setPosition(downRotations));
+    return run(() -> io.setPosition(downRotations)).alongWith(runOnce(() -> Logger.recordOutput("ClimbPosition", downRotations)));
   }
 }
