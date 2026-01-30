@@ -1,14 +1,12 @@
 package frc.robot.subsystems.shooter;
 
-import frc.robot.util.ShooterUtil.*;
+import frc.robot.util.VirtualSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.VirtualSubsystem;
+import static edu.wpi.first.wpilibj2.command.Commands.*;
 import frc.robot.subsystems.shooter.flywheels.Flywheels;
 import frc.robot.subsystems.shooter.hood.Hood;
 import frc.robot.subsystems.shooter.turret.Turret;
 
-// TODO I suggest you don't make this a SubsystemBase because then you can have commands that use
-// only some of the subsystems. If you still want a periodic method you can use VirtualSubsystem
 public class Shooter extends VirtualSubsystem {
   private final Flywheels flywheels;
   private final Turret turret;
