@@ -1,7 +1,5 @@
 package frc.robot.subsystems.shooter;
 
-import edu.wpi.first.math.geometry.Pose2d;
-
 public class ShooterUtil {
   // Constants
   public static final double Gravity = 9.81;
@@ -121,5 +119,4 @@ public class ShooterUtil {
   }
 }
 
-
-//adjust for backspin and also for Turret offset
+// adjust for backspin and also for Turret offset
