@@ -21,12 +21,12 @@ public class Turret extends SubsystemBase {
   @Override
   public void periodic() {
     io.updateInputs(inputs);
-    inputs.positionDegs = getPositionDegs();
+    double currentDegs = getPositionDegs();
+    inputs.positionDegs = currentDegs;
     Logger.processInputs("Turret", inputs);
     GeneralUtil.logSubsystem(this, "Turret");
 
     if (isShooting) {
-      double currentDegs = getPositionDegs();
       targetDegs += bufferDegs * 2;
       if (Math.abs(targetDegs + 360 - currentDegs) < Math.abs(targetDegs - currentDegs)
           && (targetDegs + 360) <= maxAngleDegs) {
@@ -44,8 +44,8 @@ public class Turret extends SubsystemBase {
 
   public double getPositionDegs() {
     double truePosition = 0;
-    double position1 = inputs.encoder1Degs;
-    double position2 = inputs.encoder1Degs;
+    double position1 = inputs.encoder1Rotations;
+    double position2 = inputs.encoder2Rotations;
 
     position1 = Units.rotationsToDegrees(position1);
     position2 = Units.rotationsToDegrees(position2);
