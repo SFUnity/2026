@@ -147,6 +147,14 @@ public class Autos {
     return routine;
   }
 
+  public AutoRoutine ScoreCenterClimb2AutoRoutine() {
+    AutoRoutine routine = factory.newRoutine("ScoreCenterClimb2 Auto Routine");
+    AutoTrajectory ScoreCenterClimb2 = routine.trajectory("ScoreCenterClimb2");
+    routine
+        .active()
+        .onTrue(Commands.sequence(ScoreCenterClimb2.resetOdometry(), ScoreCenterClimb2.cmd()));
+    return routine;
+  }  
   public AutoRoutine depotFeedAutoRoutine() {
     AutoRoutine routine = factory.newRoutine("Depot Feed Auto Routine");
     AutoTrajectory DepotFeed = routine.trajectory("DepotFeedClimb");
