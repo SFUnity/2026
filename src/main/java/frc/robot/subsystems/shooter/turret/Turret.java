@@ -14,8 +14,13 @@ public class Turret extends SubsystemBase {
   private boolean isShooting = false;
   private double targetDegs = 0;
 
+  private final double talonOffset;
+
   public Turret(TurretIO io) {
     this.io = io;
+    io.updateInputs(inputs);
+    double currentDegs = getPositionDegs();
+    talonOffset = Units.degreesToRotations(currentDegs) * gearRatio - inputs.talonRotations;
   }
 
   @Override
@@ -35,11 +40,12 @@ public class Turret extends SubsystemBase {
           && (targetDegs - 360) >= minAngleDegs) {
         targetDegs -= 360;
       }
-      io.turnTurret(currentDegs, isShooting);
     } else {
       targetDegs += bufferDegs * 2;
-      io.turnTurret(targetDegs, isShooting);
     }
+    double targetRotations = Units.degreesToRotations(targetDegs) * gearRatio;
+    targetRotations -= talonOffset;
+    io.turnTurret(targetRotations, isShooting);
   }
 
   public double getPositionDegs() {

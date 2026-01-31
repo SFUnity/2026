@@ -25,8 +25,6 @@ public class TurretIOTalonFX implements TurretIO {
   private final DynamicMotionMagicExpoVoltage motionMagicExpoVoltageNoShoot =
       new DynamicMotionMagicExpoVoltage(0, noshootKV, noshootKA).withEnableFOC(true);
 
-  private double angle;
-
   public TurretIOTalonFX() {
     talon = new TalonFX(motorID);
     encoder1 = new CANcoder(encoder1ID);
@@ -44,7 +42,6 @@ public class TurretIOTalonFX implements TurretIO {
   @Override
   public void updateInputs(TurretIOInputs inputs) {
     inputs.appliedVolts = talon.getMotorVoltage().getValueAsDouble();
-    inputs.positionDegs = angle;
     inputs.velocityDegsPerSec = talon.getVelocity().getValueAsDouble() / gearRatio;
     inputs.currentAmps = talon.getSupplyCurrent().getValueAsDouble();
     inputs.talonRotations = talon.getPosition().getValueAsDouble();
@@ -63,17 +60,14 @@ public class TurretIOTalonFX implements TurretIO {
   }
 
   @Override
-  public void turnTurret(double targetDegs, boolean isShooting) {
-    angle = targetDegs;
+  public void turnTurret(double targetRotations, boolean isShooting) {
     if (isShooting) {
       talon.setControl(
-          motionMagicExpoVoltageShoot.withPosition(
-              Units.degreesToRotations(targetDegs) * gearRatio));
+          motionMagicExpoVoltageShoot.withPosition(targetRotations));
     } else {
       talon.setControl(
           motionMagicExpoVoltageNoShoot
-              .withPosition( // if positiion is greater than one, what happens
-                  Units.degreesToRotations(targetDegs) * gearRatio));
+              .withPosition(targetRotations));
     }
   }
 }
