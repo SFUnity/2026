@@ -61,6 +61,7 @@ public class Autos {
     chooser.addRoutine("Outpost Climb Auto Routine", this::outpostClimbAutoRoutine);
     chooser.addRoutine("Depot Auto Routine", this::depotAutoRoutine);
     chooser.addRoutine("Score Center Climb Auto Routine", this::ScoreCenterClimbAutoRoutine);
+    chooser.addRoutine("Score Center Climb2 Auto Routine", this::ScoreCenterClimb2AutoRoutine);
     chooser.addRoutine("Depot Feed Auto Routine", this::depotFeedAutoRoutine);
     chooser.addRoutine("Upper Feed Climb Auto Routine", this::upperFeedClimbAutoRoutine);
     chooser.addRoutine("Feed Auto Routine", this::FeedAutoRoutine);
@@ -154,7 +155,8 @@ public class Autos {
         .active()
         .onTrue(Commands.sequence(ScoreCenterClimb2.resetOdometry(), ScoreCenterClimb2.cmd()));
     return routine;
-  }  
+  }
+
   public AutoRoutine depotFeedAutoRoutine() {
     AutoRoutine routine = factory.newRoutine("Depot Feed Auto Routine");
     AutoTrajectory DepotFeed = routine.trajectory("DepotFeedClimb");
