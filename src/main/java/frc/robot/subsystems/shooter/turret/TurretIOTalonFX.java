@@ -10,7 +10,6 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import edu.wpi.first.math.util.Units;
 
 public class TurretIOTalonFX implements TurretIO {
   private final TalonFX talon;
@@ -62,12 +61,9 @@ public class TurretIOTalonFX implements TurretIO {
   @Override
   public void turnTurret(double targetRotations, boolean isShooting) {
     if (isShooting) {
-      talon.setControl(
-          motionMagicExpoVoltageShoot.withPosition(targetRotations));
+      talon.setControl(motionMagicExpoVoltageShoot.withPosition(targetRotations));
     } else {
-      talon.setControl(
-          motionMagicExpoVoltageNoShoot
-              .withPosition(targetRotations));
+      talon.setControl(motionMagicExpoVoltageNoShoot.withPosition(targetRotations));
     }
   }
 }
