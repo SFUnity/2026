@@ -2,6 +2,8 @@ package frc.robot.subsystems.shooter;
 
 import static frc.robot.subsystems.shooter.ShooterConstants.*;
 
+import edu.wpi.first.math.geometry.Pose2d;
+
 public class ShooterUtil {
   // Constants
   public static final double Gravity = 9.81;
