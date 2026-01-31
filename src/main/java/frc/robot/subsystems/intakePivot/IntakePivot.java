@@ -60,7 +60,6 @@ public class IntakePivot extends SubsystemBase {
   //   positionSetpoint = raisedAngle.get();
   //   io.setPivotPosition(positionSetpoint);
   // }
- 
 
   public Command raise() {
     return Commands.none();
