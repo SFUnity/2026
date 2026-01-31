@@ -1,6 +1,7 @@
 package frc.robot.subsystems.shooter;
 
 import static edu.wpi.first.wpilibj2.command.Commands.*;
+import static frc.robot.subsystems.shooter.ShooterUtil.*;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.shooter.flywheels.Flywheels;
@@ -26,14 +27,21 @@ public class Shooter extends VirtualSubsystem {
     this.poseManager = poseManager;
   }
 
-  public void periodic() {}
+  public void periodic() {
+    ShooterSolution solution = ShooterUtil.calculateOptimalShot(0, 0, 0);
+    turret.setGoalDegs(solution.TurnAngleDeg);
+    hood.setAngle(solution.angleDeg);
+    flywheels.setVelocity(solution.rpm / 60);
+  }
 
   public boolean readyToShoot() {
     return turret.atGoal() && hood.atGoal() && flywheels.atGoal();
   }
 
   public Command setShooting(boolean shooting) {
-    return runOnce(() -> isShooting = shooting);
+    return runOnce(() -> isShooting = shooting)
+        .alongWith(runOnce(() -> turret.setIsShooting(shooting)))
+        .alongWith(runOnce(() -> flywheels.setIdle(shooting)));
   }
 
   public Command setScoring(boolean scoring) {
