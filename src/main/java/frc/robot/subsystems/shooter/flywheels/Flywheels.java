@@ -34,12 +34,12 @@ public class Flywheels extends SubsystemBase {
     velocity = speed;
   }
 
-  public Command setVelocity(double speed) {
-    return run(() -> updateFlywheels(speed));
+  public Command setVelocity(double rps) {
+    return run(() -> updateFlywheels(rps));
   }
 
-  public Command setIdle() {
-    return run(() -> idle = true);
+  public Command setIdle(boolean idle) {
+    return run(() -> this.idle = idle);
   }
 
   public boolean atGoal() {
