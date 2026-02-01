@@ -21,10 +21,10 @@
  },
  "params":{
   "waypoints":[
-    {"x":{"exp":"UpperTrench.x", "val":4.469950199127197}, "y":{"exp":"UpperTrench.y", "val":7.153000354766846}, "heading":{"exp":"0 deg", "val":0.0}, "intervals":36, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":{"exp":"UpperTrench.x", "val":4.469950199127197}, "y":{"exp":"UpperTrench.y", "val":7.367390155792236}, "heading":{"exp":"0 deg", "val":0.0}, "intervals":36, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"7.822229862213135 m", "val":7.822229862213135}, "y":{"exp":"6.665750026702881 m", "val":6.665750026702881}, "heading":{"exp":"-90 deg", "val":-1.5707963267948966}, "intervals":32, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"7.841720104217529 m", "val":7.841720104217529}, "y":{"exp":"5.905640125274658 m", "val":5.905640125274658}, "heading":{"exp":"-1.5707963267948966 rad", "val":-1.5707963267948966}, "intervals":37, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
-    {"x":{"exp":"UpperTrench.x", "val":4.469950199127197}, "y":{"exp":"UpperTrench.y", "val":7.153000354766846}, "heading":{"exp":"0 deg", "val":0.0}, "intervals":15, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":{"exp":"UpperTrench.x", "val":4.469950199127197}, "y":{"exp":"UpperTrench.y", "val":7.367390155792236}, "heading":{"exp":"0 deg", "val":0.0}, "intervals":15, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"3.3590199947357178 m", "val":3.3590199947357178}, "y":{"exp":"7.09453010559082 m", "val":7.09453010559082}, "heading":{"exp":"0 deg", "val":0.0}, "intervals":125, "split":false, "fixTranslation":true, "fixHeading":false, "overrideIntervals":false},
     {"x":{"exp":"UpperTower.x", "val":1.4490002393722534}, "y":{"exp":"UpperTower.y", "val":4.677770137786865}, "heading":{"exp":"0 deg", "val":0.0}, "intervals":40, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
   "constraints":[
