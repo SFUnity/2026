@@ -200,10 +200,8 @@ public class Autos {
     AutoRoutine routine = factory.newRoutine("Lower Feed Auto Routine");
     AutoTrajectory LowerFeed = routine.trajectory("LowerFeed");
     routine.active().onTrue(Commands.sequence(LowerFeed.resetOdometry(), LowerFeed.cmd()));
-    LowerFeed.atTime("StartIntake")
-        .onTrue(RobotCommands.intake().until(LowerFeed.done()));
-    LowerFeed.atTime("StartShooting")
-        .onTrue(RobotCommands.shoot().until(LowerFeed.done()));
+    LowerFeed.atTime("StartIntake").onTrue(RobotCommands.intake().until(LowerFeed.done()));
+    LowerFeed.atTime("StartShooting").onTrue(RobotCommands.shoot().until(LowerFeed.done()));
     return routine;
   }
 
