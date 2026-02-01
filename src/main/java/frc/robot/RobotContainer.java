@@ -26,6 +26,14 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOTalonFX;
+import frc.robot.subsystems.intakePivot.IntakePivot;
+import frc.robot.subsystems.intakePivot.IntakePivotIO;
+import frc.robot.subsystems.intakePivot.IntakePivotIOSim;
+import frc.robot.subsystems.intakePivot.IntakePivotIOTalon;
+import frc.robot.subsystems.rollers.intakerollers.IntakeRollers;
+import frc.robot.subsystems.rollers.intakerollers.IntakeRollersIO;
+import frc.robot.subsystems.rollers.intakerollers.IntakeRollersIOSim;
+import frc.robot.subsystems.rollers.intakerollers.IntakeRollersIOTalonFX;
 import frc.robot.subsystems.rollers.spindexer.Spindexer;
 import frc.robot.subsystems.rollers.spindexer.SpindexerIO;
 import frc.robot.subsystems.rollers.spindexer.SpindexerIOSim;
@@ -43,6 +51,8 @@ public class RobotContainer {
   private final Drive drive;
   private final Spindexer spindexer;
   private final Climb climb;
+  private final IntakePivot intakePivot;
+  private final IntakeRollers intakeRollers;
   // private final Turret turret;
   // private final Shooter Shooter;
   // private final Hood hood;
@@ -53,6 +63,7 @@ public class RobotContainer {
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
+  private boolean intakeDown = false;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -71,6 +82,8 @@ public class RobotContainer {
                 poseManager);
         spindexer = new Spindexer(new SpindexerIOTalonFX());
         climb = new Climb(new ClimbIOTalonFX());
+        intakePivot = new IntakePivot(new IntakePivotIOTalon());
+        intakeRollers = new IntakeRollers(new IntakeRollersIOTalonFX());
         break;
 
       case SIM:
@@ -85,6 +98,8 @@ public class RobotContainer {
                 poseManager);
         spindexer = new Spindexer(new SpindexerIOSim());
         climb = new Climb(new ClimbIOSim());
+        intakePivot = new IntakePivot(new IntakePivotIOSim());
+        intakeRollers = new IntakeRollers(new IntakeRollersIOSim());
         break;
 
       default:
@@ -99,6 +114,8 @@ public class RobotContainer {
                 poseManager);
         spindexer = new Spindexer(new SpindexerIO() {});
         climb = new Climb(new ClimbIO() {});
+        intakePivot = new IntakePivot(new IntakePivotIO() {});
+        intakeRollers = new IntakeRollers(new IntakeRollersIO() {});
         break;
     }
 
@@ -124,6 +141,9 @@ public class RobotContainer {
             () -> -controller.getRightX(),
             poseManager));
     spindexer.setDefaultCommand(spindexer.stop());
+    intakePivot.setDefaultCommand(intakePivot.raise());
+    intakeRollers.setDefaultCommand(intakeRollers.stop());
+    
 
     // Lock to 0° when A button is held
     controller
@@ -154,6 +174,9 @@ public class RobotContainer {
 
     controller.povUp().whileTrue(climb.climbUp());
     controller.povDown().whileTrue(climb.climbDown());
+    controller.leftBumper().onTrue(Commands.either(RobotCommands.intake(intakeRollers,intakePivot),RobotCommands.stowIntake(intakeRollers, intakePivot),()->{intakeDown = !intakeDown; 
+    return intakeDown;
+    }));
   }
 
   /**
