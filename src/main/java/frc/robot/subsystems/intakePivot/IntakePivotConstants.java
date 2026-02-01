@@ -14,7 +14,6 @@ public class IntakePivotConstants {
 
   public static final LoggedTunableNumber kP = new LoggedTunableNumber("Intake/kP", 0);
 
-
   public static final boolean pivotInverted = true;
   public static final boolean rollersInverted = false;
   public static final double pivotPositionFactor = 2.9;
@@ -29,7 +28,8 @@ public class IntakePivotConstants {
       new LoggedTunableNumber("Intake/algaeVoltageThreshold", .5);
 
   // In rotations
-  public static final LoggedTunableNumber loweredAngle = new LoggedTunableNumber("Intake/loweredAngle", 0);
-  public static final LoggedTunableNumber raisedAngle = new LoggedTunableNumber("Intake/raisedAngle", 0);
-  
+  public static final LoggedTunableNumber loweredAngle =
+      new LoggedTunableNumber("Intake/loweredAngle", 0);
+  public static final LoggedTunableNumber raisedAngle =
+      new LoggedTunableNumber("Intake/raisedAngle", 0);
 }
