@@ -58,6 +58,7 @@ public class Autos {
     chooser = new LoggedAutoChooser("ChoreoChooser");
     // chooser.addRoutine("Example Auto Routine", this::exampleAutoRoutine);
     chooser.addRoutine("Climb Auto Routine", this::climbAutoRoutine);
+    chooser.addRoutine("Climb Center Auto Routine", this::climbCenterAutoRoutine);
     chooser.addRoutine("Outpost Climb Auto Routine", this::outpostClimbAutoRoutine);
     chooser.addRoutine("Depot Auto Routine", this::depotAutoRoutine);
     chooser.addRoutine("Score Center Climb Auto Routine", this::ScoreCenterClimbAutoRoutine);
@@ -102,12 +103,20 @@ public class Autos {
   }
 
   public AutoRoutine climbAutoRoutine() {
-
     AutoRoutine routine = factory.newRoutine("Climb Auto Routine");
     AutoTrajectory Climb = routine.trajectory("Climb");
     routine.active().onTrue(Commands.sequence(Climb.resetOdometry(), Climb.cmd()));
     Climb.atTime("ExtendClimber").onTrue(RobotCommands.climbExtend());
     Climb.done().onTrue(RobotCommands.climbRetract());
+    return routine;
+  }
+
+  public AutoRoutine climbCenterAutoRoutine() {
+    AutoRoutine routine = factory.newRoutine("Climb Center Auto Routine");
+    AutoTrajectory ClimbCenter = routine.trajectory("ClimbCenter");
+    routine.active().onTrue(Commands.sequence(ClimbCenter.resetOdometry(), ClimbCenter.cmd()));
+    ClimbCenter.atTime("ExtendClimber").onTrue(RobotCommands.climbExtend());
+    ClimbCenter.done().onTrue(RobotCommands.climbRetract());
     return routine;
   }
 
