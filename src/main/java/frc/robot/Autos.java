@@ -191,8 +191,8 @@ public class Autos {
     AutoRoutine routine = factory.newRoutine("Feed Auto Routine");
     AutoTrajectory Feed = routine.trajectory("Feed");
     routine.active().onTrue(Commands.sequence(Feed.resetOdometry(), Feed.cmd()));
-    Feed.atTime("StartIntake").onTrue(RobotCommands.intake().until(Feed.atTime("StopIntake")));
-    Feed.atTime("StartShooting").onTrue(RobotCommands.shoot().until(Feed.atTime("StopShooting")));
+    Feed.atTime("StartIntake").onTrue(RobotCommands.intake().until(Feed.done()));
+    Feed.atTime("StartShooting").onTrue(RobotCommands.shoot().until(Feed.done()));
     return routine;
   }
 
@@ -201,9 +201,9 @@ public class Autos {
     AutoTrajectory LowerFeed = routine.trajectory("LowerFeed");
     routine.active().onTrue(Commands.sequence(LowerFeed.resetOdometry(), LowerFeed.cmd()));
     LowerFeed.atTime("StartIntake")
-        .onTrue(RobotCommands.intake().until(LowerFeed.atTime("StopIntake")));
+        .onTrue(RobotCommands.intake().until(LowerFeed.done()));
     LowerFeed.atTime("StartShooting")
-        .onTrue(RobotCommands.shoot().until(LowerFeed.atTime("StopShooting")));
+        .onTrue(RobotCommands.shoot().until(LowerFeed.done()));
     return routine;
   }
 
