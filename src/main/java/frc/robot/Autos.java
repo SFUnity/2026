@@ -140,7 +140,8 @@ public class Autos {
     ScoreCenterClimb.atTime("ExtendClimber").onTrue(RobotCommands.climbExtend());
     ScoreCenterClimb.atTime("StartIntake")
         .onTrue(RobotCommands.intake().until(ScoreCenterClimb.atTime("StopIntake")));
-    ScoreCenterClimb.atTime("StartShoot").onTrue(RobotCommands.shoot().until(ScoreCenterClimb.atTime("StopShoot")));
+    ScoreCenterClimb.atTime("StartShoot")
+        .onTrue(RobotCommands.shoot().until(ScoreCenterClimb.atTime("StopShoot")));
     ScoreCenterClimb.done().onTrue(RobotCommands.climbRetract());
     return routine;
   }
