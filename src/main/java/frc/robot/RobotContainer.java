@@ -143,7 +143,6 @@ public class RobotContainer {
     spindexer.setDefaultCommand(spindexer.stop());
     intakePivot.setDefaultCommand(intakePivot.raise());
     intakeRollers.setDefaultCommand(intakeRollers.stop());
-    
 
     // Lock to 0° when A button is held
     controller
@@ -174,9 +173,16 @@ public class RobotContainer {
 
     controller.povUp().whileTrue(climb.climbUp());
     controller.povDown().whileTrue(climb.climbDown());
-    controller.leftBumper().onTrue(Commands.either(RobotCommands.intake(intakeRollers,intakePivot),RobotCommands.stowIntake(intakeRollers, intakePivot),()->{intakeDown = !intakeDown; 
-    return intakeDown;
-    }));
+    controller
+        .leftBumper()
+        .onTrue(
+            Commands.either(
+                RobotCommands.intake(intakeRollers, intakePivot),
+                RobotCommands.stowIntake(intakeRollers, intakePivot),
+                () -> {
+                  intakeDown = !intakeDown;
+                  return intakeDown;
+                }));
   }
 
   /**
