@@ -7,11 +7,8 @@
 
 package frc.robot;
 
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -48,6 +45,7 @@ import frc.robot.subsystems.rollers.spindexer.SpindexerIO;
 import frc.robot.subsystems.rollers.spindexer.SpindexerIOSim;
 import frc.robot.subsystems.rollers.spindexer.SpindexerIOTalonFX;
 import frc.robot.util.PoseManager;
+import org.littletonrobotics.junction.Logger;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -172,9 +170,10 @@ public class RobotContainer {
 
   public void checkAlerts() {
     // Check controllers
-    boolean driverConnected = controller.isConnected()
-        && DriverStation.getJoystickIsXbox(
-            controller.getHID().getPort()); // Should be an XBox controller
+    boolean driverConnected =
+        controller.isConnected()
+            && DriverStation.getJoystickIsXbox(
+                controller.getHID().getPort()); // Should be an XBox controller
     driverDisconnected.set(!driverConnected);
     Logger.recordOutput("Controls/driverConnected", driverConnected);
 
