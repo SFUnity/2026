@@ -10,7 +10,7 @@ import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import lombok.Getter;
+// import lombok.Getter;
 
 /**
  * Contains various field dimensions and useful reference points. All units are
@@ -18,19 +18,19 @@ import lombok.Getter;
  * have a blue alliance origin.
  */
 public class Field {
-    @Getter
+    // @Getter
     public static final double fieldLength = Units.inchesToMeters(651.2);
-    @Getter
+    // @Getter
     private static final double halfLength = fieldLength / 2.0;
-    @Getter
+    // @Getter
     public static final double fieldWidth = Units.inchesToMeters(317.7);
-    @Getter
+    // @Getter
     private static final double halfWidth = fieldWidth / 2.0;
 
-    @Getter
+    // @Getter
     private static final Pose2d centerField = new Pose2d(halfLength, halfWidth, new Rotation2d());
 
-    @Getter
+    // @Getter
     public static final double startingLineX = Units.inchesToMeters(299.438); // Measured from the inside of starting
                                                                               // line
 
@@ -203,18 +203,18 @@ public class Field {
         return Field.fieldLength - translation;
     }
 
-    @Getter
+    // @Getter
     public static final Translation3d blueHubCenter = BlueHub.topCenter; // new Translation3d(
     // Units.inchesToMeters(182.11),
     // Units.inchesToMeters(158.84),
     // Units.inchesToMeters(72));
-    @Getter
+    // @Getter
     public static final Translation3d redHubCenter = BlueToRed(BlueHub.topCenter); // new Translation3d(
     // Units.inchesToMeters(469.11),
     // Units.inchesToMeters(158.84),
     // Units.inchesToMeters(72));
 
-    @Getter
+    // @Getter
     private static final double aprilTagWidth = Units.inchesToMeters(6.50);
 
     /** Returns {@code true} if the robot is on the blue alliance. */
