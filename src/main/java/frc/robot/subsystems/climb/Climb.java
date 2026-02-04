@@ -25,12 +25,12 @@ public class Climb extends SubsystemBase {
   }
 
   public Command climbUp() {
-    return run(() -> Logger.recordOutput("ClimbPosition", upMeters))
+    return runOnce(() -> Logger.recordOutput("ClimbPosition", upMeters))
         .andThen(() -> io.setPosition(upMeters));
   }
 
   public Command climbDown() {
-    return run(() -> Logger.recordOutput("ClimbPosition", downMeters))
+    return runOnce(() -> Logger.recordOutput("ClimbPosition", downMeters))
         .andThen(() -> io.setPosition(downMeters));
   }
 }
