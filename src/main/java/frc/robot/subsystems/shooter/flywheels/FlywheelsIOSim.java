@@ -4,14 +4,16 @@ import static frc.robot.subsystems.shooter.flywheels.FlywheelsConstants.*;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.robot.Constants;
 import frc.robot.subsystems.shooter.flywheels.FlywheelsIO.FlywheelsIOInputs;
 
 public class FlywheelsIOSim implements FlywheelsIO {
+  private static final DCMotor motorModel = DCMotor.getKrakenX60(1);
   private static final DCMotorSim sim =
-      new DCMotorSim(LinearSystemId.createDCMotorSystem(0, 0), null, null);
+      new DCMotorSim(LinearSystemId.createDCMotorSystem(motorModel, .025, 1), motorModel);
   private PIDController pid = new PIDController(kP.get(), 0, kD.get());
   private double appliedVolts = 0;
 

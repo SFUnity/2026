@@ -13,7 +13,8 @@ public class FlywheelsConstants {
   public static final LoggedTunableNumber motionMagicJerk =
       new LoggedTunableNumber("Flywheels/MotionMagic/Jerk", 1600);
 
-  public static final LoggedTunableNumber readyVolts = new LoggedTunableNumber("Flywheels/readyVolts", 6);
+  public static final LoggedTunableNumber readyVolts =
+      new LoggedTunableNumber("Flywheels/readyVolts", 6);
 
   public static final LoggedTunableNumber shooterVelocity =
       new LoggedTunableNumber("Flywheels/shootVelocity", 2000);
