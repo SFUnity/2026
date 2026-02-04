@@ -13,7 +13,7 @@ public class IntakePivotIOSim implements IntakePivotIO {
 
   private final SingleJointedArmSim sim =
       new SingleJointedArmSim(
-          DCMotor.getNEO(1),
+          DCMotor.getKrakenX60Foc(1),
           50,
           0.5,
           armLengthMeters,
