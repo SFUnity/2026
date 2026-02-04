@@ -1,5 +1,11 @@
 package frc.robot.subsystems.climb;
 
+import static frc.robot.subsystems.climb.ClimbConstants.drumRadiusMeters;
+import static frc.robot.subsystems.climb.ClimbConstants.gearRatio;
+import static frc.robot.subsystems.climb.ClimbConstants.kD;
+import static frc.robot.subsystems.climb.ClimbConstants.kI;
+import static frc.robot.subsystems.climb.ClimbConstants.kP;
+
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -11,9 +17,9 @@ public class ClimbIOTalonFX implements ClimbIO {
     var talonFXConfigs = new TalonFXConfiguration();
 
     var slot0Configs = talonFXConfigs.Slot0;
-    slot0Configs.kP = 0;
-    slot0Configs.kI = 0;
-    slot0Configs.kD = 0;
+    slot0Configs.kP = kP.get();
+    slot0Configs.kI = kI;
+    slot0Configs.kD = kD;
     talonFXConfigs.CurrentLimits.StatorCurrentLimit = 80.0;
     talonFXConfigs.CurrentLimits.StatorCurrentLimitEnable = true;
     talonFXConfigs.CurrentLimits.SupplyCurrentLimit = 60.0;
@@ -30,6 +36,7 @@ public class ClimbIOTalonFX implements ClimbIO {
     inputs.statorCurrentAmps = talon.getStatorCurrent().getValueAsDouble();
     inputs.supplyCurrentAmps = talon.getSupplyCurrent().getValueAsDouble();
     inputs.velocityRotsPerSec = talon.getVelocity().getValueAsDouble();
+    inputs.positionMeters = talon.getPosition().getValueAsDouble() * gearRatio * drumRadiusMeters;
   }
 
   @Override
