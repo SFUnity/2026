@@ -109,6 +109,9 @@ public class Drive extends SubsystemBase {
                 (state) -> Logger.recordOutput("Drive/SysIdState", state.toString())),
             new SysIdRoutine.Mechanism(
                 (voltage) -> runCharacterization(voltage.in(Volts)), null, this));
+
+    // Configure auto controllers
+    headingAutoController.enableContinuousInput(-Math.PI, Math.PI);
   }
 
   @Override
