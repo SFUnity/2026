@@ -4,6 +4,8 @@ import static frc.robot.subsystems.rollers.kicker.KickerConstants.*;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.util.GeneralUtil;
+
 import org.littletonrobotics.junction.Logger;
 
 public class Kicker extends SubsystemBase {
@@ -18,7 +20,7 @@ public class Kicker extends SubsystemBase {
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("Kicker", inputs);
-    // TODO add log subsystem from GeneralUtil
+    GeneralUtil.logSubsystem(this, "Kicker");
   }
 
   public Command runVolts() {
