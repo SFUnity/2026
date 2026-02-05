@@ -3,11 +3,12 @@ package frc.robot.subsystems.intakePivot;
 import static frc.robot.Constants.*;
 
 import edu.wpi.first.math.util.Units;
+import frc.robot.Constants.Mode;
 import frc.robot.util.LoggedTunableNumber;
 import org.littletonrobotics.junction.networktables.LoggedNetworkBoolean;
 
 public class IntakePivotConstants {
-  // ! Must not be in tuning mode for dashboard switching to work
+  // TODO remove unused
   public static final LoggedNetworkBoolean groundAlgae =
       new LoggedNetworkBoolean("Ground Algae", false);
 
@@ -27,6 +28,7 @@ public class IntakePivotConstants {
   public static final double intakePIDMinInput = 0;
   public static final double intakePIDMaxInput = 1 * 360;
 
+  // TODO remove unused
   public static final LoggedTunableNumber algaeVoltageThreshold =
       new LoggedTunableNumber("Intake/algaeVoltageThreshold", .5);
 

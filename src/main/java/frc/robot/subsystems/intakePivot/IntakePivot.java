@@ -18,6 +18,7 @@ public class IntakePivot extends SubsystemBase {
       new IntakePivotVisualizer("Setpoint", Color.kBlue);
   private double positionSetpoint = raisedAngle.get();
 
+  // TODO remove unused
   private final LinearFilter currentFilter = LinearFilter.movingAverage(4);
   private double filteredCurrent;
 
@@ -46,6 +47,7 @@ public class IntakePivot extends SubsystemBase {
     GeneralUtil.logSubsystem(this, "Intake");
   }
 
+  // TODO use these for the below todo
   // private void lower() {
   //   positionSetpoint = loweredAngle.get();
   //   io.setPivotPosition(positionSetpoint);
@@ -56,6 +58,7 @@ public class IntakePivot extends SubsystemBase {
   //   io.setPivotPosition(positionSetpoint);
   // }
 
+  // TODO update "positionSetpoint" so we can track it
   public Command raise() {
     return run(() -> io.setPivotPosition(raisedAngle.get()));
   }
@@ -67,4 +70,6 @@ public class IntakePivot extends SubsystemBase {
   public Command jork() {
     return Commands.none();
   }
+
+  // TODO add currentZeroing from Alcatraz
 }
