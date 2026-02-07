@@ -30,8 +30,6 @@ public class Shooter extends VirtualSubsystem {
   public void periodic() {
     ShooterSolution solution = ShooterUtil.calculateOptimalShot(0, 0, 0);
 
-
-
     turret.setGoalDegs(solution.TurnAngleDeg);
     hood.setAngle(solution.angleDeg);
     flywheels.setVelocity(solution.rpm / 60);
