@@ -17,7 +17,6 @@ public class IntakePivot extends SubsystemBase {
       new IntakePivotVisualizer("Setpoint", Color.kBlue);
   private double positionSetpoint = raisedAngle.get();
 
-
   private boolean startedIntaking = false;
   private boolean middleOfIntaking = false;
 
@@ -42,17 +41,25 @@ public class IntakePivot extends SubsystemBase {
   }
 
   public Command raise() {
-    return run(() -> {
-      positionSetpoint = raisedAngle.get();
-      io.setPivotPosition(positionSetpoint);
-    });
+    return run(
+        () -> {
+          positionSetpoint = raisedAngle.get();
+          io.setPivotPosition(positionSetpoint);
+        });
   }
 
   public Command lower() {
-    return run(() -> {
-      positionSetpoint = loweredAngle.get();
-      io.setPivotPosition(positionSetpoint);
-    });
+    return run(
+        () -> {
+          positionSetpoint = loweredAngle.get();
+          io.setPivotPosition(positionSetpoint);
+        });
+  }
+
+  public Command runCurrentZeroing() {
+    return run(() -> io.runPivot(-1.0))
+        .until(() -> inputs.pivotStaterCurrent > 30.0)
+        .finallyDo(() -> io.resetEncoder(0.0));
   }
 
   public Command jork() {
