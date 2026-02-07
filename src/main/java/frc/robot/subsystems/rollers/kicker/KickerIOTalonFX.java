@@ -15,7 +15,6 @@ public class KickerIOTalonFX implements KickerIO {
   private final VoltageOut voltageOut =
       new VoltageOut(0).withEnableFOC(true).withUpdateFreqHz(loopPeriodSecs);
 
- 
   public KickerIOTalonFX() {
     var talonFXConfigs = new TalonFXConfiguration();
     talonFXConfigs.CurrentLimits.StatorCurrentLimit = 80.0;
@@ -23,7 +22,7 @@ public class KickerIOTalonFX implements KickerIO {
     talonFXConfigs.CurrentLimits.SupplyCurrentLimit = 60.0;
 
     talonFXConfigs.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-    tryUntilOk(5, ()->rollerMotor.getConfigurator().apply(talonFXConfigs,0.25));
+    tryUntilOk(5, () -> rollerMotor.getConfigurator().apply(talonFXConfigs, 0.25));
   }
 
   @Override
