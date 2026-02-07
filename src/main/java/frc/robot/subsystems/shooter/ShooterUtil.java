@@ -15,9 +15,9 @@ public class ShooterUtil {
       double hoodVelocity,
       double flywheelSpeed) {}
 
-  public static LaunchingParameters getLaunchingParameters(Pose3d targetPose, Pose2d robotPose, ChassisSpeeds robotVelocity) {
+  public static LaunchingParameters getLaunchingParameters(
+      Pose3d targetPose, Pose2d robotPose, ChassisSpeeds robotVelocity) {
     LaunchingParameters params = new LaunchingParameters(false, null, 0, 0, 0, 0);
     return params;
   }
-
 }

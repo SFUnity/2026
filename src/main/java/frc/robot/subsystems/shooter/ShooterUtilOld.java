@@ -1,7 +1,7 @@
 package frc.robot.subsystems.shooter;
 
 public class ShooterUtilOld {
-      // Old 
+  // Old
   // Constants
   public static final double Gravity = 9.81;
   public static final double ShooterMaxRPM = 3500;

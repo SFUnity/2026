@@ -34,7 +34,8 @@ public class Shooter extends VirtualSubsystem {
   public void periodic() {
     Pose3d goalPose = new Pose3d();
 
-    ShooterSolution solution = ShooterUtil.calculateOptimalShot(goalPose, poseManager.getPose(), poseManager.get);
+    ShooterSolution solution =
+        ShooterUtil.calculateOptimalShot(goalPose, poseManager.getPose(), poseManager.get);
 
     turret.setGoalDegs(solution.TurnAngleDeg);
     hood.setAngle(solution.angleDeg);
