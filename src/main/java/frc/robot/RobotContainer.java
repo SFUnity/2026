@@ -41,6 +41,10 @@ import frc.robot.subsystems.rollers.intakerollers.IntakeRollers;
 import frc.robot.subsystems.rollers.intakerollers.IntakeRollersIO;
 import frc.robot.subsystems.rollers.intakerollers.IntakeRollersIOSim;
 import frc.robot.subsystems.rollers.intakerollers.IntakeRollersIOTalonFX;
+import frc.robot.subsystems.rollers.kicker.Kicker;
+import frc.robot.subsystems.rollers.kicker.KickerIO;
+import frc.robot.subsystems.rollers.kicker.KickerIOSim;
+import frc.robot.subsystems.rollers.kicker.KickerIOTalonFX;
 import frc.robot.subsystems.rollers.spindexer.Spindexer;
 import frc.robot.subsystems.rollers.spindexer.SpindexerIO;
 import frc.robot.subsystems.rollers.spindexer.SpindexerIOSim;
@@ -78,6 +82,7 @@ public class RobotContainer {
   private final Turret turret;
   private final Shooter shooter;
   private final Hood hood;
+  private final Kicker kicker;
 
   // Non-subsystems
   private final Autos autos;
@@ -140,6 +145,7 @@ public class RobotContainer {
         shooter = new Shooter(flywheels, turret, hood, poseManager);
         intakePivot = new IntakePivot(new IntakePivotIOTalon());
         intakeRollers = new IntakeRollers(new IntakeRollersIOTalonFX());
+        kicker = new Kicker(new KickerIOTalonFX());
         break;
 
       case SIM:
@@ -159,6 +165,7 @@ public class RobotContainer {
         flywheels = new Flywheels(new FlywheelsIOSim());
         turret = new Turret(new TurretIOSim());
         hood = new Hood(new HoodIOSim());
+        kicker = new Kicker(new KickerIOSim());
         shooter = new Shooter(flywheels, turret, hood, poseManager);
         break;
 
@@ -179,6 +186,7 @@ public class RobotContainer {
         flywheels = new Flywheels(new FlywheelsIO() {});
         turret = new Turret(new TurretIO() {});
         hood = new Hood(new HoodIO() {});
+        kicker = new Kicker(new KickerIO() {});
         shooter = new Shooter(flywheels, turret, hood, poseManager);
         break;
     }
@@ -297,7 +305,7 @@ public class RobotContainer {
         .onTrue(RobotCommands.intake(intakeRollers, intakePivot));
     controller.rightTrigger().whileTrue(flywheels.setVelocity(1000));
     controller.leftTrigger().whileTrue(intakePivot.jork());
-    controller.rightBumper().onTrue()
+    controller.rightBumper().onTrue(kicker.run().alongWith())
     // Commands.either(
     //         RobotCommands.intake(intakeRollers, intakePivot),
     //         RobotCommands.stowIntake(intakeRollers, intakePivot),
