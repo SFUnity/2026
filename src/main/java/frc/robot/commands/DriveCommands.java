@@ -175,6 +175,15 @@ public class DriveCommands {
         .withName("joystickDriveAtAngle");
   }
 
+  public static Command snakeDrive(
+      Drive drive, DoubleSupplier xSupplier, DoubleSupplier ySupplier, PoseManager poseManager) {
+    return joystickDriveAtAngle(
+        drive,
+        xSupplier,
+        ySupplier,
+        () -> new Rotation2d(poseManager.fieldVelocity().dx, poseManager.fieldVelocity().dy),
+        poseManager);
+  }
   /**
    * Measures the velocity feedforward constants for the drive motors.
    *
