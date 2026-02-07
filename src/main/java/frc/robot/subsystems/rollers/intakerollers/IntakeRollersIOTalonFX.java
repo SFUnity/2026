@@ -15,7 +15,6 @@ public class IntakeRollersIOTalonFX implements IntakeRollersIO {
   private final VoltageOut voltageOut =
       new VoltageOut(0).withEnableFOC(true).withUpdateFreqHz(loopPeriodSecs);
 
-
   public IntakeRollersIOTalonFX() {
     var talonFXConfigs = new TalonFXConfiguration();
 
@@ -24,7 +23,7 @@ public class IntakeRollersIOTalonFX implements IntakeRollersIO {
     talonFXConfigs.CurrentLimits.SupplyCurrentLimit = 60.0;
  
     talonFXConfigs.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-       tryUntilOk(5,()-> rollerMotor.getConfigurator().apply(talonFXConfigs,0.25));
+    tryUntilOk(5,()-> rollerMotor.getConfigurator().apply(talonFXConfigs,0.25));
   }
 
   @Override
