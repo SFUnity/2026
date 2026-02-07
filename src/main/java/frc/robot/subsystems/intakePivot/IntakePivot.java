@@ -56,9 +56,14 @@ public class IntakePivot extends SubsystemBase {
         });
   }
 
+  public Command runCurrentZeroing() {
+    return run(() -> io.runPivot(-1.0))
+        .until(() -> inputs.pivotStaterCurrent > 30.0)
+        .finallyDo(() -> io.resetEncoder(0.0));
+  }
+
   public Command jork() {
     return Commands.none();
   }
 
-  // TODO add currentZeroing from Alcatraz
 }
