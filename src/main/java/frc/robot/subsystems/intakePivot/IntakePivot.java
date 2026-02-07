@@ -17,10 +17,6 @@ public class IntakePivot extends SubsystemBase {
       new IntakePivotVisualizer("Setpoint", Color.kBlue);
   private double positionSetpoint = raisedAngle.get();
 
-  // TODO remove unused
- 
-
-
   private boolean startedIntaking = false;
   private boolean middleOfIntaking = false;
 
@@ -44,29 +40,30 @@ public class IntakePivot extends SubsystemBase {
     GeneralUtil.logSubsystem(this, "Intake");
   }
 
-  // TODO use these for the below todo
-  // private void lower() {
-  //   positionSetpoint = loweredAngle.get();
-  //   io.setPivotPosition(positionSetpoint);
-  // }
-
-  // private void raise() {
-  //   positionSetpoint = raisedAngle.get();
-  //   io.setPivotPosition(positionSetpoint);
-  // }
-
-  // TODO update "positionSetpoint" so we can track it
   public Command raise() {
-    return run(() -> io.setPivotPosition(raisedAngle.get()));
+    return run(
+        () -> {
+          positionSetpoint = raisedAngle.get();
+          io.setPivotPosition(positionSetpoint);
+        });
   }
 
   public Command lower() {
-    return run(() -> io.setPivotPosition(loweredAngle.get()));
+    return run(
+        () -> {
+          positionSetpoint = loweredAngle.get();
+          io.setPivotPosition(positionSetpoint);
+        });
+  }
+
+  public Command runCurrentZeroing() {
+    return run(() -> io.runPivot(-1.0))
+        .until(() -> inputs.pivotStaterCurrent > 30.0)
+        .finallyDo(() -> io.resetEncoder(0.0));
   }
 
   public Command jork() {
     return Commands.none();
   }
 
-  // TODO add currentZeroing from Alcatraz
 }
