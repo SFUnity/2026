@@ -40,7 +40,8 @@ public class Turret extends SubsystemBase {
       if (Math.abs(targetDegs + 360 - truePositionDegs) < Math.abs(targetDegs - truePositionDegs)
           && (targetDegs + 360) <= maxAngleDegs) {
         targetDegs += 360;
-      } else if (Math.abs(targetDegs - 360 - truePositionDegs) < Math.abs(targetDegs - truePositionDegs)
+      } else if (Math.abs(targetDegs - 360 - truePositionDegs)
+              < Math.abs(targetDegs - truePositionDegs)
           && (targetDegs - 360) >= minAngleDegs) {
         targetDegs -= 360;
       }
