@@ -15,7 +15,7 @@ public class KickerIOTalonFX implements KickerIO {
   private final VoltageOut voltageOut =
       new VoltageOut(0).withEnableFOC(true).withUpdateFreqHz(loopPeriodSecs);
 
-  // TODO fill this out
+ 
   public KickerIOTalonFX() {
     var talonFXConfigs = new TalonFXConfiguration();
     talonFXConfigs.CurrentLimits.StatorCurrentLimit = 80.0;
