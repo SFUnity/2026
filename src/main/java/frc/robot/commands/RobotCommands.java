@@ -38,7 +38,7 @@ public class RobotCommands {
   public static Command shoot(Shooter shooter, Kicker kicker, Spindexer spindexer) {
     return Commands.run(() -> Logger.recordOutput("RobotCommands/Shoot", true))
         .andThen(shooter.setShooting(true))
-        .andThen(kicker.runVolts())
+        .andThen(kicker.run())
         .andThen(spindexer.run().onlyIf(() -> shooter.readyToShoot()))
         .finallyDo((interrupted) -> Logger.recordOutput("RobotCommands/Shoot", false));
   }
