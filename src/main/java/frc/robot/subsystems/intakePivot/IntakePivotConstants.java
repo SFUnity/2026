@@ -7,7 +7,6 @@ import frc.robot.Constants.Mode;
 import frc.robot.util.LoggedTunableNumber;
 
 public class IntakePivotConstants {
-  // TODO remove unused
 
   public static final int rollersID = 18;
   public static final int pivotID = 15;
@@ -23,9 +22,7 @@ public class IntakePivotConstants {
   public static final double armLengthMeters = Units.inchesToMeters(15);
   public static final double intakePIDMinInput = 0;
   public static final double intakePIDMaxInput = 1 * 360;
-
-  // TODO remove unused
-
+  
   // In rotations
   public static final LoggedTunableNumber loweredAngle =
       new LoggedTunableNumber("Intake/loweredAngle", 20);
