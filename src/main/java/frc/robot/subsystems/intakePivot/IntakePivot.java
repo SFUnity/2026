@@ -57,7 +57,7 @@ public class IntakePivot extends SubsystemBase {
   }
 
   public Command runCurrentZeroing() {
-    return run(() -> io.runPivot(-1.0))
+    return run(() -> io.runVolts(-1.0))
         .until(() -> inputs.pivotStaterCurrent > 30.0)
         .finallyDo(() -> io.resetEncoder(0.0));
   }
@@ -66,5 +66,4 @@ public class IntakePivot extends SubsystemBase {
     return Commands.none();
   }
 
-  // TODO add currentZeroing from Alcatraz
 }
