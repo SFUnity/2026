@@ -32,14 +32,10 @@ public class Flywheels extends SubsystemBase {
     }
   }
 
-  private void updateFlywheels(double speed) {
-    ready = false;
-    velocity = speed;
-  }
 
 
   public Command setVelocity(double rpm) {
-    return run(() -> updateFlywheels(rpm));
+    return run(() -> velocity = rpm);
   }
 
   public Command setReady(boolean ready) {
