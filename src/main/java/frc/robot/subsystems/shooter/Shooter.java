@@ -5,11 +5,14 @@ import static frc.robot.subsystems.shooter.ShooterUtil.*;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.FieldConstants;
+import frc.robot.subsystems.shooter.ShooterUtil.ShooterSolution;
 import frc.robot.subsystems.shooter.flywheels.Flywheels;
 import frc.robot.subsystems.shooter.hood.Hood;
 import frc.robot.subsystems.shooter.turret.Turret;
 import frc.robot.util.PoseManager;
 import frc.robot.util.VirtualSubsystem;
+import org.littletonrobotics.junction.Logger;
 
 public class Shooter extends VirtualSubsystem {
   private final Flywheels flywheels;
@@ -36,6 +39,9 @@ public class Shooter extends VirtualSubsystem {
     turret.setGoalDegs(solution.TurnAngleDeg);
     hood.setAngle(solution.angleDeg);
     flywheels.setVelocity(solution.rpm / 60);
+
+    isScoring = poseManager.getPose().getY() > FieldConstants.LinesVertical.allianceZone;
+    Logger.recordOutput("Shooter/isScoring", isScoring);
   }
 
   public boolean readyToShoot() {
