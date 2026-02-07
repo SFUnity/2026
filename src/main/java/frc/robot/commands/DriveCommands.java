@@ -51,11 +51,9 @@ public class DriveCommands {
 
   // Drive command constraints
   private static final LoggedTunableNumber maxAngularVelocity =
-      new LoggedTunableNumber(
-          "Drive/Commands/Angle - maxVelocity", 8);
+      new LoggedTunableNumber("Drive/Commands/Angle - maxVelocity", 8);
   private static final LoggedTunableNumber maxAngularAcceleration =
-      new LoggedTunableNumber(
-          "Drive/Commands/Angle - maxAcceleration", 20);
+      new LoggedTunableNumber("Drive/Commands/Angle - maxAcceleration", 20);
 
   // Create PID controller
   private static final ProfiledPIDController angleController =
