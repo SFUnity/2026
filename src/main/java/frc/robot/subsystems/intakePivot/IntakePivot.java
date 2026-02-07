@@ -66,5 +66,4 @@ public class IntakePivot extends SubsystemBase {
     return Commands.none();
   }
 
-  // TODO add currentZeroing from Alcatraz
 }
