@@ -12,6 +12,9 @@ public class IntakeRollersIOTalonFX implements IntakeRollersIO {
   private final VoltageOut voltageOut =
       new VoltageOut(0).withEnableFOC(true).withUpdateFreqHz(loopPeriodSecs);
 
+  // TODO fill this out
+  public IntakeRollersIOTalonFX() {}
+
   @Override
   public void updateInputs(IntakeRollersIOInputs inputs) {
     inputs.appliedVolts = rollerMotor.getMotorVoltage().getValueAsDouble();

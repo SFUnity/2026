@@ -1,5 +1,7 @@
 package frc.robot.subsystems.climb;
 
+import static frc.robot.util.PhoenixUtil.*;
+
 import static frc.robot.subsystems.climb.ClimbConstants.drumRadiusMeters;
 import static frc.robot.subsystems.climb.ClimbConstants.gearRatio;
 import static frc.robot.subsystems.climb.ClimbConstants.kD;
@@ -23,7 +25,7 @@ public class ClimbIOTalonFX implements ClimbIO {
     talonFXConfigs.CurrentLimits.StatorCurrentLimit = 80.0;
     talonFXConfigs.CurrentLimits.StatorCurrentLimitEnable = true;
     talonFXConfigs.CurrentLimits.SupplyCurrentLimit = 60.0;
-    talon.getConfigurator().apply(talonFXConfigs);
+    tryUntilOk(5, () -> talon.getConfigurator().apply(talonFXConfigs, 0.25));
   }
 
   // private final VoltageOut voltageOut =
