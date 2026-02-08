@@ -282,6 +282,7 @@ public class RobotContainer {
 
     controller.y().whileTrue(intakePivot.lower());
 
+    // Climbing
     controller.povUp().whileTrue(climb.climbUp());
     controller.povDown().whileTrue(climb.climbDown());
     // controller
@@ -298,6 +299,7 @@ public class RobotContainer {
     //                 RobotCommands.stowIntake(intakeRollers, intakePivot),
     //                 () -> intakeDown)));
 
+    // Intaking
     controller.leftBumper().toggleOnTrue(Commands.runOnce(() -> intakeDown = !intakeDown));
     controller
         .leftBumper()
@@ -307,8 +309,10 @@ public class RobotContainer {
         .leftBumper()
         .and(() -> !intakeDown)
         .onTrue(RobotCommands.intake(intakeRollers, intakePivot));
-    controller.rightTrigger().whileTrue(flywheels.setVelocity(1000));
     controller.leftTrigger().whileTrue(RobotCommands.jork(intakeRollers, intakePivot));
+
+    // Shooting
+    controller.rightTrigger().whileTrue(flywheels.setVelocity(1000));
     controller.rightBumper().onTrue(spindexer.run().alongWith(kicker.run()).withName("runSpindexerAndKicker"));
     // Commands.either(
     //         RobotCommands.intake(intakeRollers, intakePivot),
