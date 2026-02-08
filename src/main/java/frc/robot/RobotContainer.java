@@ -308,7 +308,7 @@ public class RobotContainer {
         .and(() -> !intakeDown)
         .onTrue(RobotCommands.intake(intakeRollers, intakePivot));
     controller.rightTrigger().whileTrue(flywheels.setVelocity(1000));
-    controller.leftTrigger().whileTrue(intakePivot.jork());
+    controller.leftTrigger().whileTrue(RobotCommands.jork(intakeRollers, intakePivot));
     controller.rightBumper().onTrue(kicker.run().alongWith(spindexer.run()));
     // Commands.either(
     //         RobotCommands.intake(intakeRollers, intakePivot),
