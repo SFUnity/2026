@@ -1,7 +1,11 @@
 package frc.robot.subsystems.shooter;
 
+import static frc.robot.subsystems.shooter.ShooterConstants.*;
+import static frc.robot.util.GeomUtil.*;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import frc.robot.util.LoggedTunableNumber;
@@ -37,6 +41,15 @@ public class ShooterUtil {
         robotPose.exp(
             new Twist2d(
                 robotVelocity.dx * phaseDelay.get(), robotVelocity.dy * phaseDelay.get(), 0));
+
+    Pose2d turretPosition =
+        robotPose.transformBy(
+            new Transform2d(
+                turretCenter.getTranslation().toTranslation2d(),
+                turretCenter.getRotation().toRotation2d()));
+    double turretToTargetDistance =
+        targetPose.getTranslation().toTranslation2d().getDistance(turretPosition.getTranslation());
+
     LaunchingParameters params = new LaunchingParameters(false, 0, 0, 0, 0, 0);
     return params;
   }
