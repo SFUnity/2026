@@ -62,6 +62,7 @@ import frc.robot.subsystems.shooter.turret.Turret;
 import frc.robot.subsystems.shooter.turret.TurretIO;
 import frc.robot.subsystems.shooter.turret.TurretIOSim;
 import frc.robot.subsystems.shooter.turret.TurretIOTalonFX;
+import frc.robot.util.FuelSim;
 import frc.robot.util.PoseManager;
 import org.littletonrobotics.junction.Logger;
 
@@ -87,6 +88,8 @@ public class RobotContainer {
   // Non-subsystems
   private final Autos autos;
   private final PoseManager poseManager = new PoseManager();
+
+  public FuelSim fuelSim = new FuelSim("Fuel Sim");
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
@@ -305,7 +308,7 @@ public class RobotContainer {
         .and(() -> !intakeDown)
         .onTrue(RobotCommands.intake(intakeRollers, intakePivot));
     controller.rightTrigger().whileTrue(flywheels.setVelocity(1000));
-    controller.leftTrigger().whileTrue(intakePivot.jork());
+    controller.leftTrigger().whileTrue(RobotCommands.jork(intakeRollers, intakePivot));
     controller.rightBumper().onTrue(kicker.run().alongWith(spindexer.run()));
     // Commands.either(
     //         RobotCommands.intake(intakeRollers, intakePivot),

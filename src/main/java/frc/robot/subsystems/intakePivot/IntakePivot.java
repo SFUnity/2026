@@ -29,7 +29,7 @@ public class IntakePivot extends SubsystemBase {
 
   public void periodic() {
     io.updateInputs(inputs);
-    Logger.processInputs("Intake", inputs);
+    Logger.processInputs("IntakePivot", inputs);
     Logger.recordOutput("Intake/startedIntaking", startedIntaking);
     Logger.recordOutput("Intake/middleOfIntaking", middleOfIntaking);
 
@@ -45,6 +45,7 @@ public class IntakePivot extends SubsystemBase {
           positionSetpoint = raisedAngle.get();
           io.setPivotPosition(positionSetpoint);
         })
+        // TODO confusing name
         .withName("IntakePivotLower");
   }
 
