@@ -285,19 +285,6 @@ public class RobotContainer {
     // Climbing
     controller.povUp().whileTrue(climb.climbUp());
     controller.povDown().whileTrue(climb.climbDown());
-    // controller
-    //     .leftBumper()
-    //     .onTrue(
-    //         Commands.sequence(
-    //             Commands.runOnce(
-    //                 () -> {
-    //                   intakeDown = !intakeDown;
-    //                   Logger.recordOutput("Intake/intakeDown", intakeDown);
-    //                 }),
-    //             Commands.either(
-    //                 RobotCommands.intake(intakeRollers, intakePivot),
-    //                 RobotCommands.stowIntake(intakeRollers, intakePivot),
-    //                 () -> intakeDown)));
 
     // Intaking
     controller.leftBumper().toggleOnTrue(Commands.runOnce(() -> intakeDown = !intakeDown));
@@ -316,22 +303,6 @@ public class RobotContainer {
     controller
         .rightBumper()
         .onTrue(spindexer.run().alongWith(kicker.run()).withName("runSpindexerAndKicker"));
-    // Commands.either(
-    //         RobotCommands.intake(intakeRollers, intakePivot),
-    //         RobotCommands.stowIntake(intakeRollers, intakePivot),
-    //         () -> {
-    //           return intakeDown;
-    //         })
-    //     .beforeStarting(
-    //         () -> {
-    //           if (intakeDown == true) {
-    //             intakeDown = false;
-    //             Logger.recordOutput("Intake/intakeDown", intakeDown);
-    //           } else if (intakeDown == false) {
-    //             intakeDown = true;
-    //             Logger.recordOutput("Intake/intakeDown", intakeDown);
-    //           }
-    //         }));
   }
 
   /**
