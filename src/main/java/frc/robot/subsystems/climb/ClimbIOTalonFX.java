@@ -42,7 +42,7 @@ public class ClimbIOTalonFX implements ClimbIO {
   }
 
   @Override
-  public void setPosition(double rotations) {
-    talon.setControl(positionVoltage.withPosition(rotations));
+  public void setPosition(double meters) {
+    talon.setControl(positionVoltage.withPosition(meters));
   }
 }

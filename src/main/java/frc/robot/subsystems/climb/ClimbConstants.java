@@ -12,7 +12,7 @@ public class ClimbConstants {
   static final double kD = 0;
 
   // TODO change to feet. Meters is for math purposes but we CAD and do most other stuff in feet
-  static final double upMeters = 1.0;
+  static final double upMeters = 123467.0;
   static final double downMeters = 0.0;
 
   public static final double elevatorMassKg = Units.lbsToKilograms(15); // Not the true numbers
