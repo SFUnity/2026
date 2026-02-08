@@ -9,6 +9,7 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -88,30 +89,7 @@ public class RobotContainer {
   // Non-subsystems
   private final Autos autos;
   private final PoseManager poseManager = new PoseManager();
-
-  public FuelSim fuelSim = new FuelSim("Fuel Sim");
-  fuelSim.spawnStartingFuel(); // spawns fuel in the depots and neutral zone
-
-  // Register a robot for collision with fuel
-  fuelSim.registerRobot(
-          width, // from left to right in meters
-          length, // from front to back in meters
-          bumperHeight, // from floor to top of bumpers in meters
-          poseSupplier, // Supplier<Pose2d> of robot pose
-          fieldSpeedsSupplier); // Supplier<ChassisSpeeds> of field-centric chassis speeds
-
-  // Register an intake to remove fuel from the field as a rectangular bounding box
-  fuelSim.registerIntake(
-          minX, maxX, minY, maxY, // robot-centric coordinates for bounding box in meters
-          shouldIntakeSupplier, // (optional) BooleanSupplier for whether the intake should be active at a given moment
-          callback); // (optional) Runnable called whenever a fuel is intaked
-
-  fuelSim.setSubticks(int subticks); // sets the number of physics iterations to perform per 20ms loop. Default = 5
-
-  fuelSim.start(); // enables the simulation to run (updateSim must still be called periodically)
-  fuelSim.stop(); // stops the simulation running (updateSim will do nothing until start is called again)
-
-  fuelSim.enableAirResistance() // an additional drag force will be applied to fuel in physics update step
+  private final FuelSim fuelSim = new FuelSim("FuelSim");
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
@@ -192,6 +170,28 @@ public class RobotContainer {
         hood = new Hood(new HoodIOSim());
         kicker = new Kicker(new KickerIOSim());
         shooter = new Shooter(flywheels, turret, hood, poseManager);
+        
+        fuelSim.spawnStartingFuel(); // spawns fuel in the depots and neutral zone
+        // Register a robot for collision with fuel
+        fuelSim.registerRobot(
+                Units.inchesToMeters(27), // from left to right in meters
+                Units.inchesToMeters(28), // from front to back in meters
+                Units.inchesToMeters(5), // from floor to top of bumpers in meters
+                () -> poseManager.getPose(), // Supplier<Pose2d> of robot pose
+                () -> ChassisSpeeds.getChassisSpeeds()); // Supplier<ChassisSpeeds> of field-centric chassis speeds
+
+        // Register an intake to remove fuel from the field as a rectangular bounding box
+        fuelSim.registerIntake(
+                minX, maxX, minY, maxY, // robot-centric coordinates for bounding box in meters
+                shouldIntakeSupplier, // (optional) BooleanSupplier for whether the intake should be active at a given moment
+                callback); // (optional) Runnable called whenever a fuel is intaked
+
+        fuelSim.setSubticks(5); // sets the number of physics iterations to perform per 20ms loop. Default = 5
+
+        fuelSim.start(); // enables the simulation to run (updateSim must still be called periodically)
+        fuelSim.stop(); // stops the simulation running (updateSim will do nothing until start is called again)
+
+        fuelSim.enableAirResistance() // an additional drag force will be applied to fuel in physics update step
         break;
 
       default:
