@@ -13,7 +13,7 @@ public interface IntakePivotIO {
 
   default void updateInputs(IntakePivotIOInputs inputs) {}
 
-  default void runPivot(double volts) {}
+  default void runVolts(double volts) {}
 
   default void setPivotPosition(double setpointDeg) {}
 

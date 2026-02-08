@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.RobotCommands;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.climb.Climb;
 import frc.robot.subsystems.climb.ClimbIO;
@@ -40,14 +41,28 @@ import frc.robot.subsystems.rollers.intakerollers.IntakeRollers;
 import frc.robot.subsystems.rollers.intakerollers.IntakeRollersIO;
 import frc.robot.subsystems.rollers.intakerollers.IntakeRollersIOSim;
 import frc.robot.subsystems.rollers.intakerollers.IntakeRollersIOTalonFX;
+import frc.robot.subsystems.rollers.kicker.Kicker;
+import frc.robot.subsystems.rollers.kicker.KickerIO;
+import frc.robot.subsystems.rollers.kicker.KickerIOSim;
+import frc.robot.subsystems.rollers.kicker.KickerIOTalonFX;
 import frc.robot.subsystems.rollers.spindexer.Spindexer;
 import frc.robot.subsystems.rollers.spindexer.SpindexerIO;
 import frc.robot.subsystems.rollers.spindexer.SpindexerIOSim;
 import frc.robot.subsystems.rollers.spindexer.SpindexerIOTalonFX;
+import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.shooter.flywheels.Flywheels;
 import frc.robot.subsystems.shooter.flywheels.FlywheelsIO;
 import frc.robot.subsystems.shooter.flywheels.FlywheelsIOSim;
 import frc.robot.subsystems.shooter.flywheels.FlywheelsIOTalonFX;
+import frc.robot.subsystems.shooter.hood.Hood;
+import frc.robot.subsystems.shooter.hood.HoodIO;
+import frc.robot.subsystems.shooter.hood.HoodIOSim;
+import frc.robot.subsystems.shooter.hood.HoodIOTalonFX;
+import frc.robot.subsystems.shooter.turret.Turret;
+import frc.robot.subsystems.shooter.turret.TurretIO;
+import frc.robot.subsystems.shooter.turret.TurretIOSim;
+import frc.robot.subsystems.shooter.turret.TurretIOTalonFX;
+import frc.robot.util.FuelSim;
 import frc.robot.util.PoseManager;
 import org.littletonrobotics.junction.Logger;
 
@@ -65,13 +80,16 @@ public class RobotContainer {
   private final Flywheels flywheels;
   private final IntakePivot intakePivot;
   private final IntakeRollers intakeRollers;
-  // private final Turret turret;
-  // private final Shooter Shooter;
-  // private final Hood hood;
+  private final Turret turret;
+  private final Shooter shooter;
+  private final Hood hood;
+  private final Kicker kicker;
 
   // Non-subsystems
   private final Autos autos;
   private final PoseManager poseManager = new PoseManager();
+
+  public FuelSim fuelSim = new FuelSim("Fuel Sim");
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
@@ -125,8 +143,12 @@ public class RobotContainer {
         spindexer = new Spindexer(new SpindexerIOTalonFX());
         climb = new Climb(new ClimbIOTalonFX());
         flywheels = new Flywheels(new FlywheelsIOTalonFX());
+        turret = new Turret(new TurretIOTalonFX());
+        hood = new Hood(new HoodIOTalonFX());
+        shooter = new Shooter(flywheels, turret, hood, poseManager);
         intakePivot = new IntakePivot(new IntakePivotIOTalon());
         intakeRollers = new IntakeRollers(new IntakeRollersIOTalonFX());
+        kicker = new Kicker(new KickerIOTalonFX());
         break;
 
       case SIM:
@@ -144,6 +166,10 @@ public class RobotContainer {
         intakePivot = new IntakePivot(new IntakePivotIOSim());
         intakeRollers = new IntakeRollers(new IntakeRollersIOSim());
         flywheels = new Flywheels(new FlywheelsIOSim());
+        turret = new Turret(new TurretIOSim());
+        hood = new Hood(new HoodIOSim());
+        kicker = new Kicker(new KickerIOSim());
+        shooter = new Shooter(flywheels, turret, hood, poseManager);
         break;
 
       default:
@@ -161,6 +187,10 @@ public class RobotContainer {
         intakePivot = new IntakePivot(new IntakePivotIO() {});
         intakeRollers = new IntakeRollers(new IntakeRollersIO() {});
         flywheels = new Flywheels(new FlywheelsIO() {});
+        turret = new Turret(new TurretIO() {});
+        hood = new Hood(new HoodIO() {});
+        kicker = new Kicker(new KickerIO() {});
+        shooter = new Shooter(flywheels, turret, hood, poseManager);
         break;
     }
 
@@ -217,16 +247,13 @@ public class RobotContainer {
   private void configureButtonBindings() {
     // Default command, normal field-relative drive
     drive.setDefaultCommand(
-        DriveCommands.joystickDrive(
-            drive,
-            () -> -controller.getLeftY(),
-            () -> -controller.getLeftX(),
-            () -> -controller.getRightX(),
-            poseManager));
+        DriveCommands.snakeDrive(
+            drive, () -> -controller.getLeftY(), () -> -controller.getLeftX(), poseManager));
     spindexer.setDefaultCommand(spindexer.stop());
     climb.setDefaultCommand(climb.climbDown());
     intakePivot.setDefaultCommand(intakePivot.raise());
     intakeRollers.setDefaultCommand(intakeRollers.stop());
+    kicker.setDefaultCommand(kicker.stop());
 
     // Lock to 0° when A button is held
     controller
@@ -281,6 +308,8 @@ public class RobotContainer {
         .and(() -> !intakeDown)
         .onTrue(RobotCommands.intake(intakeRollers, intakePivot));
     controller.rightTrigger().whileTrue(flywheels.setVelocity(1000));
+    controller.leftTrigger().whileTrue(RobotCommands.jork(intakeRollers, intakePivot));
+    controller.rightBumper().onTrue(kicker.run().alongWith(spindexer.run()));
     // Commands.either(
     //         RobotCommands.intake(intakeRollers, intakePivot),
     //         RobotCommands.stowIntake(intakeRollers, intakePivot),

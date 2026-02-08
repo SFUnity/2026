@@ -106,8 +106,9 @@ public class ModuleIOTalonFX implements ModuleIO {
     driveConfig.Feedback.SensorToMechanismRatio = constants.DriveMotorGearRatio;
     driveConfig.TorqueCurrent.PeakForwardTorqueCurrent = constants.SlipCurrent;
     driveConfig.TorqueCurrent.PeakReverseTorqueCurrent = -constants.SlipCurrent;
-    driveConfig.CurrentLimits.StatorCurrentLimit = constants.SlipCurrent;
+    driveConfig.CurrentLimits.StatorCurrentLimit = 80.0;
     driveConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+    driveConfig.CurrentLimits.SupplyCurrentLimit = 60.0;
     driveConfig.MotorOutput.Inverted =
         constants.DriveMotorInverted
             ? InvertedValue.Clockwise_Positive
@@ -139,6 +140,9 @@ public class ModuleIOTalonFX implements ModuleIO {
         constants.SteerMotorInverted
             ? InvertedValue.Clockwise_Positive
             : InvertedValue.CounterClockwise_Positive;
+    turnConfig.CurrentLimits.StatorCurrentLimit = 80.0;
+    turnConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+    turnConfig.CurrentLimits.SupplyCurrentLimit = 60.0;
     tryUntilOk(5, () -> turnTalon.getConfigurator().apply(turnConfig, 0.25));
 
     // Configure CANCoder

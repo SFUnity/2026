@@ -3,7 +3,6 @@ package frc.robot.subsystems.intakePivot;
 import static edu.wpi.first.units.Units.Degrees;
 import static frc.robot.subsystems.intakePivot.IntakePivotConstants.*;
 
-import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -18,10 +17,6 @@ public class IntakePivot extends SubsystemBase {
       new IntakePivotVisualizer("Setpoint", Color.kBlue);
   private double positionSetpoint = raisedAngle.get();
 
-  private final LinearFilter currentFilter = LinearFilter.movingAverage(4);
-  private double filteredCurrent;
-
-  private boolean lowered = false;
   private boolean startedIntaking = false;
   private boolean middleOfIntaking = false;
 
@@ -34,10 +29,9 @@ public class IntakePivot extends SubsystemBase {
 
   public void periodic() {
     io.updateInputs(inputs);
-    Logger.processInputs("Intake", inputs);
-    Logger.recordOutput("Intake/filteredCurrent", filteredCurrent);
+    Logger.processInputs("IntakePivot", inputs);
     Logger.recordOutput("Intake/startedIntaking", startedIntaking);
-    lowered = inputs.pivotCurrentPositionDeg >= loweredAngle.get() / 2;
+    Logger.recordOutput("Intake/middleOfIntaking", middleOfIntaking);
 
     // Logs
     measuredVisualizer.update(Degrees.of(inputs.pivotCurrentPositionDeg));
@@ -46,25 +40,35 @@ public class IntakePivot extends SubsystemBase {
     GeneralUtil.logSubsystem(this, "Intake");
   }
 
-  // private void lower() {
-  //   positionSetpoint = loweredAngle.get();
-  //   io.setPivotPosition(positionSetpoint);
-  // }
-
-  // private void raise() {
-  //   positionSetpoint = raisedAngle.get();
-  //   io.setPivotPosition(positionSetpoint);
-  // }
-
   public Command raise() {
-    return run(() -> io.setPivotPosition(raisedAngle.get()));
+    return run(() -> {
+          positionSetpoint = raisedAngle.get();
+          io.setPivotPosition(positionSetpoint);
+        })
+        // TODO confusing name
+        .withName("IntakePivotLower");
   }
 
   public Command lower() {
-    return run(() -> io.setPivotPosition(loweredAngle.get()));
+    return run(() -> {
+          positionSetpoint = loweredAngle.get();
+          io.setPivotPosition(positionSetpoint);
+        })
+        .withName("IntakePivotLower");
+  }
+
+  public Command runCurrentZeroing() {
+    return run(() -> io.runVolts(-1.0))
+        .until(() -> inputs.pivotStaterCurrent > 30.0)
+        .finallyDo(() -> io.resetEncoder(0.0))
+        .withName("IntakePivotCurrentZeroing");
   }
 
   public Command jork() {
-    return Commands.none();
+    return raise()
+        .andThen(Commands.waitSeconds(jorkTime.get()))
+        .andThen(lower())
+        .andThen(Commands.waitSeconds(jorkTime.get()))
+        .withName("IntakePivotJork");
   }
 }

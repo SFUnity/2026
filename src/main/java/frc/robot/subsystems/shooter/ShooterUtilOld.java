@@ -1,6 +1,7 @@
-package frc.robot.util;
+package frc.robot.subsystems.shooter;
 
-public class ShooterUtil implements AutoCloseable {
+public class ShooterUtilOld {
+  // Old
   // Constants
   public static final double Gravity = 9.81;
   public static final double ShooterMaxRPM = 3500;
@@ -116,7 +117,4 @@ public class ShooterUtil implements AutoCloseable {
 
     return Math.atan(robotSidewaysVelocityMetersPerSec / exitVelocityMetersPerSec);
   }
-
-  @Override
-  public void close() {}
 }

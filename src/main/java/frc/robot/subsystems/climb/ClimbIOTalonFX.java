@@ -5,6 +5,7 @@ import static frc.robot.subsystems.climb.ClimbConstants.gearRatio;
 import static frc.robot.subsystems.climb.ClimbConstants.kD;
 import static frc.robot.subsystems.climb.ClimbConstants.kI;
 import static frc.robot.subsystems.climb.ClimbConstants.kP;
+import static frc.robot.util.PhoenixUtil.*;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.PositionVoltage;
@@ -20,10 +21,11 @@ public class ClimbIOTalonFX implements ClimbIO {
     slot0Configs.kP = kP.get();
     slot0Configs.kI = kI;
     slot0Configs.kD = kD;
+    // TODO add neutral mode
     talonFXConfigs.CurrentLimits.StatorCurrentLimit = 80.0;
     talonFXConfigs.CurrentLimits.StatorCurrentLimitEnable = true;
     talonFXConfigs.CurrentLimits.SupplyCurrentLimit = 60.0;
-    talon.getConfigurator().apply(talonFXConfigs);
+    tryUntilOk(5, () -> talon.getConfigurator().apply(talonFXConfigs, 0.25));
   }
 
   // private final VoltageOut voltageOut =
