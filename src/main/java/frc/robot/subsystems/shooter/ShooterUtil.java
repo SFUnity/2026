@@ -3,6 +3,7 @@ package frc.robot.subsystems.shooter;
 import static frc.robot.subsystems.shooter.ShooterConstants.*;
 import static frc.robot.util.GeomUtil.*;
 
+import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -23,6 +24,18 @@ public class ShooterUtil {
   private final InterpolatingDoubleTreeMap launchFlywheelSpeedMap =
       new InterpolatingDoubleTreeMap();
   private final InterpolatingDoubleTreeMap timeOfFlightMap = new InterpolatingDoubleTreeMap();
+
+  private double turretAngle;
+  private double hoodAngle;
+  private double turretVelocity;
+  private double hoodVelocity;
+
+  private final int sampleCount = 50;
+
+    private final LinearFilter turretAngleFilter =
+      LinearFilter.movingAverage(sampleCount);
+  private final LinearFilter hoodAngleFilter =
+      LinearFilter.movingAverage(sampleCount);
 
   public ShooterUtil(PoseManager poseManager) {
     this.poseManager = poseManager;
@@ -79,6 +92,11 @@ public class ShooterUtil {
               turretPosition.getRotation());
       lookaheadTurretToTargetDistance = targetPose.getDistance(lookeaheadPose.getTranslation());
     }
+
+    turretAngle = targetPose.minus(lookeaheadPose.getTranslation()).getAngle().getDegrees();
+    hoodAngle = launchHoodAngleMap.get(lookaheadTurretToTargetDistance);
+
+    turretVelocity = turretAngleFilter.calculate(lookaheadTurretToTargetDistance);
 
     LaunchingParameters params = new LaunchingParameters(false, 0, 0, 0, 0, 0);
     return params;
