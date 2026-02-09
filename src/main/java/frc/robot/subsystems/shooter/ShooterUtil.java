@@ -32,10 +32,8 @@ public class ShooterUtil {
 
   private final int sampleCount = 50;
 
-    private final LinearFilter turretAngleFilter =
-      LinearFilter.movingAverage(sampleCount);
-  private final LinearFilter hoodAngleFilter =
-      LinearFilter.movingAverage(sampleCount);
+  private final LinearFilter turretAngleFilter = LinearFilter.movingAverage(sampleCount);
+  private final LinearFilter hoodAngleFilter = LinearFilter.movingAverage(sampleCount);
 
   public ShooterUtil(PoseManager poseManager) {
     this.poseManager = poseManager;
