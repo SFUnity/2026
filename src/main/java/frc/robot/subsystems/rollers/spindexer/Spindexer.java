@@ -28,7 +28,6 @@ public class Spindexer extends SubsystemBase {
   }
 
   public Command stop() {
-
     return run(() -> io.run(0.0)).withName("spindexerStop");
   }
 }
