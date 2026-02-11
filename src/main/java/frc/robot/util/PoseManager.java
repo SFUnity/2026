@@ -122,7 +122,7 @@ public class PoseManager {
   // }
 
   @AutoLogOutput(key = "Odometry/FieldVelocity")
-  public Twist2d getFieldVelocity() {
+  public Twist2d fieldVelocity() {
     Translation2d linearFieldVelocity =
         new Translation2d(robotVelocity.dx, robotVelocity.dy).rotateBy(getPose().getRotation());
     return new Twist2d(
@@ -130,7 +130,7 @@ public class PoseManager {
   }
 
   @AutoLogOutput(key = "Odometry/RobotVelocity")
-  public Twist2d getRobotVelocity() {
+  public Twist2d robotVelocity() {
     return robotVelocity;
   }
 

@@ -269,12 +269,8 @@ public class Drive extends SubsystemBase {
 
   /** Returns the measured chassis speeds of the robot. */
   @AutoLogOutput(key = "SwerveChassisSpeeds/Measured")
-  public ChassisSpeeds getChassisSpeeds() {
+  private ChassisSpeeds getChassisSpeeds() {
     return DriveConstants.kinematics.toChassisSpeeds(getModuleStates());
-  }
-
-  public ChassisSpeeds getFieldSpeeds() {
-    return ChassisSpeeds.fromRobotRelativeSpeeds(getChassisSpeeds(), poseManager.getRotation());
   }
 
   /** Returns the position of each module in radians. */

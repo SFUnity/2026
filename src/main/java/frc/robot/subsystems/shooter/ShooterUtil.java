@@ -1,9 +1,5 @@
 package frc.robot.subsystems.shooter;
 
-import static frc.robot.subsystems.shooter.ShooterConstants.*;
-import static frc.robot.util.GeomUtil.*;
-
-import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -51,7 +47,7 @@ public class ShooterUtil {
 
   public record LaunchingParameters(
       boolean isValid,
-      double turretAngle,
+      Rotation2d turretAngle,
       double turretVelocity,
       double hoodAngle,
       double hoodVelocity,

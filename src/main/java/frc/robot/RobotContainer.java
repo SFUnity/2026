@@ -27,7 +27,6 @@ import frc.robot.subsystems.climb.ClimbIO;
 import frc.robot.subsystems.climb.ClimbIOSim;
 import frc.robot.subsystems.climb.ClimbIOTalonFX;
 import frc.robot.subsystems.drive.Drive;
-import frc.robot.subsystems.drive.DriveConstants;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
@@ -63,7 +62,6 @@ import frc.robot.subsystems.shooter.turret.Turret;
 import frc.robot.subsystems.shooter.turret.TurretIO;
 import frc.robot.subsystems.shooter.turret.TurretIOSim;
 import frc.robot.subsystems.shooter.turret.TurretIOTalonFX;
-import frc.robot.util.FuelSim;
 import frc.robot.util.PoseManager;
 import org.littletonrobotics.junction.Logger;
 
@@ -89,7 +87,6 @@ public class RobotContainer {
   // Non-subsystems
   private final Autos autos;
   private final PoseManager poseManager = new PoseManager();
-  public final FuelSim fuelSim = new FuelSim("FuelSim");
 
   // Controller
   private final CommandXboxController controller = new CommandXboxController(0);
@@ -170,34 +167,6 @@ public class RobotContainer {
         hood = new Hood(new HoodIOSim());
         kicker = new Kicker(new KickerIOSim());
         shooter = new Shooter(flywheels, turret, hood, poseManager);
-
-        fuelSim.spawnStartingFuel(); // spawns fuel in the depots and neutral zone
-        // Register a robot for collision with fuel
-        fuelSim
-            .start(); // enables the simulation to run (updateSim must still be called periodically)
-        fuelSim.registerRobot(
-            DriveConstants.trackWidth
-                + 2 * DriveConstants.bumperWidth, // from left to right in meters
-            DriveConstants.wheelBase
-                + 2 * DriveConstants.bumperWidth, // from front to back in meters
-            DriveConstants.bumperHeight, // from floor to top of bumpers in meters
-            () -> poseManager.getPose(), // Supplier<Pose2d> of robot pose
-            () ->
-                drive.getFieldSpeeds()); // Supplier<ChassisSpeeds> of field-centric chassis speeds
-
-        // Register an intake to remove fuel from the field as a rectangular bounding box
-        // fuelSim.registerIntake(
-        // minX, maxX, minY, maxY, // robot-centric coordinates for bounding box in meters
-        // shouldIntakeSupplier, // (optional) BooleanSupplier for whether the intake should be
-        // active at a given moment
-        // callback); // (optional) Runnable called whenever a fuel is intaked
-
-        fuelSim.setSubticks(
-            5); // sets the number of physics iterations to perform per 20ms loop. Default = 5
-
-        fuelSim
-            .enableAirResistance(); // an additional drag force will be applied to fuel in physics
-        // update step
         break;
 
       default:
@@ -275,12 +244,8 @@ public class RobotContainer {
   private void configureButtonBindings() {
     // Default command, normal field-relative drive
     drive.setDefaultCommand(
-        DriveCommands.joystickDrive(
-            drive,
-            () -> -controller.getLeftY(),
-            () -> -controller.getLeftX(),
-            () -> -controller.getRightX(),
-            poseManager));
+        DriveCommands.snakeDrive(
+            drive, () -> -controller.getLeftY(), () -> -controller.getLeftX(), poseManager));
     spindexer.setDefaultCommand(spindexer.stop());
     climb.setDefaultCommand(climb.climbDown());
     intakePivot.setDefaultCommand(intakePivot.raise());
@@ -301,10 +266,9 @@ public class RobotContainer {
     // Switch to X pattern when X button is pressed
     controller.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
 
-    // Reset gyro to 0° when start or back button is pressed
+    // Reset gyro to 0° when B button is pressed
     controller
-        .start()
-        .or(controller.back())
+        .b()
         .onTrue(
             Commands.runOnce(
                     () ->
@@ -313,11 +277,24 @@ public class RobotContainer {
                     drive)
                 .ignoringDisable(true));
 
-    // Climbing
+    controller.y().whileTrue(intakePivot.lower());
+
     controller.povUp().whileTrue(climb.climbUp());
     controller.povDown().whileTrue(climb.climbDown());
+    // controller
+    //     .leftBumper()
+    //     .onTrue(
+    //         Commands.sequence(
+    //             Commands.runOnce(
+    //                 () -> {
+    //                   intakeDown = !intakeDown;
+    //                   Logger.recordOutput("Intake/intakeDown", intakeDown);
+    //                 }),
+    //             Commands.either(
+    //                 RobotCommands.intake(intakeRollers, intakePivot),
+    //                 RobotCommands.stowIntake(intakeRollers, intakePivot),
+    //                 () -> intakeDown)));
 
-    // Intaking
     controller.leftBumper().toggleOnTrue(Commands.runOnce(() -> intakeDown = !intakeDown));
     controller
         .leftBumper()

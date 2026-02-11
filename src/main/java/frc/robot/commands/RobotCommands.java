@@ -37,11 +37,10 @@ public class RobotCommands {
 
   public static Command shoot(Shooter shooter, Kicker kicker, Spindexer spindexer) {
     return Commands.run(() -> Logger.recordOutput("RobotCommands/Shoot", true))
-        .andThen(
-            shooter.setShooting(true),
-            kicker.run(),
-            spindexer.run().onlyIf(() -> shooter.readyToShoot()))
-        .withName("Shoot");
+        .andThen(shooter.setShooting(true))
+        .andThen(kicker.run())
+        .andThen(spindexer.run().onlyIf(() -> shooter.readyToShoot()))
+        .finallyDo((interrupted) -> Logger.recordOutput("RobotCommands/Shoot", false));
   }
 
   public static Command stopShoot() {
@@ -50,19 +49,15 @@ public class RobotCommands {
   }
 
   public static Command stopShoot(Shooter shooter, Kicker kicker, Spindexer spindexer) {
-    return shooter
-        .setShooting(false)
+    return Commands.run(() -> Logger.recordOutput("RobotCommands/StopShoot", true))
+        .andThen(shooter.setShooting(false))
         .andThen(kicker.stop())
         .andThen(spindexer.stop())
-        .withName("StopShoot");
-  }
-
-  public static Command feedShooter(Spindexer spindexer, Kicker kicker) {
-    return spindexer.run().alongWith(kicker.run()).withName("feedShooter");
+        .finallyDo((interrupted) -> Logger.recordOutput("RobotCommands/StopShoot", false));
   }
 
   public static Command intake(IntakeRollers intake, IntakePivot intakePivot) {
-    return intake.intake().alongWith(intakePivot.lower()).withName("intake");
+    return intake.intake().alongWith(intakePivot.lower());
   }
 
   public static Command eject(IntakeRollers intake, IntakePivot intakePivot, Spindexer spindexer) {
@@ -71,10 +66,10 @@ public class RobotCommands {
   }
 
   public static Command stowIntake(IntakeRollers intake, IntakePivot intakePivot) {
-    return intake.stop().alongWith(intakePivot.raise()).withName("stowIntake");
+    return intake.stop().alongWith(intakePivot.raise());
   }
 
   public static Command jork(IntakeRollers intake, IntakePivot intakePivot) {
-    return intake.stop().alongWith(intakePivot.jork()).withName("jork");
+    return intake.stop().alongWith(intakePivot.jork());
   }
 }

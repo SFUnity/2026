@@ -4,12 +4,15 @@ import static edu.wpi.first.wpilibj2.command.Commands.*;
 import static frc.robot.subsystems.shooter.ShooterUtil.*;
 
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.FieldConstants;
 import frc.robot.subsystems.shooter.ShooterUtil.*;
 import frc.robot.subsystems.shooter.flywheels.Flywheels;
 import frc.robot.subsystems.shooter.hood.Hood;
 import frc.robot.subsystems.shooter.turret.Turret;
+import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.PoseManager;
 import frc.robot.util.VirtualSubsystem;
 import org.littletonrobotics.junction.Logger;
@@ -18,8 +21,6 @@ public class Shooter extends VirtualSubsystem {
   private final Flywheels flywheels;
   private final Turret turret;
   private final Hood hood;
-
-  private final ShooterUtil shooterUtil;
 
   private final PoseManager poseManager;
 
@@ -31,21 +32,22 @@ public class Shooter extends VirtualSubsystem {
     this.turret = turret;
     this.hood = hood;
     this.poseManager = poseManager;
-    this.shooterUtil = new ShooterUtil(this.poseManager);
-
-    // TODO add default commands
   }
 
   public void periodic() {
     Pose3d goalPose = new Pose3d();
 
-    LaunchingParameters solution = shooterUtil.getScoringParameters();
+    LaunchingParameters solution =
+        ShooterUtil.getLaunchingParameters(goalPose, poseManager.getPose(), new ChassisSpeeds());
 
     turret.setTargetDegs(0);
     hood.setAngle(0);
     flywheels.setVelocity(0);
 
-    isScoring = poseManager.getPose().getX() < FieldConstants.LinesVertical.allianceZone;
+    isScoring =
+        poseManager.getPose().getX()
+            < AllianceFlipUtil.applyX(FieldConstants.LinesVertical.allianceZone + Units.metersToInches(0.04));
+
     Logger.recordOutput("Shooter/isScoring", isScoring);
   }
 

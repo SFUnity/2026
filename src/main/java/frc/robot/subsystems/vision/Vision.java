@@ -89,7 +89,7 @@ public class Vision extends VirtualSubsystem {
                 // if no pose, then ignored
                 || estimatedPose.equals(new Pose2d())
                 // if turning too fast
-                || Math.abs(poseManager.getRobotVelocity().dtheta) > 720
+                || Math.abs(poseManager.robotVelocity().dtheta) > 720
                 // if off the ground
                 || aprilTagInputs[i].estimatedPose.getZ() > 0.15
                 // if off field
@@ -117,7 +117,7 @@ public class Vision extends VirtualSubsystem {
         }
 
         // Scale trust based on max velocity
-        ChassisSpeeds velo = GeomUtil.toChassisSpeeds(poseManager.getRobotVelocity());
+        ChassisSpeeds velo = GeomUtil.toChassisSpeeds(poseManager.robotVelocity());
         if (new Translation2d(velo.vxMetersPerSecond, velo.vyMetersPerSecond).getNorm()
             > DriveConstants.maxSpeedMetersPerSec / 2.0) {
           trust *= 2.0;
