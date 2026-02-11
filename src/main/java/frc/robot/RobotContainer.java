@@ -9,7 +9,6 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -174,19 +173,17 @@ public class RobotContainer {
 
         fuelSim.spawnStartingFuel(); // spawns fuel in the depots and neutral zone
         // Register a robot for collision with fuel
+        fuelSim
+            .start(); // enables the simulation to run (updateSim must still be called periodically)
         fuelSim.registerRobot(
-            Units.inchesToMeters(
-                DriveConstants.trackWidth
-                    + 2 * DriveConstants.bumperWidth), // from left to right in meters
-            Units.inchesToMeters(
-                DriveConstants.wheelBase
-                    + 2 * DriveConstants.bumperWidth), // from front to back in meters
-            Units.inchesToMeters(
-                DriveConstants.bumperHeight), // from floor to top of bumpers in meters
+            DriveConstants.trackWidth
+                + 2 * DriveConstants.bumperWidth, // from left to right in meters
+            DriveConstants.wheelBase
+                + 2 * DriveConstants.bumperWidth, // from front to back in meters
+            DriveConstants.bumperHeight, // from floor to top of bumpers in meters
             () -> poseManager.getPose(), // Supplier<Pose2d> of robot pose
             () ->
-                drive
-                    .getChassisSpeeds()); // Supplier<ChassisSpeeds> of field-centric chassis speeds
+                drive.getFieldSpeeds()); // Supplier<ChassisSpeeds> of field-centric chassis speeds
 
         // Register an intake to remove fuel from the field as a rectangular bounding box
         // fuelSim.registerIntake(
@@ -197,11 +194,6 @@ public class RobotContainer {
 
         fuelSim.setSubticks(
             5); // sets the number of physics iterations to perform per 20ms loop. Default = 5
-
-        fuelSim
-            .start(); // enables the simulation to run (updateSim must still be called periodically)
-        // fuelSim.stop(); // stops the simulation running (updateSim will do nothing until start is
-        // called again)
 
         fuelSim
             .enableAirResistance(); // an additional drag force will be applied to fuel in physics
@@ -283,8 +275,12 @@ public class RobotContainer {
   private void configureButtonBindings() {
     // Default command, normal field-relative drive
     drive.setDefaultCommand(
-        DriveCommands.snakeDrive(
-            drive, () -> -controller.getLeftY(), () -> -controller.getLeftX(), poseManager));
+        DriveCommands.joystickDrive(
+            drive,
+            () -> -controller.getLeftY(),
+            () -> -controller.getLeftX(),
+            () -> -controller.getRightX(),
+            poseManager));
     spindexer.setDefaultCommand(spindexer.stop());
     climb.setDefaultCommand(climb.climbDown());
     intakePivot.setDefaultCommand(intakePivot.raise());
@@ -332,6 +328,7 @@ public class RobotContainer {
         .and(() -> !intakeDown)
         .onTrue(RobotCommands.intake(intakeRollers, intakePivot));
     controller.leftTrigger().whileTrue(RobotCommands.jork(intakeRollers, intakePivot));
+    controller.leftTrigger().multiPress(2, 0.5).onTrue(RobotCommands.eject(intakeRollers, intakePivot, spindexer));
 
     // Shooting
     controller.rightTrigger().whileTrue(flywheels.setVelocity(1000));

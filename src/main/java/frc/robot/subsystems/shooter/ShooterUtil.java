@@ -97,7 +97,7 @@ public class ShooterUtil {
     }
 
     turretAngle = targetPose.minus(lookeaheadPose.getTranslation()).getAngle().getDegrees();
-    hoodAngle = launchHoodAngleMap.get(lookaheadTurretToTargetDistance);
+    // hoodAngle = launchHoodAngleMap.get(lookaheadTurretToTargetDistance);
 
     if (turretAngles.isEmpty()) turretAngles.add(turretAngle);
     if (hoodAngles.isEmpty()) hoodAngles.add(hoodAngle);
