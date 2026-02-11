@@ -1,6 +1,7 @@
 package frc.robot.subsystems.shooter.flywheels;
 
 import static frc.robot.subsystems.shooter.flywheels.FlywheelsConstants.flywheelTolerance;
+import static frc.robot.subsystems.shooter.flywheels.FlywheelsConstants.readyRPMSetpoint;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -24,10 +25,10 @@ public class Flywheels extends SubsystemBase {
     Logger.processInputs("Flywheels", inputs);
     GeneralUtil.logSubsystem(this, "Flywheels");
 
-    if (!ready) {
-      io.runVelocity(velocity);
-    } else {
-      io.ready();
+    if (ready && inputs.velocityRotsPerMin < velocity) {
+      io.run();
+    } else if (inputs.velocityRotsPerMin < readyRPMSetpoint.get()) {
+      io.run();
     }
   }
 

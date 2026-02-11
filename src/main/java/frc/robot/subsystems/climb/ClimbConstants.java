@@ -14,7 +14,7 @@ public class ClimbConstants {
   public static final double minHeightMeters = 0; // Not the true numbers
   public static final double maxHeightMeters = 23.1; // Not the true numbers
 
-  public static final double gearRatio = 9;  // Not the true numbers
+  public static final double gearRatio = 9; // Not the true numbers
 
   public static final LoggedTunableNumber kP;
 
