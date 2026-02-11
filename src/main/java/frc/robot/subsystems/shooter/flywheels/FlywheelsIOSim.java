@@ -25,7 +25,12 @@ public class FlywheelsIOSim implements FlywheelsIO {
   }
 
   @Override
-  public void run() {
+  public void runDutyCycle() {
+    appliedVolts = 10;
+  }
+
+  @Override
+  public void runTorqueControl() {
     appliedVolts = 10;
   }
 }

@@ -14,5 +14,7 @@ public interface FlywheelsIO {
 
   public default void updateInputs(FlywheelsIOInputs inputs) {}
 
-  public default void run() {}
+  public default void runDutyCycle() {}
+
+  public default void runTorqueControl() {}
 }

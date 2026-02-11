@@ -1,5 +1,6 @@
 package frc.robot.subsystems.shooter.flywheels;
 
+import static frc.robot.subsystems.shooter.flywheels.FlywheelsConstants.ballShotSetpointOffset;
 import static frc.robot.subsystems.shooter.flywheels.FlywheelsConstants.flywheelTolerance;
 import static frc.robot.subsystems.shooter.flywheels.FlywheelsConstants.readyRPMSetpoint;
 
@@ -25,10 +26,13 @@ public class Flywheels extends SubsystemBase {
     Logger.processInputs("Flywheels", inputs);
     GeneralUtil.logSubsystem(this, "Flywheels");
 
-    if (ready && inputs.velocityRotsPerMin < velocity) {
-      io.run();
-    } else if (inputs.velocityRotsPerMin < readyRPMSetpoint.get()) {
-      io.run();
+    if (ready) {
+      if (inputs.velocityRotsPerMin < velocity - ballShotSetpointOffset.get()) io.runDutyCycle();
+      else if (inputs.velocityRotsPerMin < velocity) io.runTorqueControl();
+    } else {
+      if (inputs.velocityRotsPerMin < readyRPMSetpoint.get() - ballShotSetpointOffset.get())
+        io.runDutyCycle();
+      else if (inputs.velocityRotsPerMin < readyRPMSetpoint.get()) io.runTorqueControl();
     }
   }
 

@@ -7,7 +7,9 @@ public class FlywheelsConstants {
   public static final int followID = 0;
 
   public static final LoggedTunableNumber readyRPMSetpoint =
-      new LoggedTunableNumber("Flywheels/readyVolts", 100);
+      new LoggedTunableNumber("Flywheels/readyRPM", 100);
+  public static final LoggedTunableNumber ballShotSetpointOffset =
+      new LoggedTunableNumber("Flywheels/ballShotSetpointOffset", 100);
 
   public static final LoggedTunableNumber flywheelTolerance =
       new LoggedTunableNumber("Flywheels/tolerance", 5); // TODO tune
