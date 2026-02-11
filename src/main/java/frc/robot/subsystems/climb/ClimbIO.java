@@ -15,6 +15,5 @@ public interface ClimbIO {
 
   public default void updateInputs(ClimbIOInputs inputs) {}
 
-  // TODO make the units consistent. Right now you're constant is in meters
-  public default void setPosition(double rotations) {}
+  public default void setPosition(double meters) {}
 }
