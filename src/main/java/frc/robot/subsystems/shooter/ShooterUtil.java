@@ -34,6 +34,9 @@ public class ShooterUtil {
   private double turretVelocity;
   private double hoodVelocity;
 
+  private double minDist = 0; // todo change
+  private double maxDist = 1000;
+
   private final int sampleCount = 50;
 
   private final LinearFilter turretAngleFilter = LinearFilter.movingAverage(sampleCount);
@@ -109,7 +112,14 @@ public class ShooterUtil {
         turretAngleFilter.calculate((turretAngle - turretAngles.remove()) / sampleCount);
     hoodVelocity = hoodAngleFilter.calculate((hoodAngle - hoodAngles.remove()) / sampleCount);
 
-    LaunchingParameters params = new LaunchingParameters(false, 0, 0, 0, 0, 0);
+    LaunchingParameters params =
+        new LaunchingParameters(
+            minDist < lookaheadTurretToTargetDistance && lookaheadTurretToTargetDistance < maxDist,
+            turretAngle,
+            turretVelocity,
+            hoodAngle,
+            hoodVelocity,
+            launchFlywheelSpeedMap.get(lookaheadTurretToTargetDistance));
     return params;
   }
 }
