@@ -3,6 +3,9 @@ package frc.robot.subsystems.shooter;
 import static frc.robot.subsystems.shooter.ShooterConstants.*;
 import static frc.robot.util.GeomUtil.*;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -10,6 +13,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import frc.robot.FieldConstants;
+import frc.robot.subsystems.shooter.turret.Turret;
 import frc.robot.util.AllianceFlipUtil;
 import frc.robot.util.LoggedTunableNumber;
 import frc.robot.util.PoseManager;
@@ -26,7 +30,9 @@ public class ShooterUtil {
   private final InterpolatingDoubleTreeMap timeOfFlightMap = new InterpolatingDoubleTreeMap();
 
   private double turretAngle;
+  private Queue<Double> turretAngles = new LinkedList<>();
   private double hoodAngle;
+  private Queue<Double> hoodAngles = new LinkedList<>();
   private double turretVelocity;
   private double hoodVelocity;
 
@@ -81,7 +87,7 @@ public class ShooterUtil {
     Pose2d lookeaheadPose = turretPosition;
     double lookaheadTurretToTargetDistance = turretToTargetDistance;
     for (int i = 0; i < 20; i++) {
-      timeOfFlight = timeOfFlightMap.get(lookaheadTurretToTargetDistance);
+      // timeOfFlight = timeOfFlightMap.get(lookaheadTurretToTargetDistance);
       timeOfFlight = 0.5; // TODO: replace with actual time of flight calculation
       double offsetX = turretVelocityX * timeOfFlight;
       double offsetY = turretVelocityY * timeOfFlight;
@@ -95,7 +101,14 @@ public class ShooterUtil {
     turretAngle = targetPose.minus(lookeaheadPose.getTranslation()).getAngle().getDegrees();
     hoodAngle = launchHoodAngleMap.get(lookaheadTurretToTargetDistance);
 
-    turretVelocity = turretAngleFilter.calculate(lookaheadTurretToTargetDistance);
+    if(turretAngles.isEmpty()) turretAngles.add(turretAngle);
+    if(hoodAngles.isEmpty()) hoodAngles.add(hoodAngle);
+
+    turretAngles.add(turretAngle);
+    hoodAngles.add(hoodAngle);
+
+    turretVelocity = turretAngleFilter.calculate((turretAngle - turretAngles.remove())/sampleCount);
+    hoodVelocity = hoodAngleFilter.calculate((hoodAngle-hoodAngles.remove())/sampleCount);
 
     LaunchingParameters params = new LaunchingParameters(false, 0, 0, 0, 0, 0);
     return params;
