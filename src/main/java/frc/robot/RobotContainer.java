@@ -334,7 +334,6 @@ public class RobotContainer {
         .onTrue(RobotCommands.eject(intakeRollers, intakePivot, spindexer));
 
     // Shooting
-    controller.rightTrigger().whileTrue(flywheels.setVelocity(1000));
     controller.rightBumper().onTrue(RobotCommands.feedShooter(spindexer, kicker));
   }
 
