@@ -18,7 +18,8 @@ public class Flywheels extends SubsystemBase {
       new Debouncer(torqueCurrentDebounce.get(), DebounceType.kFalling);
   private Debouncer atGoalDebouncer = new Debouncer(atGoalDebounce.get(), DebounceType.kFalling);
   private boolean lastTorqueCurrentControl = false;
-  @AutoLogOutput private long launchCount = 0;
+  @AutoLogOutput(key="Shooter/Flywheels/LaunchCount")
+  private long launchCount = 0;
   private double setpointVelocity;
 
   private boolean ready = false;
