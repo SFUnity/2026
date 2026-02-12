@@ -7,7 +7,6 @@ import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.GeneralUtil;
-
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
@@ -35,12 +34,30 @@ public class Flywheels extends SubsystemBase {
     GeneralUtil.logSubsystem(this, "Flywheels");
 
     if (ready) {
-      if (inputs.velocityRotsPerMin < setpointVelocity - ballShotSetpointOffset.get()) io.runDutyCycle();
-      else if (inputs.velocityRotsPerMin < setpointVelocity) io.runTorqueControl();
+      runVelocity(setpointVelocity);
     } else {
-      if (inputs.velocityRotsPerMin < readyRPMSetpoint.get() - ballShotSetpointOffset.get())
+      runVelocity(readyRPMSetpoint.get());
+    }
+  }
+
+  /** Run closed loop at the specified velocity. */
+  private void runVelocity(double velocityRPM) {
+    boolean inTolerance =
+        Math.abs(inputs.velocityRotsPerMin - velocityRPM) <= torqueCurrentTolerance.get();
+    boolean torqueCurrentControl = torqueCurrentDebouncer.calculate(inTolerance);
+    boolean atGoal = atGoalDebouncer.calculate(inTolerance);
+
+    if (!torqueCurrentControl && lastTorqueCurrentControl) {
+      launchCount++;
+    }
+    lastTorqueCurrentControl = torqueCurrentControl;
+
+    if (!atGoal) {
+      if (torqueCurrentControl) {
+        io.runTorqueControl();
+      } else {
         io.runDutyCycle();
-      else if (inputs.velocityRotsPerMin < readyRPMSetpoint.get()) io.runTorqueControl();
+      }
     }
   }
 
