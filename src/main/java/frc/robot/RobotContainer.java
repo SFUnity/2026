@@ -37,7 +37,6 @@ import frc.robot.subsystems.intakePivot.IntakePivot;
 import frc.robot.subsystems.intakePivot.IntakePivotIO;
 import frc.robot.subsystems.intakePivot.IntakePivotIOSim;
 import frc.robot.subsystems.intakePivot.IntakePivotIOTalon;
-import frc.robot.subsystems.leds.Leds;
 import frc.robot.subsystems.rollers.intakerollers.IntakeRollers;
 import frc.robot.subsystems.rollers.intakerollers.IntakeRollersIO;
 import frc.robot.subsystems.rollers.intakerollers.IntakeRollersIOSim;
@@ -258,10 +257,8 @@ public class RobotContainer {
       double voltage = RobotController.getBatteryVoltage();
       if (voltage <= extraLowBatteryVoltage) {
         lowBatteryAlert.set(true);
-        Leds.getInstance().extraLowBatteryAlert = true;
       } else if (voltage <= lowBatteryVoltage) {
         lowBatteryAlert.set(true);
-        Leds.getInstance().lowBatteryAlert = true;
       }
     }
   }
