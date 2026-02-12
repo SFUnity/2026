@@ -1,17 +1,24 @@
 package frc.robot.subsystems.shooter.flywheels;
 
-import static frc.robot.subsystems.shooter.flywheels.FlywheelsConstants.ballShotSetpointOffset;
-import static frc.robot.subsystems.shooter.flywheels.FlywheelsConstants.flywheelTolerance;
-import static frc.robot.subsystems.shooter.flywheels.FlywheelsConstants.readyRPMSetpoint;
+import static frc.robot.subsystems.shooter.flywheels.FlywheelsConstants.*;
 
+import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.GeneralUtil;
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class Flywheels extends SubsystemBase {
   private final FlywheelsIO io;
   private final FlywheelsIOInputsAutoLogged inputs = new FlywheelsIOInputsAutoLogged();
+
+  private Debouncer torqueCurrentDebouncer =
+      new Debouncer(torqueCurrentDebounce.get(), DebounceType.kFalling);
+  private Debouncer atGoalDebouncer = new Debouncer(atGoalDebounce.get(), DebounceType.kFalling);
+  private boolean lastTorqueCurrentControl = false;
+  @AutoLogOutput private long launchCount = 0;
   private double setpointVelocity;
 
   private boolean ready = false;
@@ -27,12 +34,30 @@ public class Flywheels extends SubsystemBase {
     GeneralUtil.logSubsystem(this, "Flywheels");
 
     if (ready) {
-      if (inputs.velocityRotsPerMin < setpointVelocity - ballShotSetpointOffset.get()) io.runDutyCycle();
-      else if (inputs.velocityRotsPerMin < setpointVelocity) io.runTorqueControl();
+      runVelocity(setpointVelocity);
     } else {
-      if (inputs.velocityRotsPerMin < readyRPMSetpoint.get() - ballShotSetpointOffset.get())
+      runVelocity(readyRPMSetpoint.get());
+    }
+  }
+
+  /** Run closed loop at the specified velocity. */
+  private void runVelocity(double velocityRPM) {
+    boolean inTolerance =
+        Math.abs(inputs.velocityRotsPerMin - velocityRPM) <= torqueCurrentTolerance.get();
+    boolean torqueCurrentControl = torqueCurrentDebouncer.calculate(inTolerance);
+    boolean atGoal = atGoalDebouncer.calculate(inTolerance);
+
+    if (!torqueCurrentControl && lastTorqueCurrentControl) {
+      launchCount++;
+    }
+    lastTorqueCurrentControl = torqueCurrentControl;
+
+    if (!atGoal) {
+      if (torqueCurrentControl) {
+        io.runTorqueControl();
+      } else {
         io.runDutyCycle();
-      else if (inputs.velocityRotsPerMin < readyRPMSetpoint.get()) io.runTorqueControl();
+      }
     }
   }
 
