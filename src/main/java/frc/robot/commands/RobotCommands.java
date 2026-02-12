@@ -35,15 +35,6 @@ public class RobotCommands {
         .finallyDo((interrupted) -> Logger.recordOutput("RobotCommands/Shoot", false));
   }
 
-  public static Command shoot(Shooter shooter, Kicker kicker, Spindexer spindexer) {
-    return Commands.run(() -> Logger.recordOutput("RobotCommands/Shoot", true))
-        .andThen(
-            shooter.setShooting(true),
-            kicker.run(),
-            spindexer.run().onlyIf(() -> shooter.readyToShoot()))
-        .withName("Shoot");
-  }
-
   public static Command stopShoot() {
     return Commands.run(() -> Logger.recordOutput("RobotCommands/StopShoot", true))
         .finallyDo((interrupted) -> Logger.recordOutput("RobotCommands/StopShoot", false));
@@ -57,8 +48,10 @@ public class RobotCommands {
         .withName("StopShoot");
   }
 
-  public static Command feedShooter(Spindexer spindexer, Kicker kicker) {
-    return spindexer.run().alongWith(kicker.run()).withName("feedShooter");
+  // TODO needs to be implemented
+  public static Command readyThenShoot() {
+    return Commands.run(() -> Logger.recordOutput("RobotCommands/ReadyThenShoot", true))
+        .finallyDo((interrupted) -> Logger.recordOutput("RobotCommands/ReadyThenShoot", false));
   }
 
   public static Command intake(IntakeRollers intake, IntakePivot intakePivot) {

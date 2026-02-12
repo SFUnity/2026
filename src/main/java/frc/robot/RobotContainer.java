@@ -334,7 +334,7 @@ public class RobotContainer {
         .onTrue(RobotCommands.eject(intakeRollers, intakePivot, spindexer));
 
     // Shooting
-    controller.rightBumper().onTrue(RobotCommands.feedShooter(spindexer, kicker));
+    controller.rightBumper().onTrue(RobotCommands.readyThenShoot());
   }
 
   /**
