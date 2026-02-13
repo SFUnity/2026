@@ -46,7 +46,7 @@ public class Shooter extends VirtualSubsystem {
     flywheels.setVelocity(0);
 
     isScoring = poseManager.getPose().getX() < FieldConstants.LinesVertical.allianceZone;
-    Logger.recordOutput("Shooter/isScoring", isScoring);
+    Logger.recordOutput("Subsystems/Shooter/isScoring", isScoring);
   }
 
   public boolean readyToShoot() {

@@ -20,7 +20,7 @@ public class Hood extends SubsystemBase {
     Logger.processInputs("Shooter/Hood", inputs);
     GeneralUtil.logSubsystem(this, "Shooter/Hood");
 
-    Logger.recordOutput("Shooter/Hood/Goal", goalPosition);
+    Logger.recordOutput("Subsystems/Shooter/Hood/Goal", goalPosition);
   }
 
   public Command setAngle(double angle) {

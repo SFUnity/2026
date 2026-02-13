@@ -35,7 +35,7 @@ public class ShooterVisualizer {
     hood.setAngle(hoodAngle);
     shooterVisualizer.setLength(flywheelSpeed);
 
-    Logger.recordOutput("Shooter/Mechanism2D", shooterMech);
+    Logger.recordOutput("Subsystems/Shooter/Mechanism2D", shooterMech);
 
     Pose3d ShooterPose =
         new Pose3d(
@@ -44,6 +44,6 @@ public class ShooterVisualizer {
             zCoord + Math.sin(hoodAngle) * flywheelSpeed,
             new Rotation3d());
 
-    Logger.recordOutput("Shooter/Mechanism3D", ShooterPose);
+    Logger.recordOutput("Subsystems/Shooter/Mechanism3D", ShooterPose);
   }
 }

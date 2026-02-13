@@ -15,7 +15,7 @@ public class Climb extends SubsystemBase {
 
   public Climb(ClimbIO io) {
     this.io = io;
-    Logger.recordOutput("Climb/ClimbPosition", downMeters);
+    Logger.recordOutput("Subsystems/Climb/ClimbPosition", downMeters);
   }
 
   public void periodic() {
@@ -25,10 +25,10 @@ public class Climb extends SubsystemBase {
     GeneralUtil.logSubsystem(this, "Climb");
 
     if (isUp) {
-      Logger.recordOutput("Climb/ClimbPosition", upMeters);
+      Logger.recordOutput("Subsystems/Climb/ClimbPosition", upMeters);
       io.setPosition(upMeters);
     } else {
-      Logger.recordOutput("Climb/ClimbPosition", downMeters);
+      Logger.recordOutput("Subsystems/Climb/ClimbPosition", downMeters);
       io.setPosition(downMeters);
     }
   }

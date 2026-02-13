@@ -30,8 +30,8 @@ public class Turret extends SubsystemBase {
     truePositionDegs = getPositionDegs();
     positionDegs = (truePositionDegs - (2 * bufferDegs)) % 360;
 
-    Logger.recordOutput("Shooter/Turret/TruePositionDegs", truePositionDegs);
-    Logger.recordOutput("Shooter/Turret/PositionDegs", positionDegs);
+    Logger.recordOutput("Subsystems/Shooter/Turret/TruePositionDegs", truePositionDegs);
+    Logger.recordOutput("Subsystems/Shooter/Turret/PositionDegs", positionDegs);
     Logger.processInputs("Shooter/Turret", inputs);
     GeneralUtil.logSubsystem(this, "Shooter/Turret");
 

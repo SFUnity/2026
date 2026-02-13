@@ -47,7 +47,7 @@ public class IntakePivotVisualizer {
 
     // Log Mechanism2d
     intake.setAngle(angle.in(Degrees));
-    Logger.recordOutput("Intake/Mechanism2d/" + key, mechanism);
+    Logger.recordOutput("Subsystems/Intake/Mechanism2d/" + key, mechanism);
 
     // Log 3D poses
     // The inches to meters stuff here will have to be changed
@@ -57,6 +57,6 @@ public class IntakePivotVisualizer {
             Units.inchesToMeters(yOffset.get()),
             Units.inchesToMeters(zOffset.get()),
             new Rotation3d(0.0, angle.in(Radians), 0.0));
-    Logger.recordOutput("Intake/Mechanism3d/" + key, carriagePose);
+    Logger.recordOutput("Subsystems/Intake/Mechanism3d/" + key, carriagePose);
   }
 }
