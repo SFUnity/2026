@@ -12,9 +12,13 @@ public interface KickerIO {
 
   public default void updateInputs(KickerIOInputs inputs) {}
 
-  public default void runVolts(double volts) {}
+  // public default void runVolts(double volts) {}
 
   public default void stop() {}
 
-  public default void runVelocity(double rps) {}
+  // public default void runVelocity(double rps) {}
+
+  public default void runDutyCycle(){}
+
+  public default void runTorqueControl(){}
 }

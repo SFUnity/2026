@@ -31,6 +31,11 @@ public class KickerIOTalonFX implements KickerIO {
     // talonFXConfigs.CurrentLimits.SupplyCurrentLimit = 60.0;
 
     talonFXConfigs.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+    talonFXConfigs.Slot0.kP = 999999.0;
+    talonFXConfigs.TorqueCurrent.PeakForwardTorqueCurrent = 40.0;
+    talonFXConfigs.TorqueCurrent.PeakReverseTorqueCurrent = 0.0;
+    talonFXConfigs.MotorOutput.PeakForwardDutyCycle = 1.0;
+    talonFXConfigs.MotorOutput.PeakReverseDutyCycle = 0.0;
     tryUntilOk(5, () -> rollerMotor.getConfigurator().apply(talonFXConfigs, 0.25));
   }
 
