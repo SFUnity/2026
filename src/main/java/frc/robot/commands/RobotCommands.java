@@ -51,9 +51,13 @@ public class RobotCommands {
   }
 
   // TODO needs to be implemented
-  public static Command readyThenShoot() {
-    return Commands.run(() -> Logger.recordOutput("RobotCommands/ReadyThenShoot", true))
-        .finallyDo((interrupted) -> Logger.recordOutput("RobotCommands/ReadyThenShoot", false));
+  public static Command readyThenShoot(Shooter shooter, Kicker kicker, Spindexer spindexer) {
+    return spindexer.run().alongWith(kicker.run()).andThen(spindexer.stop()).alongWith(kicker.stop()).withName("ReadyThenShoot");
+    
+    
+    
+    //Commands.run(() -> Logger.recordOutput("RobotCommands/ReadyThenShoot", true))
+      //  .finallyDo((interrupted) -> Logger.recordOutput("RobotCommands/ReadyThenShoot", false));
   }
 
   public static Command intake(IntakeRollers intake, IntakePivot intakePivot) {
