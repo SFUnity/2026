@@ -10,6 +10,7 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -186,11 +187,17 @@ public class RobotContainer {
                 drive.getFieldSpeeds()); // Supplier<ChassisSpeeds> of field-centric chassis speeds
 
         // Register an intake to remove fuel from the field as a rectangular bounding box
-        // fuelSim.registerIntake(
-        // minX, maxX, minY, maxY, // robot-centric coordinates for bounding box in meters
-        // shouldIntakeSupplier, // (optional) BooleanSupplier for whether the intake should be
+        double minX = Units.inchesToMeters(17.049462);
+        double maxX = Units.inchesToMeters(25.548604);
+        double minY = Units.inchesToMeters(12.625);
+        double maxY = Units.inchesToMeters(-12.625);
+        fuelSim.registerIntake(
+            minX, minY, maxX, maxY // robot-centric coordinates for bounding box in meters
+            //shouldIntakeSupplier, // (optional) BooleanSupplier for whether the intake should be active at a given moment
+            //callback); // (optional) Runnable called whenever a fuel is intaked
         // active at a given moment
         // callback); // (optional) Runnable called whenever a fuel is intaked
+        );
 
         fuelSim.setSubticks(
             5); // sets the number of physics iterations to perform per 20ms loop. Default = 5
