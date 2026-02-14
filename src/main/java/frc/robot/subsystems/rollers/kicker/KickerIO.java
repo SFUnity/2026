@@ -12,7 +12,7 @@ public interface KickerIO {
 
   public default void updateInputs(KickerIOInputs inputs) {}
 
-  // public default void runVolts(double volts) {}
+  public default void runVolts(double volts) {}
 
   public default void stop() {}
 
