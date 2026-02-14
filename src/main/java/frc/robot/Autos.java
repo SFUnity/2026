@@ -150,7 +150,7 @@ public class Autos {
     OutpostClimb.atTime("StartShoot")
         .onTrue(
             RobotCommands.readyThenShoot(shooter, kicker, spindexer)
-                .alongWith(RobotCommands.jork(intake, intakePivot)));
+                .deadlineWith(RobotCommands.jork(intake, intakePivot)));
     OutpostClimb.atTime("StopShoot").onTrue(RobotCommands.stopShoot(shooter, kicker, spindexer));
     OutpostClimb.done().onTrue(RobotCommands.climbRetract());
     return routine;
@@ -166,7 +166,7 @@ public class Autos {
     Depot.atTime("StartShoot")
         .onTrue(
             RobotCommands.readyThenShoot(shooter, kicker, spindexer)
-                .alongWith(RobotCommands.jork(intake, intakePivot)));
+                .deadlineWith(RobotCommands.jork(intake, intakePivot)));
     Depot.atTime("StopShoot").onTrue(RobotCommands.stopShoot(shooter, kicker, spindexer));
     Depot.done().onTrue(RobotCommands.climbRetract());
     return routine;
@@ -184,7 +184,7 @@ public class Autos {
     ScoreCenterClimb.atTime("StartShoot")
         .onTrue(
             RobotCommands.readyThenShoot(shooter, kicker, spindexer)
-                .alongWith(RobotCommands.jork(intake, intakePivot)));
+                .deadlineWith(RobotCommands.jork(intake, intakePivot)));
     ScoreCenterClimb.atTime("StopShoot")
         .onTrue(RobotCommands.stopShoot(shooter, kicker, spindexer));
     ScoreCenterClimb.done().onTrue(RobotCommands.climbRetract());
@@ -200,7 +200,7 @@ public class Autos {
     DepotFeed.atTime("StartShoot")
         .onTrue(
             RobotCommands.readyThenShoot(shooter, kicker, spindexer)
-                .alongWith(RobotCommands.jork(intake, intakePivot)));
+                .deadlineWith(RobotCommands.jork(intake, intakePivot)));
     DepotFeed.atTime("StopShoot").onTrue(RobotCommands.stopShoot(shooter, kicker, spindexer));
     DepotFeed.atTime("StartDepotIntake").onTrue(RobotCommands.intake());
     DepotFeed.atTime("StopDepotIntake").onTrue(RobotCommands.stowIntake(intake, intakePivot));
@@ -220,7 +220,7 @@ public class Autos {
     UpperFeedClimb.atTime("StartShoot")
         .onTrue(
             RobotCommands.readyThenShoot(shooter, kicker, spindexer)
-                .alongWith(RobotCommands.jork(intake, intakePivot)));
+                .deadlineWith(RobotCommands.jork(intake, intakePivot)));
     UpperFeedClimb.atTime("StopShoot").onTrue(RobotCommands.stopShoot(shooter, kicker, spindexer));
     UpperFeedClimb.atTime("ExtendClimber").onTrue(RobotCommands.climbExtend());
     UpperFeedClimb.done().onTrue(RobotCommands.climbRetract());
@@ -236,7 +236,7 @@ public class Autos {
     Feed.atTime("StartShoot")
         .onTrue(
             RobotCommands.readyThenShoot(shooter, kicker, spindexer)
-                .alongWith(RobotCommands.jork(intake, intakePivot)));
+                .deadlineWith(RobotCommands.jork(intake, intakePivot)));
     Feed.atTime("StopShoot").onTrue(RobotCommands.stopShoot());
     return routine;
   }
@@ -250,7 +250,7 @@ public class Autos {
     LowerFeed.atTime("StartShoot")
         .onTrue(
             RobotCommands.readyThenShoot(shooter, kicker, spindexer)
-                .alongWith(RobotCommands.jork(intake, intakePivot)));
+                .deadlineWith(RobotCommands.jork(intake, intakePivot)));
     LowerFeed.atTime("StopShoot").onTrue(RobotCommands.stopShoot());
     return routine;
   }
@@ -266,7 +266,7 @@ public class Autos {
     LowerFeedClimb.atTime("StartShoot")
         .onTrue(
             RobotCommands.readyThenShoot(shooter, kicker, spindexer)
-                .alongWith(RobotCommands.jork(intake, intakePivot)));
+                .deadlineWith(RobotCommands.jork(intake, intakePivot)));
     LowerFeedClimb.atTime("StopShoot").onTrue(RobotCommands.stopShoot());
     LowerFeedClimb.atTime("ExtendClimber").onTrue(RobotCommands.climbExtend());
     LowerFeedClimb.done().onTrue(RobotCommands.climbRetract());
