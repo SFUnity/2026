@@ -182,7 +182,9 @@ public class ShooterUtil {
 
     turretVelocity =
         turretAngleFilter.calculate((turretAngle - turretAngles.remove()) / sampleCount);
-    hoodVelocity = hoodAngleFilter.calculate((hoodAngle - hoodAngles.remove()) / sampleCount);
+    hoodVelocity =
+        hoodAngleFilter.calculate(
+            (hoodAngle - hoodAngles.remove()) / sampleCount); // TODO is this necessary?
 
     LaunchingParameters params =
         new LaunchingParameters(

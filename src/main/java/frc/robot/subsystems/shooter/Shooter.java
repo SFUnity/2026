@@ -40,10 +40,11 @@ public class Shooter extends VirtualSubsystem {
     Pose3d goalPose = new Pose3d();
 
     LaunchingParameters solution = shooterUtil.getScoringParameters();
-
-    turret.setTargetDegs(0);
-    hood.setAngle(0);
-    flywheels.setVelocity(0);
+    if (solution.isValid()) {
+      turret.setTarget(solution.turretAngle(), solution.turretVelocity());
+      hood.setAngle(solution.hoodAngle());
+      flywheels.setVelocity(solution.flywheelSpeed());
+    }
 
     isScoring = poseManager.getPose().getX() < FieldConstants.LinesVertical.allianceZone;
     Logger.recordOutput("Shooter/isScoring", isScoring);
