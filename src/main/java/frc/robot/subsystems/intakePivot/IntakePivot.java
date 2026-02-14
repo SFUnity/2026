@@ -77,4 +77,8 @@ public class IntakePivot extends SubsystemBase {
                 .until(() -> inputs.pivotCurrentPositionDeg >= raisedJorkAngle.get()))
         .withName("IntakePivotJork");
   }
+
+  public boolean intakeDown() {
+    return inputs.pivotCurrentPositionDeg <= (loweredAngle.get() + raisedAngle.get()) / 2.0;
+  }
 }

@@ -200,8 +200,10 @@ public class RobotContainer {
             minY,
             maxX,
             maxY, // robot-centric coordinates for bounding box in meters
-            () ->
-                intakeDown, // (optional) BooleanSupplier for whether the intake should be active at
+            () -> {
+              Logger.recordOutput("Intake Down", intakePivot.intakeDown());
+              return intakePivot.intakeDown();
+            }, // (optional) BooleanSupplier for whether the intake should be active at
             // a given moment
             () -> {
               fuelCount++;
