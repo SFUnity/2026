@@ -151,7 +151,7 @@ public class Autos {
     AutoTrajectory Depot = routine.trajectory("DepotClimb");
     routine.active().onTrue(Commands.sequence(Depot.resetOdometry(), Depot.cmd()));
     Depot.atTime("ExtendClimber").onTrue(RobotCommands.climbExtend());
-    Depot.atTime("StartIntake").onTrue(RobotCommands.intake());
+    Depot.atTime("StartIntake").onTrue(RobotCommands.intake(intake, intakePivot));
     Depot.atTime("StopIntake").onTrue(RobotCommands.stopIntake());
     Depot.atTime("StartShoot").onTrue(RobotCommands.shoot()); 
     Depot.atTime("StopShoot").onTrue(RobotCommands.stopShoot());
@@ -166,10 +166,10 @@ public class Autos {
         .active()
         .onTrue(Commands.sequence(ScoreCenterClimb.resetOdometry(), ScoreCenterClimb.cmd()));
     ScoreCenterClimb.atTime("ExtendClimber").onTrue(RobotCommands.climbExtend());
-    ScoreCenterClimb.atTime("StartIntake")
-        .onTrue(RobotCommands.intake().until(ScoreCenterClimb.atTime("StopIntake")));
-    ScoreCenterClimb.atTime("StartShoot")
-        .onTrue(RobotCommands.shoot().until(ScoreCenterClimb.atTime("StopShoot")));
+    ScoreCenterClimb.atTime("StartIntake").onTrue(RobotCommands.intake(intake, intakePivot));
+    ScoreCenterClimb.atTime("StopIntake").onTrue(RobotCommands.stopIntake());
+    ScoreCenterClimb.atTime("StartShoot").onTrue(RobotCommands.shoot());
+    ScoreCenterClimb.atTime("StopShoot").onTrue(RobotCommands.stopShoot());
     ScoreCenterClimb.done().onTrue(RobotCommands.climbRetract());
     return routine;
   }
@@ -179,7 +179,7 @@ public class Autos {
     AutoTrajectory DepotFeed = routine.trajectory("DepotFeedClimb");
     routine.active().onTrue(Commands.sequence(DepotFeed.resetOdometry(), DepotFeed.cmd()));
     DepotFeed.atTime("StartIntake")
-        .onTrue(RobotCommands.intake());
+        .onTrue(RobotCommands.intake(intake, intakePivot));
     DepotFeed.atTime("StopIntake").onTrue(RobotCommands.stopIntake());
     DepotFeed.atTime("StartShoot")
         .onTrue(RobotCommands.shoot());
@@ -199,7 +199,7 @@ public class Autos {
         .active()
         .onTrue(Commands.sequence(UpperFeedClimb.resetOdometry(), UpperFeedClimb.cmd()));
     UpperFeedClimb.atTime("StartIntake")
-        .onTrue(RobotCommands.intake());
+        .onTrue(RobotCommands.intake(intake, intakePivot));
     UpperFeedClimb.atTime("StopIntake").onTrue(RobotCommands.stopIntake());
     UpperFeedClimb.atTime("StartShoot")
         .onTrue(RobotCommands.shoot());
@@ -213,7 +213,7 @@ public class Autos {
     AutoRoutine routine = factory.newRoutine("Feed Auto Routine");
     AutoTrajectory Feed = routine.trajectory("Feed");
     routine.active().onTrue(Commands.sequence(Feed.resetOdometry(), Feed.cmd()));
-    Feed.atTime("StartIntake").onTrue(RobotCommands.intake());
+    Feed.atTime("StartIntake").onTrue(RobotCommands.intake(intake, intakePivot));
     Feed.atTime("StopIntake").onTrue(RobotCommands.stopIntake());
     Feed.atTime("StartShoot").onTrue(RobotCommands.shoot());
     Feed.atTime("StopShoot").onTrue(RobotCommands.stopShoot());
@@ -224,7 +224,7 @@ public class Autos {
     AutoRoutine routine = factory.newRoutine("Lower Feed Auto Routine");
     AutoTrajectory LowerFeed = routine.trajectory("LowerFeed");
     routine.active().onTrue(Commands.sequence(LowerFeed.resetOdometry(), LowerFeed.cmd()));
-    LowerFeed.atTime("StartIntake").onTrue(RobotCommands.intake());
+    LowerFeed.atTime("StartIntake").onTrue(RobotCommands.intake(intake, intakePivot));
     LowerFeed.atTime("StopIntake").onTrue(RobotCommands.stopIntake());
     LowerFeed.atTime("StartShoot").onTrue(RobotCommands.shoot());
     LowerFeed.atTime("StopShoot").onTrue(RobotCommands.stopShoot());
@@ -238,7 +238,7 @@ public class Autos {
         .active()
         .onTrue(Commands.sequence(LowerFeedClimb.resetOdometry(), LowerFeedClimb.cmd()));
     LowerFeedClimb.atTime("StartIntake")
-        .onTrue(RobotCommands.intake());
+        .onTrue(RobotCommands.intake(intake, intakePivot));
     LowerFeedClimb.atTime("StopIntake").onTrue(RobotCommands.stopIntake());
     LowerFeedClimb.atTime("StartShoot")
         .onTrue(RobotCommands.shoot());
