@@ -2,6 +2,7 @@ package frc.robot.subsystems.shooter;
 
 import static frc.robot.subsystems.shooter.ShooterConstants.*;
 import static frc.robot.util.GeomUtil.*;
+import static frc.robot.Constants.*;
 
 import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -18,8 +19,7 @@ import java.util.Queue;
 
 public class ShooterUtil {
 
-  private final LoggedTunableNumber phaseDelay =
-      new LoggedTunableNumber("Shooter/PhaseDelay", 0.03);
+  private final double phaseDelay = loopPeriodSecs;
   private final PoseManager poseManager;
 
   private final InterpolatingDoubleTreeMap scoreHoodAngleMap = new InterpolatingDoubleTreeMap();
@@ -65,7 +65,7 @@ public class ShooterUtil {
     robotPose =
         robotPose.exp(
             new Twist2d(
-                robotVelocity.dx * phaseDelay.get(), robotVelocity.dy * phaseDelay.get(), 0));
+                robotVelocity.dx * phaseDelay, robotVelocity.dy * phaseDelay, robotVelocity.dtheta*phaseDelay));
 
     Pose2d turretPosition =
         robotPose.transformBy(
@@ -134,7 +134,7 @@ public class ShooterUtil {
     robotPose =
         robotPose.exp(
             new Twist2d(
-                robotVelocity.dx * phaseDelay.get(), robotVelocity.dy * phaseDelay.get(), 0));
+                robotVelocity.dx * phaseDelay, robotVelocity.dy * phaseDelay, 0));
 
     Pose2d turretPosition =
         robotPose.transformBy(
