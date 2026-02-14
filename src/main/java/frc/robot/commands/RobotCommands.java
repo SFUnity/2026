@@ -35,40 +35,41 @@ public class RobotCommands {
         .finallyDo((interrupted) -> Logger.recordOutput("RobotCommands/Shoot", false));
   }
 
-  public static Command shoot(Shooter shooter, Kicker kicker, Spindexer spindexer) {
-    return Commands.run(() -> Logger.recordOutput("RobotCommands/Shoot", true))
-        .andThen(shooter.setShooting(true))
-        .andThen(kicker.runVolts())
-        .andThen(spindexer.run().onlyIf(() -> shooter.readyToShoot()))
-        .finallyDo((interrupted) -> Logger.recordOutput("RobotCommands/Shoot", false));
-  }
-
   public static Command stopShoot() {
     return Commands.run(() -> Logger.recordOutput("RobotCommands/StopShoot", true))
         .finallyDo((interrupted) -> Logger.recordOutput("RobotCommands/StopShoot", false));
   }
 
+  // TODO make the spindexer stop a bit before the shooter and kicker stops so that the last ball
+  // can be fully shot out of the robot
   public static Command stopShoot(Shooter shooter, Kicker kicker, Spindexer spindexer) {
-    return Commands.run(() -> Logger.recordOutput("RobotCommands/StopShoot", true))
-        .andThen(shooter.setShooting(false))
+    return shooter
+        .setShooting(false)
         .andThen(kicker.stop())
         .andThen(spindexer.stop())
-        .finallyDo((interrupted) -> Logger.recordOutput("RobotCommands/StopShoot", false));
+        .withName("StopShoot");
+  }
+
+  // TODO needs to be implemented
+  public static Command readyThenShoot() {
+    return Commands.run(() -> Logger.recordOutput("RobotCommands/ReadyThenShoot", true))
+        .finallyDo((interrupted) -> Logger.recordOutput("RobotCommands/ReadyThenShoot", false));
   }
 
   public static Command intake(IntakeRollers intake, IntakePivot intakePivot) {
-    return intake.intake().alongWith(intakePivot.lower());
+    return intake.intake().alongWith(intakePivot.lower()).withName("intake");
   }
 
-  public static Command eject(IntakeRollers intake, IntakePivot intakePivot) {
-    return intake.eject().alongWith(intakePivot.lower());
+  public static Command eject(IntakeRollers intake, IntakePivot intakePivot, Spindexer spindexer) {
+    // TODO put in correct spindexer command
+    return intake.eject().alongWith(intakePivot.lower(), spindexer.stop()).withName("eject");
   }
 
   public static Command stowIntake(IntakeRollers intake, IntakePivot intakePivot) {
-    return intake.stop().alongWith(intakePivot.raise());
+    return intake.stop().alongWith(intakePivot.raise()).withName("stowIntake");
   }
 
   public static Command jork(IntakeRollers intake, IntakePivot intakePivot) {
-    return intake.stop().alongWith(intakePivot.jork());
+    return intake.stop().alongWith(intakePivot.jork()).withName("jork");
   }
 }

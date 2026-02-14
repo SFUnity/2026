@@ -1,16 +1,28 @@
 package frc.robot.subsystems.shooter.flywheels;
 
-import static frc.robot.subsystems.shooter.flywheels.FlywheelsConstants.flywheelTolerance;
+import static frc.robot.subsystems.shooter.flywheels.FlywheelsConstants.*;
 
+import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.GeneralUtil;
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class Flywheels extends SubsystemBase {
   private final FlywheelsIO io;
   private final FlywheelsIOInputsAutoLogged inputs = new FlywheelsIOInputsAutoLogged();
-  private double velocity;
+
+  private Debouncer torqueCurrentDebouncer =
+      new Debouncer(torqueCurrentDebounce.get(), DebounceType.kFalling);
+  private Debouncer atGoalDebouncer = new Debouncer(atGoalDebounce.get(), DebounceType.kFalling);
+  private boolean lastTorqueCurrentControl = false;
+
+  @AutoLogOutput(key = "Subsystems/Shooter/Flywheels/LaunchCount")
+  private long launchCount = 0;
+
+  private double setpointVelocity;
 
   private boolean ready = false;
 
@@ -21,18 +33,39 @@ public class Flywheels extends SubsystemBase {
   @Override
   public void periodic() {
     io.updateInputs(inputs);
-    Logger.processInputs("Flywheels", inputs);
-    GeneralUtil.logSubsystem(this, "Flywheels");
+    Logger.processInputs("Shooter/Flywheels", inputs);
+    GeneralUtil.logSubsystem(this, "Shooter/Flywheels");
 
-    if (!ready) {
-      io.runVelocity(velocity);
+    if (ready) {
+      runVelocity(setpointVelocity);
     } else {
-      io.ready();
+      runVelocity(readyRPMSetpoint.get());
+    }
+  }
+
+  /** Run closed loop at the specified velocity. */
+  private void runVelocity(double velocityRPM) {
+    boolean inTolerance =
+        Math.abs(inputs.velocityRotsPerMin - velocityRPM) <= torqueCurrentTolerance.get();
+    boolean torqueCurrentControl = torqueCurrentDebouncer.calculate(inTolerance);
+    boolean atGoal = atGoalDebouncer.calculate(inTolerance);
+
+    if (!torqueCurrentControl && lastTorqueCurrentControl) {
+      launchCount++;
+    }
+    lastTorqueCurrentControl = torqueCurrentControl;
+
+    if (!atGoal) {
+      if (torqueCurrentControl) {
+        io.runTorqueControl();
+      } else {
+        io.runDutyCycle();
+      }
     }
   }
 
   public Command setVelocity(double rpm) {
-    return run(() -> velocity = rpm);
+    return run(() -> setpointVelocity = rpm);
   }
 
   public Command setReady(boolean ready) {
@@ -40,6 +73,6 @@ public class Flywheels extends SubsystemBase {
   }
 
   public boolean atGoal() {
-    return Math.abs(inputs.velocityRotsPerMin - velocity) < flywheelTolerance.get();
+    return Math.abs(inputs.velocityRotsPerMin - setpointVelocity) < flywheelTolerance.get();
   }
 }

@@ -5,6 +5,8 @@ import static frc.robot.subsystems.shooter.flywheels.FlywheelsConstants.*;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
+import com.ctre.phoenix6.controls.VelocityDutyCycle;
+import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
@@ -24,25 +26,13 @@ public class FlywheelsIOTalonFX implements FlywheelsIO {
 
     talonFXConfigs.MotorOutput.NeutralMode = NeutralModeValue.Coast;
 
-    var slot0Configs = talonFXConfigs.Slot0;
-    slot0Configs.kS = 0;
-    slot0Configs.kV = kV.get();
-    slot0Configs.kA = kA.get();
-    slot0Configs.kP = kP.get();
-    slot0Configs.kI = 0;
-    slot0Configs.kD = kD.get();
-    talonFXConfigs.CurrentLimits.StatorCurrentLimit = 80.0;
-    talonFXConfigs.CurrentLimits.StatorCurrentLimitEnable = true;
-    talonFXConfigs.CurrentLimits.SupplyCurrentLimit = 60.0;
-
-    // set Motion Magic settings
-    var motionMagicConfigs = talonFXConfigs.MotionMagic;
-    motionMagicConfigs.MotionMagicCruiseVelocity =
-        motionMagicCruiseVelocity.get(); // Target cruise velocity of 80 rps
-    motionMagicConfigs.MotionMagicAcceleration =
-        motionMagicAcceleration.get(); // Target acceleration of 160 rps/s (0.5 seconds)
-    motionMagicConfigs.MotionMagicJerk =
-        motionMagicJerk.get(); // Target jerk of 1600 rps/s/s (0.1 seconds)
+    // TODO add current limits (specifically stator and supply current)
+    var config = new TalonFXConfiguration();
+    config.Slot0.kP = 999999.0;
+    config.TorqueCurrent.PeakForwardTorqueCurrent = 40.0;
+    config.TorqueCurrent.PeakReverseTorqueCurrent = 0.0;
+    config.MotorOutput.PeakForwardDutyCycle = 1.0;
+    config.MotorOutput.PeakReverseDutyCycle = 0.0;
 
     leader.getConfigurator().apply(talonFXConfigs);
 
@@ -59,12 +49,14 @@ public class FlywheelsIOTalonFX implements FlywheelsIO {
   }
 
   @Override
-  public void runVelocity(double rpm) {
-    leader.setControl(motionMagicVelocity.withVelocity((rpm / 60)));
+  public void runDutyCycle() {
+    // duty-cycle bang bang
+    leader.setControl(new VelocityDutyCycle(10.0).withEnableFOC(true));
   }
 
   @Override
-  public void ready() {
-    leader.setControl(voltageOut.withOutput(readyVolts.get()));
+  public void runTorqueControl() {
+    // Torque-current bang-bang
+    leader.setControl(new VelocityTorqueCurrentFOC(10.0));
   }
 }

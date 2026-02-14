@@ -5,7 +5,6 @@ import static frc.robot.subsystems.climb.ClimbConstants.*;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 
 public class ClimbIOSim implements ClimbIO {
@@ -18,8 +17,8 @@ public class ClimbIOSim implements ClimbIO {
           gearRatio,
           elevatorMassKg,
           drumRadiusMeters,
-          Units.inchesToMeters(minHeightInches),
-          Units.inchesToMeters(maxHeightInches),
+          minHeightMeters,
+          maxHeightMeters,
           true,
           0);
 
@@ -36,8 +35,8 @@ public class ClimbIOSim implements ClimbIO {
   }
 
   @Override
-  public void setPosition(double rotations) {
-    appliedVolts = controller.calculate(0.0, rotations);
+  public void setPosition(double meters) {
+    appliedVolts = controller.calculate(sim.getPositionMeters(), meters);
     sim.setInputVoltage(appliedVolts);
   }
 }

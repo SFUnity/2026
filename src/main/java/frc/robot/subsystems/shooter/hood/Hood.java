@@ -17,9 +17,10 @@ public class Hood extends SubsystemBase {
   @Override
   public void periodic() {
     io.updateInputs(inputs);
-    GeneralUtil.logSubsystem(this, "Hood");
+    Logger.processInputs("Shooter/Hood", inputs);
+    GeneralUtil.logSubsystem(this, "Shooter/Hood");
 
-    Logger.recordOutput("Hood/Goal", goalPosition);
+    Logger.recordOutput("Subsystems/Shooter/Hood/Goal", goalPosition);
   }
 
   public Command setAngle(double angle) {
@@ -30,5 +31,9 @@ public class Hood extends SubsystemBase {
 
   public boolean atGoal() {
     return Math.abs(inputs.positionDeg - goalPosition) < HoodConstants.angleTolerance;
+  }
+
+  public double getAngle() {
+    return inputs.positionDeg;
   }
 }

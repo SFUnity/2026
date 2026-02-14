@@ -3,17 +3,34 @@ package frc.robot.subsystems.shooter;
 import static edu.wpi.first.wpilibj2.command.Commands.*;
 import static frc.robot.subsystems.shooter.ShooterUtil.*;
 
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.FieldConstants;
+import frc.robot.subsystems.shooter.ShooterUtil.*;
 import frc.robot.subsystems.shooter.flywheels.Flywheels;
 import frc.robot.subsystems.shooter.hood.Hood;
 import frc.robot.subsystems.shooter.turret.Turret;
+import frc.robot.util.LoggedTunableNumber;
 import frc.robot.util.PoseManager;
 import frc.robot.util.VirtualSubsystem;
+import org.littletonrobotics.junction.Logger;
 
 public class Shooter extends VirtualSubsystem {
   private final Flywheels flywheels;
   private final Turret turret;
   private final Hood hood;
+
+  private final ShooterVisualizer measuredVisualizer =
+      new ShooterVisualizer("Measured", Color.kRed);
+  private final ShooterVisualizer setpointVisualizer =
+      new ShooterVisualizer("Setpoint", Color.kBlue);
+  private final LoggedTunableNumber fakeTurretAngle =
+      new LoggedTunableNumber("Shooter/FakeTurretAngle", 0);
+  private final LoggedTunableNumber fakeHoodAngle =
+      new LoggedTunableNumber("Shooter/FakeHoodAngle", 0);
+
+  private final ShooterUtil shooterUtil;
 
   private final PoseManager poseManager;
 
@@ -25,14 +42,27 @@ public class Shooter extends VirtualSubsystem {
     this.turret = turret;
     this.hood = hood;
     this.poseManager = poseManager;
+    this.shooterUtil = new ShooterUtil(this.poseManager);
+
+    // TODO add default commands
   }
 
   public void periodic() {
-    ShooterSolution solution = ShooterUtil.calculateOptimalShot(0, 0, 0);
+    Pose3d goalPose = new Pose3d();
 
-    turret.setGoalDegs(solution.TurnAngleDeg);
-    hood.setAngle(solution.angleDeg);
-    flywheels.setVelocity(solution.rpm / 60);
+    LaunchingParameters solution = shooterUtil.getScoringParameters();
+
+    turret.setTargetDegs(0);
+    hood.setAngle(0);
+    flywheels.setVelocity(0);
+
+    isScoring = poseManager.getPose().getX() < FieldConstants.LinesVertical.allianceZone;
+    Logger.recordOutput("Subsystems/Shooter/isScoring", isScoring);
+
+    // TODO uncomment when ready to test
+    // measuredVisualizer.update(turret.getPositionDegs(), hood.getAngle());
+    // setpointVisualizer.update(solution.turretAngle(), solution.hoodAngle());
+    measuredVisualizer.update(fakeTurretAngle.get(), fakeHoodAngle.get());
   }
 
   public boolean readyToShoot() {

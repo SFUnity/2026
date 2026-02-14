@@ -10,11 +10,12 @@ import org.littletonrobotics.junction.Logger;
 public class Climb extends SubsystemBase {
 
   private ClimbIO io;
+  private boolean isUp = false;
   private final ClimbIOInputsAutoLogged inputs = new ClimbIOInputsAutoLogged();
 
   public Climb(ClimbIO io) {
     this.io = io;
-    Logger.recordOutput("ClimbPosition", downMeters);
+    Logger.recordOutput("Subsystems/Climb/ClimbSetPoint", downMeters);
   }
 
   public void periodic() {
@@ -22,15 +23,21 @@ public class Climb extends SubsystemBase {
 
     Logger.processInputs("Climb", inputs);
     GeneralUtil.logSubsystem(this, "Climb");
+
+    if (isUp) {
+      Logger.recordOutput("Subsystems/Climb/ClimbSetPoint", upMeters);
+      io.setPosition(upMeters);
+    } else {
+      Logger.recordOutput("Subsystems/Climb/ClimbSetPoint", downMeters);
+      io.setPosition(downMeters);
+    }
   }
 
   public Command climbUp() {
-    return runOnce(() -> Logger.recordOutput("ClimbPosition", upMeters))
-        .andThen(() -> io.setPosition(upMeters));
+    return runOnce(() -> isUp = true).withName("climbUp");
   }
 
   public Command climbDown() {
-    return runOnce(() -> Logger.recordOutput("ClimbPosition", downMeters))
-        .andThen(() -> io.setPosition(downMeters));
+    return runOnce(() -> isUp = false).withName("climbDown");
   }
 }

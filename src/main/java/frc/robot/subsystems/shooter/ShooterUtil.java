@@ -1,122 +1,198 @@
 package frc.robot.subsystems.shooter;
 
-public class ShooterUtil implements AutoCloseable {
-  // Constants
-  public static final double Gravity = 9.81;
-  public static final double ShooterMaxRPM = 3500;
-  public static final double ShooterMinAngle = 45;
-  public static final double ShooterMaxAngle = 75;
+import static frc.robot.subsystems.shooter.ShooterConstants.*;
+import static frc.robot.util.GeomUtil.*;
 
-  // returning three values so we need a custom helper class
-  public static class ShooterSolution {
-    public final double angleDeg;
-    public final double rpm;
-    public final double TurnAngleDeg;
+import edu.wpi.first.math.filter.LinearFilter;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Twist2d;
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
+import frc.robot.FieldConstants;
+import frc.robot.util.AllianceFlipUtil;
+import frc.robot.util.LoggedTunableNumber;
+import frc.robot.util.PoseManager;
+import java.util.LinkedList;
+import java.util.Queue;
 
-    public ShooterSolution(double angleDeg, double rpm, double TurnAngleDeg) {
-      this.angleDeg = angleDeg;
-      this.rpm = rpm;
-      this.TurnAngleDeg = TurnAngleDeg;
-    }
+public class ShooterUtil {
+
+  private final LoggedTunableNumber phaseDelay =
+      new LoggedTunableNumber("Shooter/PhaseDelay", 0.03);
+  private final PoseManager poseManager;
+
+  private final InterpolatingDoubleTreeMap scoreHoodAngleMap = new InterpolatingDoubleTreeMap();
+  private final InterpolatingDoubleTreeMap scoreFlywheelSpeedMap = new InterpolatingDoubleTreeMap();
+  private final InterpolatingDoubleTreeMap scoreTimeOfFlightMap = new InterpolatingDoubleTreeMap();
+
+  private final InterpolatingDoubleTreeMap feedHoodAngleMap = new InterpolatingDoubleTreeMap();
+  private final InterpolatingDoubleTreeMap feedFlywheelSpeedMap = new InterpolatingDoubleTreeMap();
+  private final InterpolatingDoubleTreeMap feedTimeOfFlightMap = new InterpolatingDoubleTreeMap();
+
+  private double turretAngle;
+  private Queue<Double> turretAngles = new LinkedList<>();
+  private double hoodAngle;
+  private Queue<Double> hoodAngles = new LinkedList<>();
+  private double turretVelocity;
+  private double hoodVelocity;
+
+  private double minDist = 0; // todo change
+  private double maxDist = 1000;
+
+  private final int sampleCount = 50;
+
+  private final LinearFilter turretAngleFilter = LinearFilter.movingAverage(sampleCount);
+  private final LinearFilter hoodAngleFilter = LinearFilter.movingAverage(sampleCount);
+
+  public ShooterUtil(PoseManager poseManager) {
+    this.poseManager = poseManager;
   }
 
-  // Calculations
-  public static ShooterSolution calculateOptimalShot(
-      double horizontalDistanceMeters, double verticalDistanceMeters, double launchAngle) {
+  public record LaunchingParameters(
+      boolean isValid,
+      double turretAngle,
+      double turretVelocity,
+      double hoodAngle,
+      double hoodVelocity,
+      double flywheelSpeed) {}
 
-    // I'll just assume minimum angle is always optimal for now
-    double optimalAngleRad =
-        Math.atan(
-            (verticalDistanceMeters
-                    + Math.sqrt(
-                        horizontalDistanceMeters * horizontalDistanceMeters
-                            + verticalDistanceMeters * verticalDistanceMeters))
-                / horizontalDistanceMeters);
-    // Added a bit of tolerance by increasing the angle by 2 degrees
-    double optimalAngleDeg = Math.toDegrees(optimalAngleRad) + 2;
-    double optimalAngle = Math.toRadians(optimalAngleDeg);
+  public LaunchingParameters getScoringParameters() {
+    Pose2d robotPose = poseManager.getPose();
+    Twist2d robotVelocity = poseManager.getRobotVelocity();
+    Translation2d targetPose =
+        AllianceFlipUtil.apply(FieldConstants.Hub.topCenterPoint.toTranslation2d());
+    robotPose =
+        robotPose.exp(
+            new Twist2d(
+                robotVelocity.dx * phaseDelay.get(), robotVelocity.dy * phaseDelay.get(), 0));
 
-    // Math shenanigans to calculate the required velocity or smth
-    double requiredVelocity =
-        Math.sqrt(
-            (Gravity * horizontalDistanceMeters * horizontalDistanceMeters)
-                / (2
-                    * Math.cos(optimalAngle)
-                    * (horizontalDistanceMeters * Math.tan(optimalAngle)
-                        - verticalDistanceMeters)));
+    Pose2d turretPosition =
+        robotPose.transformBy(
+            new Transform2d(
+                turretCenter.getTranslation().toTranslation2d(),
+                turretCenter.getRotation().toRotation2d()));
+    double turretToTargetDistance = targetPose.getDistance(turretPosition.getTranslation());
 
-    double calculationsNumerator = Gravity * horizontalDistanceMeters * horizontalDistanceMeters;
-    double calculationsDenominator =
-        2
-            * Math.cos(optimalAngle)
-            * (horizontalDistanceMeters * Math.tan(optimalAngle) - verticalDistanceMeters);
+    Twist2d fieldRelativeRobotVelocity = poseManager.getFieldVelocity();
+    double robotAngle = robotPose.getRotation().getRadians();
+    double turretVelocityX =
+        fieldRelativeRobotVelocity.dx
+            + fieldRelativeRobotVelocity.dtheta
+                * (turretCenter.getY() * Math.cos(robotAngle)
+                    - turretCenter.getX() * Math.sin(robotAngle));
+    double turretVelocityY =
+        fieldRelativeRobotVelocity.dy
+            + fieldRelativeRobotVelocity.dtheta
+                * (turretCenter.getX() * Math.cos(robotAngle)
+                    - turretCenter.getY() * Math.sin(robotAngle));
 
-    if (calculationsNumerator / calculationsDenominator < 0) {
-      return null;
+    double timeOfFlight;
+    Pose2d lookeaheadPose = turretPosition;
+    double lookaheadTurretToTargetDistance = turretToTargetDistance;
+    for (int i = 0; i < 20; i++) {
+      // timeOfFlight = scoreTimeOfFlightMap.get(lookaheadTurretToTargetDistance);
+      timeOfFlight = 0.5; // TODO: replace with actual time of flight calculation
+      double offsetX = turretVelocityX * timeOfFlight;
+      double offsetY = turretVelocityY * timeOfFlight;
+      lookeaheadPose =
+          new Pose2d(
+              turretPosition.getTranslation().plus(new Translation2d(offsetX, offsetY)),
+              turretPosition.getRotation());
+      lookaheadTurretToTargetDistance = targetPose.getDistance(lookeaheadPose.getTranslation());
     }
 
-    // Convert velocity to RPM or whatever measurement motors run on idk
-    double wheelRadius = 0.0508;
-    double rpm = (requiredVelocity / (2 * Math.PI * wheelRadius)) * 60;
+    turretAngle = targetPose.minus(lookeaheadPose.getTranslation()).getAngle().getDegrees();
+    // hoodAngle = scoreHoodAngleMap.get(lookaheadTurretToTargetDistance);
 
-    // correcting angle instead if required rpm is too large
-    if (rpm > ShooterMaxRPM) {
-      // Solve quadratic for tan(theta) using v_max and basically reverse the projectile motion
-      // equations
-      double v_max = 2 * Math.PI * wheelRadius * (ShooterMaxRPM / 60.0);
-      double a =
-          Gravity * horizontalDistanceMeters * horizontalDistanceMeters / (2 * v_max * v_max);
-      double b = -horizontalDistanceMeters;
-      double c = a + verticalDistanceMeters;
+    if (turretAngles.isEmpty()) turretAngles.add(turretAngle);
+    if (hoodAngles.isEmpty()) hoodAngles.add(hoodAngle);
 
-      double discriminant = b * b - 4 * a * c;
+    turretAngles.add(turretAngle);
+    hoodAngles.add(hoodAngle);
 
-      if (discriminant >= 0) {
-        double T1 = (-b + Math.sqrt(discriminant)) / (2 * a);
-        double T2 = (-b - Math.sqrt(discriminant)) / (2 * a);
+    turretVelocity =
+        turretAngleFilter.calculate((turretAngle - turretAngles.remove()) / sampleCount);
+    hoodVelocity = hoodAngleFilter.calculate((hoodAngle - hoodAngles.remove()) / sampleCount);
 
-        double newAngleRad = Math.atan(Math.min(T1, T2));
-        double newAngleDeg = Math.toDegrees(newAngleRad);
+    LaunchingParameters params =
+        new LaunchingParameters(
+            minDist < lookaheadTurretToTargetDistance && lookaheadTurretToTargetDistance < maxDist,
+            turretAngle,
+            turretVelocity,
+            hoodAngle,
+            hoodVelocity,
+            // scoreFlywheelSpeedMap.get(lookaheadTurretToTargetDistance)
+            0);
+    return params;
+  }
 
-        if (newAngleDeg >= ShooterMinAngle && newAngleDeg <= ShooterMaxAngle) {
-          optimalAngleDeg = newAngleDeg;
-          optimalAngle = newAngleRad;
-          requiredVelocity = v_max;
+  public LaunchingParameters getFeedingParameters(Pose2d target) {
+    Pose2d robotPose = poseManager.getPose();
+    Twist2d robotVelocity = poseManager.getRobotVelocity();
+    Translation2d targetPose = target.getTranslation();
+    robotPose =
+        robotPose.exp(
+            new Twist2d(
+                robotVelocity.dx * phaseDelay.get(), robotVelocity.dy * phaseDelay.get(), 0));
 
-          rpm = ShooterMaxRPM; // since we are using max velocity
-        } else {
-          // No valid angle or velocity so sotm defaults to largest angle and max rpm
-          return new ShooterSolution(ShooterMaxAngle, ShooterMaxRPM, launchAngle);
-        }
-      }
+    Pose2d turretPosition =
+        robotPose.transformBy(
+            new Transform2d(
+                turretCenter.getTranslation().toTranslation2d(),
+                turretCenter.getRotation().toRotation2d()));
+    double turretToTargetDistance = targetPose.getDistance(turretPosition.getTranslation());
+
+    Twist2d fieldRelativeRobotVelocity = poseManager.getFieldVelocity();
+    double robotAngle = robotPose.getRotation().getRadians();
+    double turretVelocityX =
+        fieldRelativeRobotVelocity.dx
+            + fieldRelativeRobotVelocity.dtheta
+                * (turretCenter.getY() * Math.cos(robotAngle)
+                    - turretCenter.getX() * Math.sin(robotAngle));
+    double turretVelocityY =
+        fieldRelativeRobotVelocity.dy
+            + fieldRelativeRobotVelocity.dtheta
+                * (turretCenter.getX() * Math.cos(robotAngle)
+                    - turretCenter.getY() * Math.sin(robotAngle));
+
+    double timeOfFlight;
+    Pose2d lookeaheadPose = turretPosition;
+    double lookaheadTurretToTargetDistance = turretToTargetDistance;
+    for (int i = 0; i < 20; i++) {
+      // timeOfFlight = feedTimeOfFlightMap.get(lookaheadTurretToTargetDistance);
+      timeOfFlight = 0.5; // TODO: replace with actual time of flight calculation
+      double offsetX = turretVelocityX * timeOfFlight;
+      double offsetY = turretVelocityY * timeOfFlight;
+      lookeaheadPose =
+          new Pose2d(
+              turretPosition.getTranslation().plus(new Translation2d(offsetX, offsetY)),
+              turretPosition.getRotation());
+      lookaheadTurretToTargetDistance = targetPose.getDistance(lookeaheadPose.getTranslation());
     }
 
-    return new ShooterSolution(optimalAngleDeg, rpm, launchAngle);
+    turretAngle = targetPose.minus(lookeaheadPose.getTranslation()).getAngle().getDegrees();
+    // hoodAngle = feedHoodAngleMap.get(lookaheadTurretToTargetDistance);
+
+    if (turretAngles.isEmpty()) turretAngles.add(turretAngle);
+    if (hoodAngles.isEmpty()) hoodAngles.add(hoodAngle);
+
+    turretAngles.add(turretAngle);
+    hoodAngles.add(hoodAngle);
+
+    turretVelocity =
+        turretAngleFilter.calculate((turretAngle - turretAngles.remove()) / sampleCount);
+    hoodVelocity = hoodAngleFilter.calculate((hoodAngle - hoodAngles.remove()) / sampleCount);
+
+    LaunchingParameters params =
+        new LaunchingParameters(
+            minDist < lookaheadTurretToTargetDistance && lookaheadTurretToTargetDistance < maxDist,
+            turretAngle,
+            turretVelocity,
+            hoodAngle,
+            hoodVelocity,
+            // feedFlywheelSpeedMap.get(lookaheadTurretToTargetDistance)
+            0);
+    return params;
   }
-
-  // i don't think I did this right but basically calculate flight time to find horizontal skew
-  public static double calculateTimeOfFlight(
-      double horizontalDistanceMeters, double launchAngleDeg, double rpm) {
-    double angleRad = Math.toRadians(launchAngleDeg);
-
-    double wheelRadius = 0.0508;
-    double exitVelocity = (rpm / 60.0) * (2 * Math.PI * wheelRadius);
-
-    double horizontalVelocity = exitVelocity * Math.cos(angleRad);
-    if (horizontalVelocity <= 0) {
-      return -1;
-    }
-
-    return horizontalDistanceMeters / horizontalVelocity;
-  }
-
-  // calculate the angle the robot needs to turn to compensate for sideways movement
-  public static double calculateTurnAngle(
-      double robotSidewaysVelocityMetersPerSec, double exitVelocityMetersPerSec) {
-
-    return Math.atan(robotSidewaysVelocityMetersPerSec / exitVelocityMetersPerSec);
-  }
-
-  @Override
-  public void close() {}
 }
