@@ -8,6 +8,8 @@ public class KickerConstants {
   public static final int positionFactor = 3;
 
   public static final double spinupTime = 0.25;
+  public static final LoggedTunableNumber RPMSetpoint =
+      new LoggedTunableNumber("Flywheels/readyRPM", 100);
   public static final LoggedTunableNumber torqueCurrentTolerance =
       new LoggedTunableNumber("Flywheel/TorqueCurrentTolerance", 1200.0);
   public static final LoggedTunableNumber torqueCurrentDebounce =
