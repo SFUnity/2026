@@ -152,11 +152,9 @@ public class Autos {
         .onTrue(Commands.sequence(ScoreCenterClimb.resetOdometry(), ScoreCenterClimb.cmd()));
     ScoreCenterClimb.atTime("ExtendClimber").onTrue(RobotCommands.climbExtend());
     ScoreCenterClimb.atTime("StartIntake")
-        .onTrue(RobotCommands.intake());
-    ScoreCenterClimb.atTime("StopIntake").onTrue(RobotCommands.stopIntake());
+        .onTrue(RobotCommands.intake().until(ScoreCenterClimb.atTime("StopIntake")));
     ScoreCenterClimb.atTime("StartShoot")
-        .onTrue(RobotCommands.shoot());
-    ScoreCenterClimb.atTime("StopShoot").onTrue(RobotCommands.stopShoot());
+        .onTrue(RobotCommands.shoot().until(ScoreCenterClimb.atTime("StopShoot")));
     ScoreCenterClimb.done().onTrue(RobotCommands.climbRetract());
     return routine;
   }
@@ -166,11 +164,14 @@ public class Autos {
     AutoTrajectory DepotFeed = routine.trajectory("DepotFeedClimb");
     routine.active().onTrue(Commands.sequence(DepotFeed.resetOdometry(), DepotFeed.cmd()));
     DepotFeed.atTime("StartIntake")
-        .onTrue(RobotCommands.intake().until(DepotFeed.atTime("StopIntake")));
+        .onTrue(RobotCommands.intake());
+    DepotFeed.atTime("StopIntake").onTrue(RobotCommands.stopIntake());
     DepotFeed.atTime("StartShoot")
-        .onTrue(RobotCommands.shoot().until(DepotFeed.atTime("StopShoot")));
+        .onTrue(RobotCommands.shoot());
+    DepotFeed.atTime("StopShoot").onTrue(RobotCommands.stopShoot());
     DepotFeed.atTime("StartDepotIntake")
-        .onTrue(RobotCommands.intake().until(DepotFeed.atTime("StopDepotIntake")));
+        .onTrue(RobotCommands.intake());
+    DepotFeed.atTime("StopDepotIntake").onTrue(RobotCommands.stopIntake());
     DepotFeed.atTime("ExtendClimber").onTrue(RobotCommands.climbExtend());
     DepotFeed.done().onTrue(RobotCommands.climbRetract());
     return routine;
