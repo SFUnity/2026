@@ -14,6 +14,7 @@ public class Turret extends SubsystemBase {
   private final TurretIO io;
   private final TurretIOInputsAutoLogged inputs = new TurretIOInputsAutoLogged();
   private double targetDegs = 0;
+  private double targetVelocity = 0;
   private boolean isShooting = false;
   private double truePositionDegs = 0;
   private double positionDegs = 0;
@@ -98,8 +99,9 @@ public class Turret extends SubsystemBase {
     // velocity, rather than just 0
   }
 
-  public void setTargetDegs(double targetDegs) {
+  public void setTarget(double targetDegs, double targetVelocity) {
     this.targetDegs = targetDegs;
+    this.targetVelocity = targetVelocity;
   }
 
   public void setIsShooting(boolean isShooting) {
