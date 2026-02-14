@@ -17,8 +17,17 @@ public class KickerIOSim implements KickerIO {
     appliedVolts = 0;
   }
 
+  // @Override
+  // public void runVolts(double volts) {
+  //   appliedVolts = volts;
+  // }
   @Override
-  public void runVolts(double volts) {
-    appliedVolts = volts;
+  public void runDutyCycle(){
+    appliedVolts = 10;
+  }
+
+  @Override
+  public void runTorqueControl(){
+    appliedVolts = 10;
   }
 }
