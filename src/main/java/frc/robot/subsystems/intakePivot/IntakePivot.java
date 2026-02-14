@@ -65,7 +65,7 @@ public class IntakePivot extends SubsystemBase {
 
   public Command runJork() {
     return Commands.repeatingSequence(
-        lower().until(() -> inputs.pivotCurrentPositionDeg == loweredAngle.get()),
-        raise().until(() -> inputs.pivotCurrentPositionDeg == raisedAngle.get()));
+        lower().until(() -> inputs.pivotCurrentPositionDeg == loweredJorkAngle.get()),
+        raise().until(() -> inputs.pivotCurrentPositionDeg == raisedJorkAngle.get()));
   }
 }
