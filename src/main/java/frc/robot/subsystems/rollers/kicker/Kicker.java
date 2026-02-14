@@ -29,4 +29,8 @@ public class Kicker extends SubsystemBase {
   public Command stop() {
     return run(() -> io.runVolts(0)).withName("stop");
   }
+
+  public Command runBack() {
+    return run(() -> io.runVolts(-kickerSpeedVolts.get())).withName("runVolts");
+  }
 }
