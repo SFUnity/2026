@@ -46,7 +46,8 @@ public class Shooter extends VirtualSubsystem {
     LaunchingParameters solution = shooterUtil.getScoringParameters();
     if (solution.isValid()) {
       double turretAngle = solution.turretAngle() - poseManager.getRotation().getDegrees();
-      double turretVelocity = solution.turretVelocity() - Units.radiansToDegrees(poseManager.getRobotVelocity().dtheta);
+      double turretVelocity =
+          solution.turretVelocity() - Units.radiansToDegrees(poseManager.getRobotVelocity().dtheta);
       turret.setTarget(turretAngle, turretVelocity);
       hood.setAngle(solution.hoodAngle());
       flywheels.setVelocity(solution.flywheelSpeed());

@@ -1,8 +1,8 @@
 package frc.robot.subsystems.shooter;
 
+import static frc.robot.Constants.*;
 import static frc.robot.subsystems.shooter.ShooterConstants.*;
 import static frc.robot.util.GeomUtil.*;
-import static frc.robot.Constants.*;
 
 import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -12,7 +12,6 @@ import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import frc.robot.FieldConstants;
 import frc.robot.util.AllianceFlipUtil;
-import frc.robot.util.LoggedTunableNumber;
 import frc.robot.util.PoseManager;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -65,7 +64,9 @@ public class ShooterUtil {
     robotPose =
         robotPose.exp(
             new Twist2d(
-                robotVelocity.dx * phaseDelay, robotVelocity.dy * phaseDelay, robotVelocity.dtheta*phaseDelay));
+                robotVelocity.dx * phaseDelay,
+                robotVelocity.dy * phaseDelay,
+                robotVelocity.dtheta * phaseDelay));
 
     Pose2d turretPosition =
         robotPose.transformBy(
@@ -132,9 +133,7 @@ public class ShooterUtil {
     Twist2d robotVelocity = poseManager.getRobotVelocity();
     Translation2d targetPose = target.getTranslation();
     robotPose =
-        robotPose.exp(
-            new Twist2d(
-                robotVelocity.dx * phaseDelay, robotVelocity.dy * phaseDelay, 0));
+        robotPose.exp(new Twist2d(robotVelocity.dx * phaseDelay, robotVelocity.dy * phaseDelay, 0));
 
     Pose2d turretPosition =
         robotPose.transformBy(

@@ -1,23 +1,27 @@
 package frc.robot.subsystems.shooter.turret;
 
+import static frc.robot.Constants.*;
 import static frc.robot.subsystems.shooter.turret.TurretConstants.*;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.GeneralUtil;
 import frc.robot.util.LoggedTunableNumber;
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 public class Turret extends SubsystemBase {
   private final TurretIO io;
   private final TurretIOInputsAutoLogged inputs = new TurretIOInputsAutoLogged();
   private double targetDegs = 0;
+  private double lastTargetDegs = 0;
   private double targetVelocity = 0;
-  private boolean atTarget = false;
   private boolean isShooting = false;
   private double truePositionDegs = 0;
   private double positionDegs = 0;
@@ -29,6 +33,8 @@ public class Turret extends SubsystemBase {
   private TrapezoidProfile profile =
       new TrapezoidProfile(
           new TrapezoidProfile.Constraints(maxVelocity.get(), maxAcceleration.get()));
+
+  private State setpoint = new State();
 
   private LoggedTunableNumber kP = new LoggedTunableNumber("Turret/kP", 0.5);
   private LoggedTunableNumber kD = new LoggedTunableNumber("Turret/kD", 0.5);
@@ -67,24 +73,39 @@ public class Turret extends SubsystemBase {
     encoder1Disconnected.set(encoder1DisconnectedDebouncer.calculate(inputs.encoder1Disconnected));
     encoder2Disconnected.set(encoder2DisconnectedDebouncer.calculate(inputs.encoder2Disconnected));
 
-    if (isShooting) {
-      targetDegs += bufferDegs * 2;
-      if (Math.abs(targetDegs + 360 - truePositionDegs) < Math.abs(targetDegs - truePositionDegs)
-          && (targetDegs + 360) <= maxAngleDegs) {
-        targetDegs += 360;
-      } else if (Math.abs(targetDegs - 360 - truePositionDegs)
-              < Math.abs(targetDegs - truePositionDegs)
-          && (targetDegs - 360) >= minAngleDegs) {
-        targetDegs -= 360;
+    double minLegalAngle = isShooting ? minAngleDegs : minBufferAngleDegs;
+    double maxLegalAngle = isShooting ? maxAngleDegs : maxBufferAngleDegs;
+
+    boolean hasBestAngle = false;
+    double bestAngle = 0;
+
+    for (int i = -2; i < 3; i++) {
+      double potentialSetpoint = targetDegs + 360 * i;
+      if (potentialSetpoint < minLegalAngle || potentialSetpoint > maxLegalAngle) {
+        continue;
+      } else {
+        if (!hasBestAngle) {
+          bestAngle = potentialSetpoint;
+          hasBestAngle = true;
+        }
+        if (Math.abs(lastTargetDegs - potentialSetpoint) < Math.abs(lastTargetDegs - bestAngle)) {
+          bestAngle = potentialSetpoint;
+        }
       }
-    } else {
-      targetDegs += bufferDegs * 2;
     }
+    lastTargetDegs = bestAngle;
+
+    State goalState =
+        new State(MathUtil.clamp(bestAngle, minLegalAngle, maxLegalAngle), targetVelocity);
+
+    setpoint = profile.calculate(loopPeriodSecs, setpoint, goalState);
+
     double targetRotations = Units.degreesToRotations(targetDegs) * gearRatio;
     targetRotations -= talonOffset;
     io.turnTurret(targetRotations, isShooting);
   }
 
+  @AutoLogOutput
   public double getMotorOffset() {
     double truePosition = 0;
     double position1 = inputs.encoder1Rotations;
@@ -102,10 +123,12 @@ public class Turret extends SubsystemBase {
     return truePosition;
   }
 
+  @AutoLogOutput
   public double getPositionDegs() {
     return (inputs.talonRotations + talonOffset) / gearRatio;
   }
 
+  @AutoLogOutput
   public boolean atGoal() {
     return Math.abs(positionDegs - targetDegs) < angleToleranceDegs
         && inputs.velocityDegsPerSec
