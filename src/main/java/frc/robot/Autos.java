@@ -223,9 +223,11 @@ public class Autos {
         .active()
         .onTrue(Commands.sequence(LowerFeedClimb.resetOdometry(), LowerFeedClimb.cmd()));
     LowerFeedClimb.atTime("StartIntake")
-        .onTrue(RobotCommands.intake().until(LowerFeedClimb.atTime("StopIntake")));
+        .onTrue(RobotCommands.intake());
+    LowerFeedClimb.atTime("StopIntake").onTrue(RobotCommands.stopIntake());
     LowerFeedClimb.atTime("StartShoot")
-        .onTrue(RobotCommands.shoot().until(LowerFeedClimb.atTime("StopShoot")));
+        .onTrue(RobotCommands.shoot());
+    LowerFeedClimb.atTime("StopShoot").onTrue(RobotCommands.stopShoot());
     LowerFeedClimb.atTime("ExtendClimber").onTrue(RobotCommands.climbExtend());
     LowerFeedClimb.done().onTrue(RobotCommands.climbRetract());
     return routine;
