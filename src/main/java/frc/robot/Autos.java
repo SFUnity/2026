@@ -199,7 +199,7 @@ public class Autos {
     AutoTrajectory Feed = routine.trajectory("Feed");
     routine.active().onTrue(Commands.sequence(Feed.resetOdometry(), Feed.cmd()));
     Feed.atTime("StartIntake").onTrue(RobotCommands.intake().until(Feed.done()));
-    Feed.atTime("StartShooting").onTrue(RobotCommands.shoot().until(Feed.done()));
+    Feed.atTime("StartShoot").onTrue(RobotCommands.shoot().until(Feed.done()));
     return routine;
   }
 
@@ -220,8 +220,8 @@ public class Autos {
         .onTrue(Commands.sequence(LowerFeedClimb.resetOdometry(), LowerFeedClimb.cmd()));
     LowerFeedClimb.atTime("StartIntake")
         .onTrue(RobotCommands.intake().until(LowerFeedClimb.atTime("StopIntake")));
-    LowerFeedClimb.atTime("StartShooting")
-        .onTrue(RobotCommands.shoot().until(LowerFeedClimb.atTime("StopShooting")));
+    LowerFeedClimb.atTime("StartShoot")
+        .onTrue(RobotCommands.shoot().until(LowerFeedClimb.atTime("StopShoot")));
     LowerFeedClimb.atTime("ExtendClimber").onTrue(RobotCommands.climbExtend());
     LowerFeedClimb.done().onTrue(RobotCommands.climbRetract());
     return routine;
