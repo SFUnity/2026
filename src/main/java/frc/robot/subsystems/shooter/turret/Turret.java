@@ -3,11 +3,13 @@ package frc.robot.subsystems.shooter.turret;
 import static frc.robot.subsystems.shooter.turret.TurretConstants.*;
 
 import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.GeneralUtil;
+import frc.robot.util.LoggedTunableNumber;
 import org.littletonrobotics.junction.Logger;
 
 public class Turret extends SubsystemBase {
@@ -18,6 +20,17 @@ public class Turret extends SubsystemBase {
   private boolean isShooting = false;
   private double truePositionDegs = 0;
   private double positionDegs = 0;
+
+  private LoggedTunableNumber maxVelocity = new LoggedTunableNumber("Turret/maxVelocity", 16);
+  private LoggedTunableNumber maxAcceleration =
+      new LoggedTunableNumber("Turret/maxAcceleration", 99999);
+
+  private TrapezoidProfile profile =
+      new TrapezoidProfile(
+          new TrapezoidProfile.Constraints(maxVelocity.get(), maxAcceleration.get()));
+
+  private LoggedTunableNumber kP = new LoggedTunableNumber("Turret/kP", 0.5);
+  private LoggedTunableNumber kD = new LoggedTunableNumber("Turret/kD", 0.5);
 
   public final Alert encoder1Disconnected;
   public final Alert encoder2Disconnected;
