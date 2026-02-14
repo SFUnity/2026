@@ -52,10 +52,7 @@ public class RobotCommands {
         .withName("StopShoot");
   }
 
-  // TODO needs to be implemented
   public static Command readyThenShoot(Shooter shooter, Kicker kicker, Spindexer spindexer) {
-    // return
-    // spindexer.run().alongWith(kicker.run()).andThen(spindexer.stop()).alongWith(kicker.stop()).withName("ReadyThenShoot");
     return shooter
         .setShooting(true)
         .andThen(
