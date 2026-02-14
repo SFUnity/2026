@@ -15,9 +15,7 @@ public class KickerConstants {
   public static final LoggedTunableNumber atGoalDebounce =
       new LoggedTunableNumber("Flywheel/AtGoalDebounce", 0.2);
   public static final LoggedTunableNumber kickerTolerance =
-    new LoggedTunableNumber("Kicker/tolerance", 5); // TODO tune
-
-
+      new LoggedTunableNumber("Kicker/tolerance", 5); // TODO tune
 
   public static final LoggedTunableNumber kickerSpeedVolts =
       new LoggedTunableNumber("Kicker/rollerSpeed", 2);

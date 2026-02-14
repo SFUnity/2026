@@ -215,11 +215,9 @@ public class Autos {
     routine
         .active()
         .onTrue(Commands.sequence(UpperFeedClimb.resetOdometry(), UpperFeedClimb.cmd()));
-    UpperFeedClimb.atTime("StartIntake")
-        .onTrue(RobotCommands.intake());
+    UpperFeedClimb.atTime("StartIntake").onTrue(RobotCommands.intake());
     UpperFeedClimb.atTime("StopIntake").onTrue(RobotCommands.stopIntake());
-    UpperFeedClimb.atTime("StartShoot")
-        .onTrue(RobotCommands.shoot());
+    UpperFeedClimb.atTime("StartShoot").onTrue(RobotCommands.shoot());
     UpperFeedClimb.atTime("StopShoot").onTrue(RobotCommands.stopShoot());
     UpperFeedClimb.atTime("ExtendClimber").onTrue(RobotCommands.climbExtend());
     UpperFeedClimb.done().onTrue(RobotCommands.climbRetract());

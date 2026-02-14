@@ -193,11 +193,12 @@ public class RobotContainer {
         double maxY = Units.inchesToMeters(-12.625);
         fuelSim.registerIntake(
             minX, minY, maxX, maxY // robot-centric coordinates for bounding box in meters
-            //shouldIntakeSupplier, // (optional) BooleanSupplier for whether the intake should be active at a given moment
-            //callback); // (optional) Runnable called whenever a fuel is intaked
-        // active at a given moment
-        // callback); // (optional) Runnable called whenever a fuel is intaked
-        );
+            // shouldIntakeSupplier, // (optional) BooleanSupplier for whether the intake should be
+            // active at a given moment
+            // callback); // (optional) Runnable called whenever a fuel is intaked
+            // active at a given moment
+            // callback); // (optional) Runnable called whenever a fuel is intaked
+            );
 
         fuelSim.setSubticks(
             5); // sets the number of physics iterations to perform per 20ms loop. Default = 5

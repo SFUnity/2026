@@ -21,13 +21,14 @@ public class KickerIOSim implements KickerIO {
   public void runVolts(double volts) {
     appliedVolts = volts;
   }
+
   @Override
-  public void runDutyCycle(){
+  public void runDutyCycle() {
     appliedVolts = 10;
   }
 
   @Override
-  public void runTorqueControl(){
+  public void runTorqueControl() {
     appliedVolts = 10;
   }
 }

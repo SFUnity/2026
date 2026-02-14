@@ -12,8 +12,6 @@ import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import edu.wpi.first.wpilibj.DutyCycle;
-
 public class KickerIOTalonFX implements KickerIO {
   private final TalonFX rollerMotor = new TalonFX(kickerMotorID);
   private final VelocityVoltage velocityVoltage = new VelocityVoltage(0).withEnableFOC(true);
@@ -25,7 +23,7 @@ public class KickerIOTalonFX implements KickerIO {
   public KickerIOTalonFX() {
     var talonFXConfigs = new TalonFXConfiguration();
     var slot0Configs = talonFXConfigs.Slot0;
-  
+
     // slot0Configs.kS = 0;
     // slot0Configs.kV = kV.get();
     // slot0Configs.kA = kA.get();
@@ -51,7 +49,6 @@ public class KickerIOTalonFX implements KickerIO {
     inputs.currentAmps = rollerMotor.getSupplyCurrent().getValueAsDouble();
   }
 
-
   @Override
   public void stop() {
     rollerMotor.setControl(voltageOut.withOutput(0));
@@ -62,12 +59,12 @@ public class KickerIOTalonFX implements KickerIO {
   //   rollerMotor.setControl(velocityVoltage.withVelocity((rps / 60)));
   // }
   @Override
-  public void runDutyCycle(){
+  public void runDutyCycle() {
     rollerMotor.setControl(dutyCycle.withEnableFOC(true));
   }
 
   @Override
-  public void runTorqueControl(){
+  public void runTorqueControl() {
     rollerMotor.setControl(new VelocityTorqueCurrentFOC(10));
   }
 }
