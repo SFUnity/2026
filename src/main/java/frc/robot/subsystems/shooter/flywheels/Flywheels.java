@@ -65,7 +65,7 @@ public class Flywheels extends SubsystemBase {
     return run(() -> setpointVelocity = rpm);
   }
 
-  public Command setReady(boolean ready) {
+  public Command setIsShooting(boolean ready) {
     return run(() -> this.ready = ready);
   }
 

@@ -39,6 +39,9 @@ public class Shooter extends VirtualSubsystem {
   public void periodic() {
     Pose3d goalPose = new Pose3d();
 
+    turret.setIsShooting(isShooting);
+    flywheels.setIsShooting(isShooting);
+
     LaunchingParameters solution = shooterUtil.getScoringParameters();
     if (solution.isValid()) {
       turret.setTarget(solution.turretAngle(), solution.turretVelocity());
@@ -57,7 +60,7 @@ public class Shooter extends VirtualSubsystem {
   public Command setShooting(boolean shooting) {
     return runOnce(() -> isShooting = shooting)
         .alongWith(runOnce(() -> turret.setIsShooting(shooting)))
-        .alongWith(runOnce(() -> flywheels.setReady(shooting)));
+        .alongWith(runOnce(() -> flywheels.setIsShooting(shooting)));
   }
 
   public Command setScoring(boolean scoring) {
