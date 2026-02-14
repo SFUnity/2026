@@ -47,6 +47,7 @@ import frc.robot.subsystems.rollers.kicker.Kicker;
 import frc.robot.subsystems.rollers.kicker.KickerIO;
 import frc.robot.subsystems.rollers.kicker.KickerIOSim;
 import frc.robot.subsystems.rollers.kicker.KickerIOTalonFX;
+import frc.robot.subsystems.rollers.kicker.Kicker.KickerState;
 import frc.robot.subsystems.rollers.spindexer.Spindexer;
 import frc.robot.subsystems.rollers.spindexer.SpindexerIO;
 import frc.robot.subsystems.rollers.spindexer.SpindexerIOSim;
@@ -301,7 +302,7 @@ public class RobotContainer {
     climb.setDefaultCommand(climb.climbDown());
     intakePivot.setDefaultCommand(intakePivot.raise());
     intakeRollers.setDefaultCommand(intakeRollers.stop());
-    kicker.setDefaultCommand(kicker.stop());
+    kicker.setDefaultCommand(kicker.setState(KickerState.STOP));
 
     // Lock to 0° when A button is held
     controller
