@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.intakePivot.IntakePivot;
 import frc.robot.subsystems.rollers.intakerollers.IntakeRollers;
 import frc.robot.subsystems.rollers.kicker.Kicker;
+import frc.robot.subsystems.rollers.kicker.Kicker.KickerState;
 import frc.robot.subsystems.rollers.spindexer.Spindexer;
 import frc.robot.subsystems.shooter.Shooter;
 import org.littletonrobotics.junction.Logger;
@@ -47,7 +48,7 @@ public class RobotCommands {
   public static Command stopShoot(Shooter shooter, Kicker kicker, Spindexer spindexer) {
     return shooter
         .setShooting(false)
-        .andThen(kicker.stop())
+        .andThen(kicker.setState(KickerState.STOP))
         .andThen(spindexer.stop())
         .withName("StopShoot");
   }
@@ -56,9 +57,9 @@ public class RobotCommands {
     return shooter
         .setShooting(true)
         .andThen(
-            kicker.runBack().alongWith(spindexer.runBack()).withTimeout(0.2),
+            kicker.setState(KickerState.BACKWARDS).alongWith(spindexer.runBack()).withTimeout(0.2),
             spindexer.stop(),
-            kicker.run(),
+            kicker.setState(KickerState.RUN),
             waitUntil(shooter::readyToShoot),
             spindexer.run());
   }
