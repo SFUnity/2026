@@ -5,7 +5,6 @@ import static frc.robot.subsystems.intakePivot.IntakePivotConstants.*;
 
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.util.GeneralUtil;
 import org.littletonrobotics.junction.Logger;
@@ -65,9 +64,9 @@ public class IntakePivot extends SubsystemBase {
 
   public Command jork() {
     return raise()
-        //.andThen(Commands.waitSeconds(jorkTime.get()))
-        //.andThen(lower())
-        //.andThen(Commands.waitSeconds(jorkTime.get()))
+        // .andThen(Commands.waitSeconds(jorkTime.get()))
+        // .andThen(lower())
+        // .andThen(Commands.waitSeconds(jorkTime.get()))
         .withName("IntakePivotJork");
   }
 }
